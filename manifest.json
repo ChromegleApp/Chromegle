@@ -1,0 +1,54 @@
+{
+
+  "name": "Chromegle - Advanced Omegle Integration",
+  "description": "Elavate your Omegle experience with an integrated IP puller and natively supported dark mode.",
+  "author": "Isaac Kogan",
+  "homepage_url": "https://github.com/isaackogan",
+
+  "manifest_version": 3,
+  "version": "2.0",
+
+  "content_scripts": [
+    {
+      "css": [
+        "css/main.css",
+        "css/settings.css"
+      ],
+      "js": [
+
+        "javascript/libraries/jquery-2.1.1.min.js",
+        "javascript/libraries/js-cookie-2.2.1.min.js",
+        "javascript/libraries/micromodal.min.js",
+
+        "javascript/utilities/utilities.js",
+        "javascript/themes/themes.js",
+        "javascript/display/buttons.js",
+
+        "javascript/settings/menu.js",
+        "javascript/settings/settings.js",
+
+        "javascript/main.js"
+
+      ],
+      "matches": [
+        "*://*.omegle.com/*"
+      ]
+    }
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "/javascript/themes/types/*",
+        "/css/*",
+        "/images/*",
+        "/html/settings/*"
+      ],
+      "matches": ["*://*.omegle.com/*"]
+    }
+  ],
+
+  "incognito": "split",
+  "permissions": ["storage"],
+  "externally_connectable": {"matches": ["*://*.omegle.com/*"]}
+}

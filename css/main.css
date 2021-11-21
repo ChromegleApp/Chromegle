@@ -1,0 +1,29 @@
+.homeButton {
+    height: 57px; width: 236px;
+    background-size: 236px 57px;
+    border: none;
+    background-color: inherit;
+    background-image: url("chrome-extension://__MSG_@@extension_id__/images/HomeButton.png")
+}
+
+.settingsButton {
+    margin-top: 25px;
+    height: 57px; width: 150px;
+    background-size: 150px 57px;
+    border: none;
+    border-radius: 10px;
+    background-image: url("chrome-extension://__MSG_@@extension_id__/images/SettingsButton.png");
+    cursor: pointer;
+    background-color: black;
+    opacity: 100%;
+}
+
+.customDiscordBanner {
+    height: 150px; width: 287px;
+    background-size: 287px 150px;
+    background-color: inherit;
+    cursor: pointer;
+    z-index: 2;
+    margin-right: 20px;
+    margin-bottom: 25px;
+}
