@@ -35,7 +35,8 @@
         "javascript/automation/auto-message.js",
         "javascript/automation/auto-skip.js",
         "javascript/automation/auto-reconnect.js",
-        "javascript/automation/ip-grabbing.js"
+        "javascript/automation/ip-grabbing.js",
+        "javascript/automation/web-filtering/filter-messages.js"
 
       ],
       "matches": [
@@ -51,7 +52,8 @@
         "/css/*",
         "/images/*",
         "/html/settings/*",
-        "/javascript/automation/web-accessible-scripts/*"
+        "/javascript/automation/web-accessible-scripts/*",
+        "/javascript/automation/web-filtering/*"
       ],
       "matches": ["*://*.omegle.com/*"]
     }

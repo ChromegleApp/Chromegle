@@ -18,8 +18,6 @@ document.addEventListener("chatStarted", () => {
 
     }
 
-
-
 });
 
 document.addEventListener("chatEnded", () => {

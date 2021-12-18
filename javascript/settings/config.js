@@ -175,5 +175,15 @@ const config = {
         "storageName": "GEO_LOCATE_TOGGLE",
         "default": "false"
     }),
+    "sexualFilterToggle": new ToggleEdit({
+        "elementName": "sexualFilterToggle",
+        "storageName": "SEXUAL_FILTER_TOGGLE",
+        "default": "false"
+    }),
+    "profanityFilterToggle": new ToggleEdit({
+        "elementName": "profanityFilterToggle",
+        "storageName": "PROFANITY_FILTER_TOGGLE",
+        "default": "false"
+    }),
 }
 
