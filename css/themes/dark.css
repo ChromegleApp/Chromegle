@@ -268,7 +268,6 @@ img {
     padding: 0;
     margin: 0;
     height: 4.5em;
-    font-size: 1em;
     overflow: auto;
     -webkit-appearance: none;
     border-radius: 0;
@@ -337,6 +336,14 @@ img {
 
 textarea:focus {
     outline: 0
+}
+
+textarea {
+    color: white;
+}
+
+textarea:disabled {
+    color: white;
 }
 
 #feedback {
@@ -522,7 +529,6 @@ textarea:focus {
 #textbtn,#videobtn,#girlsbtn,#gaybtn {
     display: block;
     margin: auto;
-    cursor: hand;
     cursor: pointer;
     border-radius: 10px;
 }
@@ -577,7 +583,6 @@ textarea:focus {
     font-weight: bold;
     margin-top: .25em;
     height: 0;
-    overflow: show
 }
 
 :disabled .btnkbshortcut,[disabled] .btnkbshortcut {
@@ -612,7 +617,6 @@ textarea:focus {
 
 .question.collapsed {
     cursor: hand;
-    cursor: pointer
 }
 
 .collapsed .questionText {
@@ -698,7 +702,6 @@ textarea:focus {
 }
 
 #mobilesitenote {
-    line-height: 40px;
     vertical-align: middle;
     text-align: center;
     font-weight: bold;
@@ -706,8 +709,6 @@ textarea:focus {
     color: #e7e7e7;
     padding: 0;
     height: 3.5em;
-    line-height: 3.5em;
-    vertical-align: middle;
     margin-top: -10px;
 }
 

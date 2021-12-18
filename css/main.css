@@ -27,3 +27,43 @@
     margin-right: 20px;
     margin-bottom: 25px;
 }
+
+.ipLookupButton {
+    cursor: pointer;
+    padding: 6px;
+    border-radius: .5em;
+    font-size: .9em;
+    background: #409ffe;
+    background-image: -o-linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: -moz-linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: -webkit-gradient(linear,0 0,0 100%,from(#80c0ff),to(#017ffe));
+    background-image: -webkit-linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: -ms-linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    color: rgb(255, 255, 255);
+    font-weight: 400;
+
+    display: inherit;
+    position: inherit;
+    z-index: inherit;
+    border: inherit;
+    margin-right: inherit;
+    background-size: inherit;
+    height: inherit; width: inherit;
+}
+
+.statusItem {
+    color: #208ffe;
+    font-size: .9em;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    -webkit-animation: msgfade .25s ease-out forwards;
+    animation: msgfade .25s ease-out forwards
+}
+
+.statusItem.statusAnswer {
+    font-size: .9em;
+    font-weight: normal;
+}
+

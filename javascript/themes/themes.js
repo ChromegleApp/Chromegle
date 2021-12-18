@@ -62,19 +62,14 @@ class ThemeManager {
 
 
         #overrideTaglineInsertMenu = () => {
-
-
             $("#tagline").replaceWith(ButtonManager.menuButton)
 
-
-
         };
-
 
         #overrideHongKongPoster = () => {
             let newBanner = document.createElement("img");
             newBanner.src = getResourceURL("images/DiscordBanner.png");
-            newBanner.href = DefaultValues.discordURL;
+            newBanner.href = ConstantValues.discordURL;
             newBanner.classList.add("customDiscordBanner");
             $("img[src$='/static/standwithhk.jpeg']").replaceWith(newBanner);
         }

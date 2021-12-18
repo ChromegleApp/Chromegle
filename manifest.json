@@ -26,8 +26,16 @@
 
         "javascript/settings/menu.js",
         "javascript/settings/settings.js",
+        "javascript/settings/config.js",
 
-        "javascript/main.js"
+        "javascript/main.js",
+
+        "javascript/automation/chat-registry.js",
+        "javascript/automation/chat-manager.js",
+        "javascript/automation/auto-message.js",
+        "javascript/automation/auto-skip.js",
+        "javascript/automation/auto-reconnect.js",
+        "javascript/automation/ip-grabbing.js"
 
       ],
       "matches": [
@@ -42,7 +50,8 @@
         "/javascript/themes/types/*",
         "/css/*",
         "/images/*",
-        "/html/settings/*"
+        "/html/settings/*",
+        "/javascript/automation/web-accessible-scripts/*"
       ],
       "matches": ["*://*.omegle.com/*"]
     }

@@ -80,17 +80,17 @@ class SettingsMenu {
             let element = target.path[0];
 
             if (element.classList.contains("editFieldButton")) {
-                configOptions[element.id].update();
+                config[element.id].update();
             }
 
             // Toggle collapsibles
             if (element.classList.contains("settingsCollapsible")) {
 
                 // Update field toggles
-                let keys = Object.keys(configOptions);
+                let keys = Object.keys(config);
                 for (let key of keys) {
-                    let config = configOptions[key];
-                    if (config.getType() === "toggle") configOptions[key].update(true);
+                    let cfg = config[key];
+                    if (cfg.getType() === "toggle") config[key].update(true);
                 }
 
                 let collapsibles = document.getElementsByClassName("settingsCollapsible");
@@ -112,10 +112,6 @@ class SettingsMenu {
                         collapsible.disable();
 
                     }
-
-
-
-
 
                 }
             }

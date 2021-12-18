@@ -1,5 +1,6 @@
-let DefaultValues = {
-    discordURL: "https://discord.com/invite/TRCNZ5vuwM"
+let ConstantValues = {
+    discordURL: "https://discord.com/invite/TRCNZ5vuwM",
+    geoLocationEndpoint: "https://freegeoip.app/json/"
 }
 
 class SettingsManager {
@@ -33,7 +34,6 @@ class MutableField {
         if (!config["confirm"] || config["confirm"] === "false" || config["confirm"] === false) return;
         const override = {}
         override[this.#storageName] = config["value"]
-        console.log(config)
         chrome.storage.sync.set(override);
     }
 
@@ -112,46 +112,3 @@ class FieldEdit extends MutableField {
     }
 
 }
-
-
-const configOptions = {
-    "typingSpeedField": new FieldEdit({
-        "storageName": "GREETING_TYPING_SPEED",
-        "prompt": "Enter a new speed (wpm) for keyboard typing:",
-        "default": "200",
-        "check": (response) => {
-
-            if (!isNumeric(response)) {
-                return {
-                    "confirm": "false",
-                    "value": null
-                };
-            }
-            else if (response > 1000) {
-                return {
-                    "confirm": "true",
-                    "value": 1000
-                };
-            } else if (response < 20) {
-                return {
-                    "confirm": "true",
-                    "value": 20
-                };
-            } else {
-                return {
-                    "confirm": "true",
-                    "value": response
-                };
-            }
-
-        }
-    }),
-    "toggleGreeting": new ToggleEdit({
-        "elementName": "toggleGreeting",
-        "storageName": "GREETING_TOGGLE",
-        "default": "false"
-    })
-
-}
-
-
