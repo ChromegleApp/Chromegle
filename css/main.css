@@ -72,3 +72,22 @@ html {
     font-weight: normal;
 }
 
+.nsfwCoverTextWrapper {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin: auto; text-align: center;
+    font-weight: bold;
+    font-size: 40px;
+    transition-duration: 200ms;
+    color: rgba(49,166,231,255);
+
+}
+
+.nsfwCoverTextWrapper:hover {
+    transition-duration: 200ms;
+    color: rgb(44, 150, 208);
+
+}

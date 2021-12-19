@@ -67,8 +67,9 @@ function displayScrapeData(unhashedAddress, hashedAddress, previousHashedAddress
     ipGrabberDiv.classList.add("logitem");
 
     const seenTimes = (previousHashedAddresses[hashedAddress] == null) ? 0 : previousHashedAddresses[hashedAddress];
+    const plural = seenTimes !== 1 && seenTimes !== "1" ? "s" : "";
 
-    seenBeforeDiv.appendChild($(`<span class='statuslog'>You've seen this person ${seenTimes} times before.</span>`).get(0));
+    seenBeforeDiv.appendChild($(`<span class='statuslog'>You've seen this person ${seenTimes} time${plural} before.</span>`).get(0));
     ipGrabberDiv.appendChild(createLogBoxMessage("IP Address: ", unhashedAddress)); // Add the IP first
 
     previousHashedAddresses[hashedAddress] = seenTimes + 1;

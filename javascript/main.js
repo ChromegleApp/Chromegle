@@ -4,6 +4,10 @@ let chatRegistry = null;
 
 MicroModal.init();
 
+document.onkeypress = function (e) {
+    console.log(e)
+
+};
 
 $(document).on("ready", () => {
 

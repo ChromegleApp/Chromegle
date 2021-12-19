@@ -77,7 +77,6 @@ class ThemeManager {
 
         #overrideTaglineInsertMenu = () => {
             $("#tagline").replaceWith(ButtonManager.menuButton)
-
         };
 
         #overrideHongKongPoster = () => {

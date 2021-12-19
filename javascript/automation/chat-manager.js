@@ -16,6 +16,7 @@ document.addEventListener("chatStarted", () => {
             $(self).css("z-index", "");
         }
 
+
     }
 
 });
