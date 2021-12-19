@@ -42,7 +42,7 @@ body, #header {
 /*
 Secondary Colour BACKGROUND
  */
-#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .nsfwbutton {
+#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .nsfwbutton, #selfvideo, #othervideo{
     background: rgb(29, 29, 31);
 }
 
@@ -53,6 +53,10 @@ Primary Colour TEXT
 .lowergaybtnwrapper, .chatmsg:focus, .statuslog, .logitem, textarea, textarea:disabled,
 .videochat .controlwrapper,.videochat .disconnectbtn,.videochat .disconnectbtnwrapper, #mobilesitenote {
     color: #9a9a9a;
+}
+
+.nsfwCoverTextWrapper {
+    color: #cbcaca;
 }
 
 /*
@@ -497,7 +501,6 @@ textarea:focus {
 
 #selfvideo,#othervideo {
     display: block;
-    background: #555
 }
 
 @keyframes spinner {

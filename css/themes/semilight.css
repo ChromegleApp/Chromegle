@@ -50,6 +50,11 @@ Secondary Colour BACKGROUND
     background: #ffffff;
 }
 
+#selfvideo, #othervideo {
+    background: #3b3b3b;
+}
+
+
 #intro {
     box-shadow: inset 0 0 0.5em #bbb;
     -webkit-box-shadow: inset 0 0 0.5em #bbb;
@@ -60,7 +65,7 @@ Primary Colour TEXT
  */
 #intro,  .newbtn.disconnectbtn, .sendbtn, .lowersexybtnwrapper,
 .lowergaybtnwrapper, .chatmsg:focus, .statuslog, .logitem, textarea, textarea:disabled,
-.videochat .controlwrapper,.videochat .disconnectbtn,.videochat .disconnectbtnwrapper, #mobilesitenote, input{
+.videochat .controlwrapper,.videochat .disconnectbtn,.videochat .disconnectbtnwrapper, #mobilesitenote, input, .nsfwCoverTextWrapper{
     color: #454545;
 }
 
@@ -87,7 +92,7 @@ Tertiary colour text
     color: #525252;
 }
 
-.logwrapper, .chatmsgwrapper, .disconnectbtnwrapper, .sendbtnwrapper, .nsfwbutton {
+.logwrapper, .chatmsgwrapper, .disconnectbtnwrapper, .sendbtnwrapper, .nsfwbutton, #selfvideo, #othervideo {
     border: 1px solid #CCC;
 }
 
@@ -525,9 +530,8 @@ textarea:focus {
     -webkit-border-top-left-radius: .5em
 }
 
-#selfvideo,#othervideo {
+#selfvideo, #othervideo {
     display: block;
-    background: #555
 }
 
 @keyframes spinner {
