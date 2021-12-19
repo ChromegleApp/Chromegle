@@ -40,6 +40,11 @@ $(window).on("resize", () => {
 document.addEventListener("pageStarted", () => {
     let otherVideo = $("#othervideo");
 
+    // Must be video
+    if (otherVideo.get(0) == null) {
+        return;
+    }
+
     $("#videowrapper").get(0).appendChild(ButtonManager.coverButton.get(0))
     $(otherVideo).on("click", (event) => blockVideo(event.target));
 

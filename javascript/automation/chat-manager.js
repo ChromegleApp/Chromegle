@@ -21,8 +21,8 @@ document.addEventListener("chatStarted", () => {
 
 });
 
-document.addEventListener("chatEnded", () => {
 
+const cleanEndChat = () => {
     const autoReconnect = $("label:contains('Auto-reroll')");
 
     if (autoReconnect.get(0) != null) autoReconnect.css("color", "");
@@ -35,11 +35,10 @@ document.addEventListener("chatEnded", () => {
             .css("padding", "5px")
             .val("Click to Disable")
             .get(0).classList.add("conversationgreat");
-
     }
+}
 
-
-});
+document.addEventListener("chatEnded", () => cleanEndChat());
 
 document.addEventListener("click", () => {
 

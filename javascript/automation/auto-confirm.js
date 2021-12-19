@@ -6,7 +6,7 @@ function autoConfirm() {
     $("input[type=button][value='Confirm & continue']").trigger("click");
 }
 
-$(document).on("ready", () => {
+document.addEventListener("startUpEvent",() => {
 
     ["#textbtn", "#videobtn", "#videobtnunmoderated"].forEach((button) => {
         $(button).on('click', () => autoConfirm());

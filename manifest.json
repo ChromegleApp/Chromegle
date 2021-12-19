@@ -55,7 +55,7 @@
         "/javascript/themes/types/*",
         "/css/*",
         "/images/*",
-        "/html/settings/*",
+        "/html/*",
         "/javascript/automation/web-accessible-scripts/*",
         "/javascript/automation/web-filtering/*"
       ],

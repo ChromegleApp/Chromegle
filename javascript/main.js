@@ -7,9 +7,31 @@ MicroModal.init();
 $(document).on("ready", () => {
 
     /**
+     * Banned Pages
+     */
+    {
+        // Porn-redirect screen
+        if (window.location.href.includes("banredir.html")) {
+            window.location.href = "https://omegle.com/static/ban.html";
+            return;
+        }
+
+        // Static HTML ban screen
+        if (window.location.href.includes("ban.html")) {
+            $("html")
+                .load(chrome.runtime.getURL("/html/banned.html"))
+                .css("visibility", "visible")
+                .css("background-color", "#17191a");
+            return;
+        }
+    }
+
+
+    /**
      * General Start-Up
      */
     {
+        document.dispatchEvent(new CustomEvent("startUpEvent"));
         settingsManager = new SettingsManager();
         chatRegistry = new ChatRegistry();
         chatRegistry.startObserving();

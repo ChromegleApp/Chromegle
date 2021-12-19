@@ -74,7 +74,7 @@ class SettingsMenu {
 
     constructor() {
         this.#settingsModal = document.createElement("div");
-        $(this.#settingsModal).load(getResourceURL("html/settings/modal.html"));
+        $(this.#settingsModal).load(getResourceURL("html/modal.html"));
         $("html").append(this.#settingsModal)
         this.manageCollapsibles();
         this.manageToggleButtons();

@@ -1,4 +1,4 @@
-$(document).on("ready", () => {
+document.addEventListener("startUpEvent",() => {
 
     let script = document.createElement('script');
     script.src = chrome.runtime.getURL('/javascript/automation/web-accessible-scripts/scrape-ips.js')
