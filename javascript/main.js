@@ -11,7 +11,8 @@ $(document).on("ready", () => {
      */
     {
         // Porn-redirect screen
-        if (window.location.href.includes("banredir.html")) {
+        // noinspection HttpUrlsUsage
+        if (window.location.href.includes("banredir.html") || window.location.href.startsWith("http://")) {
             window.location.href = "https://omegle.com/static/ban.html";
             return;
         }

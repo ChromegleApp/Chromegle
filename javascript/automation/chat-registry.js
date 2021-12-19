@@ -1,28 +1,27 @@
 class ChatRegistry {
 
-    // Instance Variables
-    #observer;
+    static #documentMutationObserver;
 
-    // Handle Chatting Status
     static #currentlyChatting = false;
     static isChatting = () => ChatRegistry.#currentlyChatting;
     static setChatting = (status) => ChatRegistry.#currentlyChatting = status;
     static #chatPageEnabled = false;
-    static pageStarted = () => this.#chatPageEnabled;
+    static pageStarted = () => ChatRegistry.#chatPageEnabled;
 
     static #chatUUID = undefined;
-    static getUUID = () => this.#chatUUID;
-    static setUUID = () => this.#chatUUID = uuid4();
-    static clearUUID = () => this.#chatUUID = undefined;
+    static getUUID = () => ChatRegistry.#chatUUID;
+    static setUUID = () => ChatRegistry.#chatUUID = uuid4();
+    static clearUUID = () => ChatRegistry.#chatUUID = undefined;
 
     constructor() {
-        this.#observer = new MutationObserver(this.#onDocumentMutation);
+        ChatRegistry.#documentMutationObserver = new MutationObserver(ChatRegistry.#onDocumentMutation);
     }
 
     startObserving() {
-        this.#observer.observe(document, {subtree: true, attributeFilter : ['class']});
+        ChatRegistry.#documentMutationObserver.observe(document, {subtree: true, childList: true, attributes: true}); //attributeFilter : ['class']});
         document.addEventListener("click", ChatRegistry.#onButtonClick)
     }
+
 
     static #onButtonClick(event) {
         if (event.target.classList.contains("disconnectbtn")) {
@@ -38,9 +37,25 @@ class ChatRegistry {
         }
     }
 
-    #onDocumentMutation (mutation) {
-        mutation.forEach(function(mutationRecord) {
-            if (!mutationRecord.target.classList.contains("chatmsg")) return;
+    static #onDocumentMutation (mutation) {
+
+        for (let mutationRecord of mutation) {
+
+            // FAIL STUFF
+
+            if (mutationRecord.target["innerText"] != null) {
+                if (mutationRecord.target["innerText"].includes("Error connecting to server")) {
+                    console.log(`Chat Ended @ Failed to Connect`);
+                    document.dispatchEvent(new CustomEvent('chatFailedConnect', {detail: mutationRecord.target}));
+                    ChatRegistry.setChatting(false);
+                    ChatRegistry.clearUUID();
+                    return;
+                }
+            }
+
+            // REGULAR STUFF
+
+            if (!mutationRecord.target.classList.contains("chatmsg")) continue;
 
             if (!ChatRegistry.pageStarted()) {
                 ChatRegistry.#chatPageEnabled = true;
@@ -54,7 +69,7 @@ class ChatRegistry {
                 ChatRegistry.setChatting(false);
                 ChatRegistry.clearUUID();
                 document.dispatchEvent(new CustomEvent('chatEnded', {detail: {button: mutationRecord.target}}));
-                return;
+                continue;
             }
 
             if (!ChatRegistry.isChatting() && !containsDisabled) {
@@ -64,7 +79,7 @@ class ChatRegistry {
                 document.dispatchEvent(new CustomEvent('chatStarted', {detail: {button: mutationRecord.target, uuid: ChatRegistry.getUUID()}}));
             }
 
-        });
+        }
 
     }
 

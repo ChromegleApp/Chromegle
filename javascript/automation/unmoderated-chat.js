@@ -52,13 +52,15 @@ function cleanPage() {
 }
 
 /**
- * Run some stuff when the chat ends
+ * Run some stuff when the chat ends or fails to connect
  */
-document.addEventListener("chatEnded", () => {
+document.addEventListener("chatEnded", () => cleanChatEnd());
+document.addEventListener("chatFailedConnect", () => cleanChatEnd());
+
+const cleanChatEnd = () => {
     $("img[src='/static/sexbtn.png?xx']").remove();
     $("img[src='/static/gaybtnorange.png']").remove();
-
-});
+}
 
 
 /**
