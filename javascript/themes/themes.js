@@ -85,6 +85,7 @@ class ThemeManager {
             newBanner.src = getResourceURL("images/DiscordBanner.png");
             newBanner.href = ConstantValues.discordURL;
             newBanner.classList.add("customDiscordBanner");
+            $(newBanner).on("click", () => window.open(ConstantValues.discordURL));
             $("img[src$='/static/standwithhk.jpeg']").replaceWith(newBanner);
         }
         #overrideTopicEditor = () => $(".topictageditor").get(0).style.background = null;

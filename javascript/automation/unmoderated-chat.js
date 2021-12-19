@@ -1,3 +1,28 @@
+/**
+ * ONLY run this if they click the NSFW button :D
+ */
+$("#videobtnunmoderated").on("click", () => startNSFWObserving());
+
+
+/**
+ * Video chat -> NSFW Chat
+ */
+$(document).on("click", (event) => {
+    if (event.target.innerText === "unmoderated section") {
+        autoConfirm();
+        cleanPage();
+        startNSFWObserving();
+    }
+
+})
+
+function startNSFWObserving() {
+    nsfwObserver.observe(document, {attributes: true, childList: true, subtree:true});
+}
+
+/**
+ * Clean the page on load
+ */
 function cleanPage() {
     $(".lowergaybtnwrapper").remove();
     $(".lowersexybtnwrapper").remove();
@@ -22,6 +47,9 @@ function cleanPage() {
 
 }
 
+/**
+ * Run some stuff when the chat ends
+ */
 document.addEventListener("chatEnded", () => {
     $("img[src='/static/sexbtn.png?xx']").remove();
     $("img[src='/static/gaybtnorange.png']").remove();
@@ -29,6 +57,9 @@ document.addEventListener("chatEnded", () => {
 });
 
 
+/**
+ * Observe for changes in DOM
+ */
 let nsfwObserver = new MutationObserver((mutationRecord) => {
 
     for (let mutation of mutationRecord) {
@@ -40,16 +71,8 @@ let nsfwObserver = new MutationObserver((mutationRecord) => {
             }
         }
 
-
-
     }
 });
 
 
-document.addEventListener("pageStarted", () => {
-    const isNSFW = document.getElementById("abovevideosexybtn") !== null;
-    if (!isNSFW) return;
 
-    cleanPage();
-    nsfwObserver.observe(document, {attributes: true, childList: true, subtree:true});
-});
