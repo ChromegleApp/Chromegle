@@ -28,10 +28,19 @@ class ChatRegistry {
         if (event.target.classList.contains("disconnectbtn")) {
             document.dispatchEvent(new CustomEvent('chatButtonClicked', {event: event}));
         }
+
+        // For banned -> Non-banned is able to use the onDocumentMutation
+        if (["videobtn", "textbtn"].includes(event.target.id)) {
+            if (!ChatRegistry.pageStarted()) {
+                ChatRegistry.#chatPageEnabled = true;
+                document.dispatchEvent(new CustomEvent('pageStarted', {detail: {button: event.target}}));
+            }
+        }
     }
 
     #onDocumentMutation (mutation) {
         mutation.forEach(function(mutationRecord) {
+            console.log(mutationRecord.target)
             if (!mutationRecord.target.classList.contains("chatmsg")) return;
 
             if (!ChatRegistry.pageStarted()) {
@@ -40,6 +49,7 @@ class ChatRegistry {
             }
 
             const containsDisabled = mutationRecord.target.classList.contains("disabled");
+            console.log(containsDisabled);
 
             if (ChatRegistry.isChatting() && containsDisabled) {
                 console.log(`Chat Ended @ UUID ${ChatRegistry.getUUID()}`);

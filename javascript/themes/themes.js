@@ -37,7 +37,8 @@ class ThemeManager {
                 this.#overrideTopicEditor,
                 this.#overrideCollegeAndUnModeratedButtons,
                 this.#overrideLinks,
-                this.#overrideHeader
+                this.#overrideHeader,
+                this.#overrideStudentChatEmoji
             ].forEach((fn) => {
                 try {
                     fn();
@@ -45,6 +46,10 @@ class ThemeManager {
                     console.log(ex);
                 }
             })
+        }
+
+        #overrideStudentChatEmoji = () => {
+            $("span:contains('▶')").remove()
         }
 
         #overrideHeader = () => {

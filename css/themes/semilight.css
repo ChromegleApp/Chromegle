@@ -65,7 +65,8 @@ Primary Colour TEXT
  */
 #intro,  .newbtn.disconnectbtn, .sendbtn, .lowersexybtnwrapper,
 .lowergaybtnwrapper, .chatmsg:focus, .statuslog, .logitem, textarea, textarea:disabled,
-.videochat .controlwrapper,.videochat .disconnectbtn,.videochat .disconnectbtnwrapper, #mobilesitenote, input, .nsfwCoverTextWrapper{
+.videochat .controlwrapper,.videochat .disconnectbtn,.videochat .disconnectbtnwrapper, #mobilesitenote, input, .nsfwCoverTextWrapper,
+#chattypeorcell,.chattypeorcell{
     color: #454545;
 }
 
@@ -575,18 +576,18 @@ textarea:focus {
 }
 
 #chattypeorcell,.chattypeorcell {
-    color: #cbcbcb;
     font-size: .9em;
     font-weight: bold;
     padding: .5em !important
 }
 
-#textbtn,#videobtn,#girlsbtn,#gaybtn {
+#textbtn, #videobtn, #girlsbtn,#gaybtn {
     display: block;
     margin: auto;
     cursor: pointer;
     border-radius: 10px;
 }
+
 
 #videobtn.disabled {
     cursor: default
@@ -883,9 +884,13 @@ td #topicsettingscontainer,td #intoheader {
 }
 
 #monitoringnotice.banned {
-    background: red
+    display: block;
+    padding: 10px 10px 15px;
+    color: rgba(32,34,37,255);
+    background: #fff7ee;
+    box-shadow: inset 0 0 0.5em #bbb;
+    -webkit-box-shadow: inset 0 0 0.5em #bbb;
 }
-
 #monitoringnotice p {
     margin: 0;
     font-size: 1.1em

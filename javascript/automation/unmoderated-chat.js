@@ -2,7 +2,8 @@
  * ONLY run this if they click the NSFW button :D
  */
 $("#videobtnunmoderated").on("click", () => startNSFWObserving());
-
+$("#videobtn").on("click", () => startNSFWObserving());
+$("#textbtn").on("click", () => startNSFWObserving());
 
 /**
  * Video chat -> NSFW Chat
@@ -34,11 +35,14 @@ function cleanPage() {
         .css("font-size", "20px")
         .addClass("nsfwbutton")
 
-    aboveButtonClone.get(0).innerHTML = (
-        `<a href="${ConstantValues.discordURL}" target="_blank" style="text-decoration: none;">
+    let aboveClone = aboveButtonClone.get(0);
+    if (aboveClone != null) {
+        aboveClone.innerHTML = (
+            `<a href="${ConstantValues.discordURL}" target="_blank" style="text-decoration: none;">
          <strong>Chromegle Discord (NO NSFW)</strong>
          </a>`
-    );
+        );
+    }
 
     $(aboveButton).replaceWith(aboveButtonClone);
 

@@ -550,7 +550,7 @@ textarea:focus {
     padding: .5em !important
 }
 
-#textbtn,#videobtn,#girlsbtn,#gaybtn {
+#textbtn, #videobtn, #girlsbtn, #gaybtn{
     display: block;
     margin: auto;
     cursor: pointer;
@@ -873,7 +873,10 @@ td #topicsettingscontainer,td #intoheader {
 }
 
 #monitoringnotice.banned {
-    background: red
+    display: block;
+    padding: 10px 10px 15px;
+    color: #cbcbcb;
+    background: rgb(49, 52, 57);
 }
 
 #monitoringnotice p {
