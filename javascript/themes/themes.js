@@ -1,5 +1,3 @@
-
-
 class ThemeManager {
 
     #currentResourcePath = undefined;
@@ -9,8 +7,7 @@ class ThemeManager {
     setCurrentResourcePath = (newPath) => this.#currentResourcePath = newPath;
 
     constructor(resourcePath) {
-        this.setCurrentResourcePath(resourcePath || "css/themes/dark.css");
-
+        this.setCurrentResourcePath(resourcePath);
         let pageLinks = document.getElementsByTagName("link");
 
         for (let link of pageLinks) {
@@ -24,7 +21,7 @@ class ThemeManager {
 
     loadCurrentTheme() {
         this.OverrideManager.initialize();
-        this.#stylesheet.href = getResourceURL(this.#currentResourcePath)
+        this.#stylesheet.href = chrome.runtime.getURL(this.#currentResourcePath)
     }
 
     OverrideManager = new class {
@@ -39,7 +36,8 @@ class ThemeManager {
                 this.#overrideHomePageText,
                 this.#overrideTopicEditor,
                 this.#overrideCollegeAndUnModeratedButtons,
-                this.#overrideLinks
+                this.#overrideLinks,
+                this.#overrideHeader
             ].forEach((fn) => {
                 try {
                     fn();
@@ -47,6 +45,19 @@ class ThemeManager {
                     console.log(ex);
                 }
             })
+        }
+
+        #overrideHeader = () => {
+            let headerQuery = {}
+            headerQuery[config.headerButtonsToggle.getName()] = config.headerButtonsToggle.getDefault();
+            chrome.storage.sync.get(headerQuery, (result) => {
+                let showHeaderButtons = result[config.headerButtonsToggle.getName()] === "true";
+                if (showHeaderButtons) return;
+
+                $("#sharebuttons").remove();
+                $("#onlinecount").css("margin-top", "-15px");
+
+            });
         }
 
         #overrideBody = () => {

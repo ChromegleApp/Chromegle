@@ -30,6 +30,8 @@ class Collapsible {
 }
 
 
+
+
 class ToggleButton {
     #element;
 
@@ -49,6 +51,23 @@ class ToggleButton {
     }
 }
 
+class SwitchButton {
+    #element;
+
+    constructor(element) {
+        this.#element = element;
+    }
+
+    enable() {
+        this.#element.classList.add("editToggleEnabled")
+    }
+
+    disable() {
+        this.#element.classList.remove("editToggleEnabled")
+
+    }
+}
+
 
 class SettingsMenu {
     #settingsModal = undefined;
@@ -59,7 +78,7 @@ class SettingsMenu {
         $("html").append(this.#settingsModal)
         this.manageCollapsibles();
         this.manageToggleButtons();
-
+        this.manageSwitchButtons();
     }
 
     manageToggleButtons = () => {
@@ -73,6 +92,21 @@ class SettingsMenu {
                 toggle.disable();
             }
         })
+    }
+
+    manageSwitchButtons = () => {
+        document.addEventListener("SwitchModify", (response) => {
+            const element = document.getElementById(response["detail"]["element"]);
+
+            for (let elementName of response["detail"]["others"]) {
+                let other = $(`#${elementName}`).get(0);
+                let otherSwitch = new SwitchButton(other);
+                otherSwitch.disable();
+            }
+
+            new SwitchButton(element).enable();
+
+        });
     }
 
     manageCollapsibles = () => {
@@ -91,6 +125,7 @@ class SettingsMenu {
                 for (let key of keys) {
                     let cfg = config[key];
                     if (cfg.getType() === "toggle") config[key].update(true);
+                    if (cfg.getType() === "switch") config[key].update(true);
                 }
 
                 let collapsibles = document.getElementsByClassName("settingsCollapsible");

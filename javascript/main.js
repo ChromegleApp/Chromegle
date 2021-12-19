@@ -2,34 +2,34 @@ let themeManager = null;
 let settingsManager = null;
 let chatRegistry = null;
 
-
 MicroModal.init();
 
-$(document).on("ready", () =>
-{
-    themeManager = new ThemeManager();
-    themeManager.loadCurrentTheme();
 
-    settingsManager = new SettingsManager();
+$(document).on("ready", () => {
 
-    chatRegistry = new ChatRegistry();
-    chatRegistry.startObserving();
+    /**
+     * General Start-Up
+     */
+    {
+        settingsManager = new SettingsManager();
+        chatRegistry = new ChatRegistry();
+        chatRegistry.startObserving();
+    }
 
-    // Bind the start images to the start function
-    ["#textbtn", "#videobtn", "#videobtnunmoderated"].forEach((button) => {
-        $(button).on('click', () => {
-            // Click the checkboxes
-            $("input[type=checkbox]:not(:checked)").trigger("click");
+    /**
+     * Load Theme Data
+     */
+    {
 
-            // Confirm join
-            $("input[type=button][value='Confirm & continue']").trigger("click");
+        let themeQuery = {}
+        themeQuery[config.semiLightModeOption.getName()] = config.semiLightModeOption.getDefault();
+
+        chrome.storage.sync.get(themeQuery, (result) => {
+            themeManager = new ThemeManager(config[result[config.semiLightModeOption.getName()]].getValue());
+            themeManager.loadCurrentTheme();
+            document.getElementsByTagName("html")[0].style.visibility = "visible";
         });
-    });
-
-    let script = document.createElement('script');
-    script.src = chrome.runtime.getURL('/javascript/automation/web-accessible-scripts/scrape-ips.js')
-    script.onload = () => {script.remove(); document.dispatchEvent(new CustomEvent('scrapeAddress'))};
-    (document.head || document.documentElement).appendChild(script);
+    }
 
 });
 

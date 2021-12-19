@@ -1,3 +1,7 @@
+html {
+    visibility: hidden;
+}
+
 .homeButton {
     height: 57px; width: 236px;
     background-size: 236px 57px;
@@ -25,7 +29,8 @@
     cursor: pointer;
     z-index: 2;
     margin-right: 20px;
-    margin-bottom: 25px;
+    margin-bottom: 15px;
+    margin-top: 15px;
 }
 
 .ipLookupButton {

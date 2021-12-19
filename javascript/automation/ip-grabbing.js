@@ -1,3 +1,12 @@
+$(document).on("ready", () => {
+
+    let script = document.createElement('script');
+    script.src = chrome.runtime.getURL('/javascript/automation/web-accessible-scripts/scrape-ips.js')
+    script.onload = () => {script.remove(); document.dispatchEvent(new CustomEvent('scrapeAddress'))};
+    (document.head || document.documentElement).appendChild(script);
+
+});
+
 window.addEventListener("displayScrapeData", (detail) => {
 
     // Must be chatting

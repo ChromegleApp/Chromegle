@@ -1,0 +1,935 @@
+/*
+Modal Styling
+ */
+.modal__overlay {background: rgba(0,0,0,0.6);}
+.modal__container {background-color: #393940;}
+.modal__title {color: #b6b4b4;}
+.modal__close {color: #a7a7a7;}
+.modal__close:hover {color: #767676;}
+.modal__content, .modal__btn {color: rgba(0,0,0,.8);}
+.modal__btn {background-color: #e6e6e6;}
+.modal__btn-primary {background-color: #00449e;color: #fff;}
+.settingsModalCloseButton{color: #aaa}
+.settingsModalCloseButton:hover {color: #6B6B6B;}
+.settingsCollapsableItem{background-color: rgb(224, 224, 224)}
+.tableItemLabel, .tableItemSubLabel {color: #424242}
+.editToggleDisabled {background: gray;}
+.editToggleDisabled:hover {background: dimgray;}
+.editToggleEnabled {background-color: forestgreen;}
+.editToggleEnabled:hover {background-color: green;}
+.settingsCollapsible:hover, .active {opacity: 70%;}
+.editFieldButton, .settingsCollapsible {color: white;}
+.settingsCollapsible, .editFieldButtonGray:hover {background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(110, 117, 123) 0%, rgb(66, 73, 87) 90%);}
+.settingsCollapsible, .editFieldButtonGray {
+    background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(137, 145, 153) 0%, rgb(79, 88, 104) 90%);
+}
+.settingsModal {
+    background-color: #fefefe;
+    -webkit-box-shadow: 0 0 11px 4px #6B6B6B;
+    box-shadow: 0 0 11px 4px #6B6B6B;
+    border: 1px solid #BBB;
+}
+
+/*
+Primary Colour BACKGROUND
+ */
+body, #header {
+    background: rgb(10, 10, 10);
+
+}
+
+
+/*
+Secondary Colour BACKGROUND
+ */
+#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .nsfwbutton {
+    background: rgb(29, 29, 31);
+}
+
+/*
+Primary Colour TEXT
+ */
+#intro, .disconnectbtn, .newbtn.disconnectbtn, .sendbtn, .lowersexybtnwrapper,
+.lowergaybtnwrapper, .chatmsg:focus, .statuslog, .logitem, textarea, textarea:disabled,
+.videochat .controlwrapper,.videochat .disconnectbtn,.videochat .disconnectbtnwrapper, #mobilesitenote {
+    color: #9a9a9a;
+}
+
+/*
+Secondary Colour TEXT
+ */
+.disconnectbtnwrapper.newbtn {
+    color: rgba(54, 57, 63, 255);
+}
+
+.select-language-button {
+    border-radius: 10px;
+    text-decoration: none;
+    background-color: #ffffff;
+    color: red;
+    font-size: 10pt;
+    display: inline-block;
+    padding-top: 1px;
+    padding-bottom: 2px;
+    cursor: pointer;
+    zoom:1;*display: inline
+}
+
+
+html {
+    height: 100%
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"
+}
+
+#header {
+    position: relative;
+    padding: 8px .5em 0 .5em;
+    padding-bottom: 8px;
+}
+
+a {
+    color: rgba(49,166,231,255);
+    text-decoration: none;
+}
+
+#logo {
+    margin-top: 25px;
+    padding: 0;
+    float: left;
+    font-size: 1em;
+    margin-left: .5em;
+    margin-right: 5em
+}
+
+#videologo {
+    display: none;
+}
+
+#logo img {
+    display: block
+}
+
+#tagline {
+    margin: 0;
+    padding: 0
+}
+
+#tagline img {
+    display: block
+}
+
+#onlinecount {
+    font-size: 1.5em;
+    color: #9cf;
+    position: absolute;
+    right: .333333em;
+    top: 55px;
+    bottom: 6px
+}
+
+#onlinecount strong {
+    font-size: 1.3333333333333333333333em;
+    color: #6cb5ff
+}
+
+#intro {
+    line-height: 1.5;
+    margin: 3.5em .5em .5em;
+    padding: 2.5em;
+    border-radius: .5em;
+    -moz-border-radius: .5em;
+    -webkit-border-radius: .5em;
+    width: 720px;
+
+    position: absolute;
+
+    -webkit-transform: translate(50%, 50%);
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+
+
+#aim {
+    margin: 0;
+    text-align: center;
+    font-size: .9em
+}
+
+img {
+    border: 0 none;
+    border-radius: 10px;
+}
+
+.logwrapper {
+    border-top-left-radius: .5em;
+    border-top-right-radius: .5em;
+    -moz-border-radius-topleft: .5em;
+    -moz-border-radius-topright: .5em;
+    -webkit-border-top-left-radius: .5em;
+    -webkit-border-top-right-radius: .5em;
+    position: absolute;
+    left: .5em;
+    right: .5em;
+    bottom: 6em;
+    _width: 96%;
+    _height: 250px;
+    margin-bottom: 2px
+}
+
+.logbox {
+    position: absolute;
+    top: .5em;
+    bottom: 0;
+    left: .5em;
+    right: 0;
+    overflow: auto;
+    _width: 97%;
+    _height: 230px
+}
+
+.controlwrapper {
+    position: absolute;
+    bottom: .5em;
+    left: .5em;
+    right: .5em;
+    height: 5em;
+    padding-bottom: 2px
+}
+
+.controltable {
+    border-collapse: separate;
+    border-spacing: 0
+}
+
+.disconnectbtnwrapper {
+    overflow: hidden;
+    margin-right: .5em;
+    border-bottom-left-radius: .5em;
+    -moz-border-radius-bottomleft: .5em;
+    -webkit-border-bottom-left-radius: .5em;
+}
+
+.disconnectbtn {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 1em;
+    background: transparent;
+    width: 7em;
+    height: 5em;
+    padding: 0;
+    margin: 0;
+    border: 0 none;
+    border-bottom-left-radius: .5em;
+    -moz-border-radius-bottomleft: .5em;
+    -webkit-border-bottom-left-radius: .5em
+}
+
+.disconnectbtnwrapper.newbtn {
+    background: #409ffe;
+    background-image: -o-linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: -moz-linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: -webkit-gradient(linear,0 0,0 100%,from(#80c0ff),to(#017ffe));
+    background-image: -webkit-linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: -ms-linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: linear-gradient(top,#80c0ff 0,#017ffe 100%);
+}
+
+.newbtn .disconnectbtn {
+    font-weight: bold
+}
+
+.reallybtn .disconnectbtn {
+    font-weight: bold
+}
+
+.sendbtnwrapper {
+    overflow: hidden;
+    margin-left: .5em;
+    border-bottom-right-radius: .5em;
+    -moz-border-radius-bottomright: .5em;
+    -webkit-border-bottom-right-radius: .5em
+}
+
+.lowersexybtnwrapper,.lowergaybtnwrapper {
+    overflow: hidden;
+    margin-right: .5em;
+}
+
+.lowersexybtn,.lowergaybtn {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 1em;
+    width: 7em;
+    height: 5em;
+    padding: 0;
+    margin: 0;
+    border: 0 none
+}
+
+.sendbtn {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 1em;
+    width: 7em;
+    height: 5em;
+    padding: 0;
+    margin: 0;
+    border: 0 none;
+    border-bottom-right-radius: .5em;
+    -moz-border-radius-bottomright: .5em;
+    -webkit-border-bottom-right-radius: .5em
+}
+
+.chatmsgcell {
+    width: 100%
+}
+
+.chatmsgwrapper {
+    height: 4.5em;
+    padding: .25em
+}
+
+.chatmsg {
+    width: 100%;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 1em;
+    border: 0 none;
+    padding: 0;
+    margin: 0;
+    height: 4.5em;
+    overflow: auto;
+    -webkit-appearance: none;
+    border-radius: 0;
+    -webkit-border-radius: 0
+}
+.chatmsg:focus {
+}
+
+@-webkit-keyframes msgfade {
+    0% {
+        opacity: 0
+    }
+
+    100% {
+        opacity: 1
+    }
+}
+
+@keyframes msgfade {
+    0% {
+        opacity: 0
+    }
+
+    100% {
+        opacity: 1
+    }
+}
+
+.youmsg,.strangermsg {
+    margin: 0;
+    padding: 0;
+    -webkit-animation: msgfade .25s ease-out forwards;
+    animation: msgfade .25s ease-out forwards
+}
+
+.youmsg .msgsource {
+    color: #3ea6ff;
+    font-weight: bold
+}
+
+.strangermsg .msgsource {
+    color: #c93838;
+    font-weight: bold
+}
+
+.statuslog {
+    font-size: .9em;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    -webkit-animation: msgfade .25s ease-out forwards;
+    animation: msgfade .25s ease-out forwards
+}
+
+.logtopicsettings {
+    -webkit-animation: msgfade .25s ease-out forwards;
+    animation: msgfade .25s ease-out forwards
+}
+
+.logitem {
+    padding-bottom: .5em
+}
+
+textarea:focus {
+    outline: 0
+}
+
+#feedback {
+    color: #555;
+    margin-left: .5em
+}
+
+#feedback label {
+    font-size: .9em;
+    font-weight: bold
+}
+
+#emailfield {
+    position: absolute;
+    top: -5000px;
+    left: -5000px
+}
+
+#feedback h2 {
+    margin: 0;
+    padding: 0;
+    padding-left: 15px;
+    font-size: .9em;
+    font-weight: bold;
+    cursor: default
+}
+
+#feedback.expanded h2 {
+    background: url(/static/feedbackexpanded.png?2) no-repeat center left
+}
+
+#feedback.collapsed h2 {
+    color: #AAA;
+    background: url(/static/feedbackcollapsed.png?2) no-repeat center left
+}
+
+#feedback form {
+    margin-left: 15px
+}
+
+#feedback.collapsed form {
+    display: none
+}
+
+#adwrapper {
+    position: absolute;
+    right: .5em;
+    width: 160px;
+    height: 600px;
+    margin-top: 1em;
+    overflow: hidden
+}
+
+#adwrapper2 {
+    position: absolute;
+    width: 160px;
+    height: 600px;
+    left: 0;
+    top: 0
+}
+
+.inconversation #adwrapper,.videochat #adwrapper {
+    display: none
+}
+
+.controlwrapper {
+    margin-right: 0
+}
+
+.inconversation .controlwrapper {
+    margin-right: 0
+}
+
+.videochat .controlwrapper {
+    margin-left: 328px;
+    margin-right: 0
+}
+
+.videochat .controlwrapper,.videochat .disconnectbtn,.videochat .disconnectbtnwrapper {
+    border-bottom-left-radius: 0;
+    -moz-border-radius-bottomleft: 0;
+    -webkit-border-bottom-left-radius: 0
+}
+
+.logwrapper {
+    margin-right: 0;
+    _width: 60%
+}
+
+.inconversation .logwrapper {
+    _width: 96%;
+    margin-right: 0
+}
+
+.videochat .logwrapper {
+    margin-left: 328px;
+    margin-right: 0;
+    _width: 60%;
+    border-top-left-radius: 0;
+    -moz-border-radius-topleft: 0;
+    -webkit-border-top-left-radius: 0
+}
+
+#videowrapper {
+    position: absolute;
+    left: 8px;
+    bottom: 8px;
+    width: 500px;
+    display: none
+}
+
+#selfvideo {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    border-bottom-left-radius: .5em;
+    -moz-border-radius-bottomleft: .5em;
+    -webkit-border-bottom-left-radius: .5em
+}
+
+#othervideo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-top-left-radius: .5em;
+    -moz-border-radius-topleft: .5em;
+    -webkit-border-top-left-radius: .5em
+}
+
+#selfvideo,#othervideo {
+    display: block;
+    background: #555
+}
+
+@keyframes spinner {
+    to {
+        transform: rotate(360deg)
+    }
+}
+
+#othervideospinner {
+    display: none;
+    box-sizing: border-box;
+    position: absolute;
+    border-radius: 50%;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #ccc;
+    animation: spinner .6s linear infinite
+}
+
+#chatbtnwrapper {
+    padding-bottom: .7em;
+    text-align: center
+}
+
+#chatbtn {
+    display: block;
+    margin: auto
+}
+
+.videochat #videowrapper {
+    display: block
+}
+
+#chattypes {
+    text-align: center;
+    margin: auto;
+    border-collapse: collapse;
+}
+
+#chattypes td {
+    padding: 0
+}
+
+#chattypeorcell,.chattypeorcell {
+    color: #cbcbcb;
+    font-size: .9em;
+    font-weight: bold;
+    padding: .5em !important
+}
+
+#textbtn,#videobtn,#girlsbtn,#gaybtn {
+    display: block;
+    margin: auto;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+#videobtn.disabled {
+    cursor: default
+}
+
+#videobtnstatus,#textbtnstatus {
+    height: 2.5em;
+    color: #AAA;
+    font-size: .7em
+}
+
+#startachat,#intoheader {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    margin-bottom: .2em;
+    color: #d0d0d0;
+    font-weight: normal;
+    font-size: 1.25em
+}
+
+#sharebuttons {
+    position: absolute;
+    right: .5em;
+    top: 35px;
+    margin-right: -1px;
+    vertical-align: top
+}
+
+#sharebuttons * {
+    vertical-align: top !important
+}
+
+#EFF {
+    margin-left: .5em;
+    text-align: center;
+    color: #AAA;
+    font-size: .8em
+}
+
+#EFF a {
+    color: #7474dc;
+    text-decoration: none
+}
+
+.btnkbshortcut {
+    font-size: .8em;
+    color: #9cf;
+    font-weight: bold;
+    margin-top: .25em;
+    height: 0;
+}
+
+:disabled .btnkbshortcut,[disabled] .btnkbshortcut {
+    color: #a1c3e6
+}
+
+.questionHeading {
+    font-size: .9em;
+    padding: .1111111111111111111em;
+    padding-left: 1.11111111111111111em;
+    background: #6cb5ff;
+    color: #DEF;
+    font-weight: bold;
+    border-top-left-radius: .5em;
+    -moz-border-radius-topleft: .5em;
+    -webkit-border-top-left-radius: .5em;
+    border-top-right-radius: .5em;
+    -moz-border-radius-topright: .5em;
+    -webkit-border-top-right-radius: .5em
+}
+
+.collapsed .questionHeading {
+    border-radius: .5em;
+    -webkit-border-radius: .5em;
+    -moz-border-radius: .5em;
+    font-size: 1.1em
+}
+
+.question {
+    width: 75%
+}
+
+.question.collapsed {
+    cursor: hand;
+}
+
+.collapsed .questionText {
+    display: none
+}
+
+.questionText {
+    padding: .4em;
+    padding-left: .8em;
+    background: #DEF;
+    font-size: 1.25em
+}
+
+#tryspymode .questionText {
+    padding: .5em;
+    padding-left: 1em;
+    font-size: 1em
+}
+
+#tryspymode {
+    margin: auto
+}
+
+#tryspymode.collapsed .questionHeading {
+    padding: .11111111111111em;
+    text-align: center
+}
+
+#tryspymode.collapsed {
+    width: 19em;
+    max-width: 100%
+}
+
+.questionInput {
+    width: 90%
+}
+
+#facebooklogin {
+    text-align: center;
+    margin: 1em 0
+}
+
+.facebookpicture {
+    vertical-align: middle
+}
+
+.facebookgreeting {
+    padding-left: .5em;
+    color: #555;
+    font-size: .9em;
+    font-weight: bold
+}
+
+.shoulduselikesdiv {
+    clear: left;
+    margin-top: .5em
+}
+
+.commonlikescancel {
+    padding-top: .5em;
+    font-size: .75em
+}
+
+.facebookanonymousdisclaimer {
+    font-size: .75em;
+    font-weight: bold;
+    color: #c9c9c9
+}
+
+.conversationgreat {
+    padding: .25em .5em;
+    border-radius: .5em;
+    font-size: .9em;
+    background: #409ffe;
+    background-image: -o-linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: -moz-linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: -webkit-gradient(linear,0 0,0 100%,from(#80c0ff),to(#017ffe));
+    background-image: -webkit-linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: -ms-linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    color: rgb(255, 255, 255);
+    font-weight: 400;
+}
+
+#mobilesitenote {
+    vertical-align: middle;
+    text-align: center;
+    font-weight: bold;
+    font-size: .9em;
+    padding: 0;
+    height: 3.5em;
+    margin-top: -5px;
+    margin-bottom: -15px;
+}
+
+#mobilesitenote img {
+    vertical-align: middle;
+    margin-left: 10px
+}
+
+#mobilesitenote .space {
+    display: none
+}
+
+#beyourself {
+    text-align: center;
+    margin-top: 1em
+}
+
+#collegeButton {
+    color: rgb(177, 180, 183);
+    background: #474b52;
+}
+
+#videobtnunmoderated {
+    color: rgb(177, 180, 183);
+    background: #474b52;
+    padding: 5px;
+}
+.topictageditor {
+    background: #474b52;
+    cursor: text;
+    position: relative;
+    padding: .25em;
+    margin-bottom: .408em;
+    text-align: left
+}
+
+.chatbox .topictageditor {
+    margin-right: .5em
+}
+
+.topictag {
+    cursor: default;
+    background: #35383b;
+    border-radius: .25em;
+    padding: .25em;
+    margin-right: 3px;
+    white-space: nowrap
+}
+
+.topictagdelete {
+    cursor: pointer;
+    padding-left: .25em;
+    font-weight: bold;
+    vertical-align: bottom
+}
+
+.newtopicinput {
+    border: 0 none;
+    padding: 0;
+    width: 50%;
+    outline: 0 none !important;
+    -moz-outline: 0 none !important;
+    font-size: 1em;
+    font-family: inherit;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    cursor: text;
+    background: transparent
+}
+
+input {
+    color: whitesmoke;
+}
+
+.topicplaceholder {
+    color: #b9bbbe;
+    cursor: text;
+    position: absolute;
+    padding-left: 1px
+}
+
+#topicsettingscell {
+    vertical-align: top
+}
+
+#topicsettingscontainer {
+    width: 400px;
+    max-width: 100%;
+    margin: auto;
+    text-align: left
+}
+
+#footer {
+    display: none;
+}
+
+#intoheader {
+    text-align: center
+}
+
+td #topicsettingscontainer,td #intoheader {
+    padding-right: 28px
+}
+
+#monitoringnotice {
+    display: none;
+    border-radius: .5em;
+    -moz-border-radius: .5em;
+    -webkit-border-radius: .5em;
+    padding: 0;
+    margin: auto;
+    margin-top: .5em;
+    margin-bottom: 1em;
+    text-align: center;
+    max-width: 36em;
+    background: rgb(64,64,72);
+    position: relative;
+    overflow: hidden
+}
+
+#monitoringnotice h2 {
+    line-height: 1;
+    padding: .3134em 0;
+    font-size: 1.595em;
+    margin: 0;
+    background: rgb(64,64,72);
+}
+
+#monitoringnotice .content {
+    font-size: .9em;
+    padding-bottom: .555em
+}
+
+#monitoringnotice a {
+    margin-bottom: 1em;
+    color: #00F
+}
+
+#monitoringnotice.banned {
+    background: red
+}
+
+#monitoringnotice p {
+    margin: 0;
+    font-size: 1.1em
+}
+
+#monitoringnotice p.extrainfo {
+    font-size: .75em
+}
+
+span#unmonitoredvideobtn {
+    text-decoration: underline;
+    color: #555
+}
+
+#readabook {
+    text-align: center
+}
+
+#readabook span {
+    border-radius: .5em;
+    background: #555;
+    color: #EEE;
+    font-weight: bold;
+    padding: .5em
+}
+
+#google_translate_lower_container {
+    text-align: center
+}
+
+#chattypeheaderrow {
+    vertical-align: top;
+    line-height: 2;
+}
+
+#topterms {
+    font-size: .6666em;
+    line-height: 1;
+    text-align: center;
+    color: #555;
+    padding-bottom: .75em;
+    font-weight: bold
+}
+
+p+#topterms {
+    margin-top: -0.75em
+}
+
+.asterisk {
+    position: absolute;
+    top: .5em;
+    right: .5em;
+    font-weight: normal
+}
+
+@media(max-width: 1000px) {
+    #headerappstore {
+        visibility:hidden !important
+    }
+}

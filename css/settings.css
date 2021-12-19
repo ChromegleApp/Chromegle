@@ -12,14 +12,12 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0,0,0,0.6);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .modal__container {
-    background-color: #393940;
     padding: 30px;
     max-width: 700px;
     min-width: 700px;
@@ -43,7 +41,6 @@
     font-size: 1.25rem;
     line-height: 1.25;
     cursor: unset;
-    color: #b6b4b4;
     box-sizing: border-box;
 }
 
@@ -51,13 +48,12 @@
     background: transparent;
     border: 0;
     font-size: 20px;
-    color: #a7a7a7;
     cursor: pointer;
     transition-duration: 150ms;
 }
 
+
 .modal__close:hover {
-    color: #767676;
     transition-duration: 150ms;
 }
 
@@ -67,8 +63,8 @@
     margin-top: 2rem;
     margin-bottom: 2rem;
     line-height: 1.5;
-    color: rgba(0,0,0,.8);
 }
+
 
 .modal__btn {
     font-size: .875rem;
@@ -76,8 +72,6 @@
     padding-right: 1rem;
     padding-top: .5rem;
     padding-bottom: .5rem;
-    background-color: #e6e6e6;
-    color: rgba(0,0,0,.8);
     border-radius: .25rem;
     border-style: none;
     border-width: 0;
@@ -94,7 +88,6 @@
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
     transition: -webkit-transform .25s ease-out;
-    transition: transform .25s ease-out;
     transition: transform .25s ease-out,-webkit-transform .25s ease-out;
 }
 
@@ -102,12 +95,6 @@
     -webkit-transform: scale(1.05);
     transform: scale(1.05);
 }
-
-.modal__btn-primary {
-    background-color: #00449e;
-    color: #fff;
-}
-
 
 
 /**************************\
@@ -185,31 +172,22 @@
 }
 
 .settingsModal {
-    background-color: #fefefe;
     margin: 15% auto; /* 15% from the top and centered */
     padding: 20px;
     width: 80%; /* Could be more or less, depending on screen size */
     border-radius: .5em;
     -moz-border-radius: .5em;
     -webkit-border-radius: .5em;
-    -webkit-box-shadow: 0 0 11px 4px #6B6B6B;
-    box-shadow: 0 0 11px 4px #6B6B6B;
-    border: 1px solid #BBB;
 
 }
 
 .settingsModalCloseButton {
     margin-right: 10%;
-    color: #aaa;
     float: right;
     display: inline;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
-}
-
-.settingsModalCloseButton:hover {
-    color: #6B6B6B;
 }
 
 .settingsCollapseContainer {
@@ -218,8 +196,6 @@
 }
 
 .settingsCollapsible {
-    background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(137, 145, 153) 0%, rgb(79, 88, 104) 90%);
-    color: white;
     cursor: pointer;
     padding: 18px;
     width: 100%;
@@ -234,7 +210,6 @@
 }
 
 .active, .settingsCollapsible:hover {
-    opacity: 70%;
     transition: opacity 300ms;
 }
 
@@ -249,7 +224,6 @@
     padding: 0 18px;
     display: none;
     overflow: hidden;
-    background-color: rgb(224, 224, 224);
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
 }
@@ -264,21 +238,17 @@
     font-size: 16px;
     font-family: Helvetica, Arial, sans-serif;
     font-weight: normal;
-    color: #424242;
 }
 
 .tableItemSubLabel {
     font-size: 12px;
     font-family: Helvetica, Arial, sans-serif;
     font-weight: normal;
-    color: #424242;
 }
 
 .editFieldButton {
-    background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(137, 145, 153) 0%, rgb(79, 88, 104) 90%);
     text-align: center;
     font-size: 15px;
-    color: white;
     line-height: 17px;
     font-weight: 450;
     vertical-align: center;
@@ -291,28 +261,6 @@
     cursor: pointer;
     float: right;
     width: 100px;
-}
-
-.editFieldButton:hover {
-    background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(110, 117, 123) 0%, rgb(66, 73, 87) 90%);
-}
-
-.editToggleDisabled {
-    !important;
-    background: gray;
-}
-
-.editToggleDisabled:hover {
-    background: dimgray;
-}
-
-.editToggleEnabled {
-    !important;
-    background-color: forestgreen;
-}
-
-.editToggleEnabled:hover {
-    background-color: green;
 }
 
 .centerVertAndHorizontally {

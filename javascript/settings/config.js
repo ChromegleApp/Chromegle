@@ -1,4 +1,3 @@
-
 const config = {
     "greetingMessageField": new FieldEdit({
         "storageName": "GREETING_MESSAGE_FIELD",
@@ -185,5 +184,31 @@ const config = {
         "storageName": "PROFANITY_FILTER_TOGGLE",
         "default": "false"
     }),
-}
+    "ultraDarkModeOption": new ThemeSwitchEdit({
+        "elementName": "ultraDarkModeOption",
+        "otherElementNames": ["semiDarkModeOption", "semiLightModeOption"],
+        "storageName": "THEME_CHOICE_SWITCH",
+        "default": "semiLightModeOption",
+        "value": "/css/themes/ultradark.css"
+    }),
+    "semiDarkModeOption": new ThemeSwitchEdit({
+        "elementName": "semiDarkModeOption",
+        "otherElementNames": ["ultraDarkModeOption", "semiLightModeOption"],
+        "storageName": "THEME_CHOICE_SWITCH",
+        "default": "semiLightModeOption",
+        "value": "/css/themes/semidark.css"
+    }),
+    "semiLightModeOption": new ThemeSwitchEdit({
+        "elementName": "semiLightModeOption",
+        "otherElementNames": ["semiDarkModeOption", "ultraDarkModeOption"],
+        "storageName": "THEME_CHOICE_SWITCH",
+        "default": "semiLightModeOption",
+        "value": "/css/themes/semilight.css"
+    }),
+    "headerButtonsToggle": new ThemeToggleEdit({
+        "elementName": "headerButtonsToggle",
+        "storageName": "HEADER_BUTTONS_TOGGLE",
+        "default": "true"
+    }),
 
+}
