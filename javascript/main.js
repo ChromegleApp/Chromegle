@@ -12,17 +12,25 @@ $(document).on("ready", () => {
     {
         // Porn-redirect screen
         // noinspection HttpUrlsUsage
-        if (window.location.href.includes("banredir.html") || window.location.href.startsWith("http://")) {
+        if (window.location.href.includes("banredir.html") || window.location.href === "http://omegle.com/static/ban.html") {
             window.location.href = "https://omegle.com/static/ban.html";
-            return;
         }
 
         // Static HTML ban screen
         if (window.location.href.includes("ban.html")) {
             $("html")
                 .load(chrome.runtime.getURL("/html/banned.html"))
-                .css("visibility", "visible")
                 .css("background-color", "#17191a");
+        }
+    }
+
+    /**
+     * Not the main page
+     */
+    {
+        if (window.location.pathname !== "/") {
+            $("html")
+                .css("visibility", "visible");
             return;
         }
     }
