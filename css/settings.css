@@ -97,9 +97,7 @@
 }
 
 
-/**************************\
-  Demo Animation Style
-\**************************/
+
 @keyframes mmfadeIn {
     from { opacity: 0; }
     to { opacity: 1; }

@@ -40,7 +40,6 @@ const typingDelay = (text, wpm) => {
 function writeMessage(writeBox, text, perLetterDelay, finalSendDelay, uuid) {
 
     if (uuid !== ChatRegistry.getUUID()) {
-        console.log("Cancel")
         return;
     }
 
@@ -54,7 +53,6 @@ function writeMessage(writeBox, text, perLetterDelay, finalSendDelay, uuid) {
     setTimeout(function () {
 
         if (uuid !== ChatRegistry.getUUID()) {
-            console.log("Cancel")
             return;
         }
 

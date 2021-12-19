@@ -98,7 +98,7 @@ a {
     text-decoration: none;
 }
 
-#logo {
+#omegleLogo {
     margin-top: 25px;
     padding: 0;
     float: left;
@@ -111,7 +111,7 @@ a {
     display: none;
 }
 
-#logo img {
+#omegleLogo img {
     display: block
 }
 

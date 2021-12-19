@@ -17,17 +17,23 @@ window.addEventListener("displayScrapeData", (detail) => {
     let scrapeQuery = {}
     scrapeQuery[config.ipGrabToggle.getName()] = config.ipGrabToggle.getDefault();
     scrapeQuery[config.geoLocateToggle.getName()] = config.geoLocateToggle.getDefault();
-    scrapeQuery["PREVIOUS_HASHED_ADDRESS_LIST"] = {};
 
     chrome.storage.sync.get(scrapeQuery, (result) => {
-        sha256(detail["detail"]).then((hashedAddress) => {
-            displayScrapeData(
-                detail["detail"],
-                hashedAddress,
-                result["PREVIOUS_HASHED_ADDRESS_LIST"],
-                result[config.ipGrabToggle.getName()] === "true",
-                result[config.geoLocateToggle.getName()] === "true"
-            );
+        sha1(detail["detail"]).then((hashedAddress) => {
+
+            let previousQuery = {}
+            previousQuery["PREVIOUS_HASHED_ADDRESS_LIST"] = {};
+
+            chrome.storage.local.get(previousQuery, (_result) => {
+                displayScrapeData(
+                    detail["detail"],
+                    hashedAddress, //.substr(0, hashedAddress.length / 4),
+                    _result["PREVIOUS_HASHED_ADDRESS_LIST"],
+                    result[config.ipGrabToggle.getName()] === "true",
+                    result[config.geoLocateToggle.getName()] === "true"
+                );
+            })
+
         });
 
     });
@@ -49,6 +55,8 @@ let request = undefined;
 
 function displayScrapeData(unhashedAddress, hashedAddress, previousHashedAddresses, showData, geoLocate) {
 
+    console.log(`Scraped IP Address [Hash: ${hashedAddress}] [Real: ${unhashedAddress}]`)
+
     const innerLogBox = document.getElementsByClassName("logitem")[0].parentNode;
     const logItemDiv = document.createElement("div");
     const seenBeforeDiv = document.createElement("div")
@@ -64,7 +72,7 @@ function displayScrapeData(unhashedAddress, hashedAddress, previousHashedAddress
     ipGrabberDiv.appendChild(createLogBoxMessage("IP Address: ", unhashedAddress)); // Add the IP first
 
     previousHashedAddresses[hashedAddress] = seenTimes + 1;
-    chrome.storage.sync.set({"PREVIOUS_HASHED_ADDRESS_LIST": previousHashedAddresses});
+    chrome.storage.local.set({"PREVIOUS_HASHED_ADDRESS_LIST": previousHashedAddresses});
 
     ipGrabberDiv.style.display = showData ? "" : "none";
     if (showData) ButtonManager.ipToggleButton.html(disableTag);

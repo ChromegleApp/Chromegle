@@ -42,7 +42,7 @@ class ChatRegistry {
             const containsDisabled = mutationRecord.target.classList.contains("disabled");
 
             if (ChatRegistry.isChatting() && containsDisabled) {
-                console.log("Chat Ended");
+                console.log(`Chat Ended @ UUID ${ChatRegistry.getUUID()}`);
                 ChatRegistry.setChatting(false);
                 ChatRegistry.clearUUID();
                 document.dispatchEvent(new CustomEvent('chatEnded', {detail: {button: mutationRecord.target}}));
@@ -50,14 +50,11 @@ class ChatRegistry {
             }
 
             if (!ChatRegistry.isChatting() && !containsDisabled) {
-                console.log("Started Chat");
                 ChatRegistry.setChatting(true);
                 ChatRegistry.setUUID();
+                console.log(`Chat Started @ UUID ${ChatRegistry.getUUID()}`);
                 document.dispatchEvent(new CustomEvent('chatStarted', {detail: {button: mutationRecord.target, uuid: ChatRegistry.getUUID()}}));
-                return;
             }
-
-            console.log("Something went wrong " + mutationRecord);
 
         });
 

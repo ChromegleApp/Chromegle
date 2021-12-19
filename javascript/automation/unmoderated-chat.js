@@ -1,5 +1,4 @@
 function cleanPage() {
-    console.log("clean")
     $(".lowergaybtnwrapper").remove();
     $(".lowersexybtnwrapper").remove();
 

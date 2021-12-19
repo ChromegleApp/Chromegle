@@ -98,7 +98,7 @@ class SwitchEdit extends MutableField {
             }
 
             // Not currently Selected
-            if (!currentlySelected) {
+            if (!currentlySelected && !noChange) {
                 this.updateValue({"confirm": "true", "value": this.#elementName});
 
                 document.dispatchEvent(new CustomEvent("SwitchModify", {
@@ -157,15 +157,16 @@ class ToggleEdit extends MutableField {
                newResult = result[name];
            } else {
                newResult = result[name] === "true" ? "false" : "true";
+               this.updateValue({"confirm": "true", "value": newResult});
+
            }
-           this.updateValue({"confirm": "true", "value": newResult});
-            document.dispatchEvent(new CustomEvent("ToggleModify", {
+           document.dispatchEvent(new CustomEvent("ToggleModify", {
                 detail: {
                     "element": this.#elementName,
                     "value": newResult,
                     "change": !noChange
                 }
-            }));
+           }));
         });
     }
 

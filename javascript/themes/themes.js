@@ -69,7 +69,10 @@ class ThemeManager {
 
         };
         #overrideLinks = () => $("#feedback").remove();
-        #overrideLogo = () => $("canvas").replaceWith(ButtonManager.homeButton);
+        #overrideLogo = () => {
+            $("#logo").attr("id", "omegleLogo");
+            $("canvas").replaceWith(ButtonManager.homeButton)
+        };
 
 
         #overrideTaglineInsertMenu = () => {
