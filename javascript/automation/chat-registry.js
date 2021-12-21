@@ -54,7 +54,6 @@ class ChatRegistry {
             }
 
             // REGULAR STUFF
-
             if (!mutationRecord.target.classList.contains("chatmsg")) continue;
 
             if (!ChatRegistry.pageStarted()) {
