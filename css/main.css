@@ -94,3 +94,14 @@ html {
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 }
+
+.otherVideoCover {
+    -webkit-border-top-left-radius: 0.5em;
+
+}
+
+.selfVideoCover {
+    -webkit-border-bottom-left-radius: 0.5em;
+    left: 0;
+    bottom: 0;
+}

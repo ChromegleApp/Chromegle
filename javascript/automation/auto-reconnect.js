@@ -12,7 +12,9 @@ document.addEventListener("chatEnded", () => {
     chrome.storage.sync.get(reconnectQuery, (result) => {
 
         if (result[config.autoReconnectToggle.getName()] === "true") {
-            $(".disconnectbtn").trigger("click");
+            setTimeout(() => {
+                $(".disconnectbtn").trigger("click");
+            }, 25);
         }
     });
 

@@ -33,7 +33,7 @@ function cleanPage() {
     let aboveButtonClone = aboveButton.clone()
         .css("background", "")
         .css("font-size", "20px")
-        .addClass("nsfwbutton")
+        .addClass("videoCoverButton")
 
     let aboveClone = aboveButtonClone.get(0);
     if (aboveClone != null) {

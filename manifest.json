@@ -22,6 +22,7 @@
         "javascript/libraries/micromodal.min.js",
 
         "javascript/utilities/utilities.js",
+        "javascript/utilities/logger.js",
         "javascript/themes/themes.js",
         "javascript/display/buttons.js",
 
@@ -39,7 +40,8 @@
         "javascript/automation/ip-grabbing.js",
         "javascript/automation/auto-confirm.js",
         "javascript/automation/unmoderated-chat.js",
-        "javascript/automation/nsfw-button.js",
+        "javascript/automation/video-blocking.js",
+        "javascript/automation/sync-topics.js",
         "javascript/automation/web-filtering/filter-messages.js"
 
       ],

@@ -193,7 +193,7 @@
     margin: 0 auto 7%;
 }
 
-.settingsCollapsible {
+.settingsCollapsable {
     cursor: pointer;
     padding: 18px;
     width: 100%;
@@ -207,11 +207,11 @@
 
 }
 
-.active, .settingsCollapsible:hover {
+.active, .settingsCollapsable:hover {
     transition: opacity 300ms;
 }
 
-.settingsCollapsibleWrapper {
+.settingsCollapsableWrapper {
     margin: 30px auto 0;
     transition: opacity 300ms;
 

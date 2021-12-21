@@ -45,7 +45,7 @@ class ChatRegistry {
 
             if (mutationRecord.target["innerText"] != null) {
                 if (mutationRecord.target["innerText"].includes("Error connecting to server")) {
-                    console.log(`Chat Ended @ Failed to Connect`);
+                    Logger.ERROR("Chat failed to connect, user is likely soft-banned due to a VPN or proxy")
                     document.dispatchEvent(new CustomEvent('chatFailedConnect', {detail: mutationRecord.target}));
                     ChatRegistry.setChatting(false);
                     ChatRegistry.clearUUID();
@@ -65,7 +65,7 @@ class ChatRegistry {
             const containsDisabled = mutationRecord.target.classList.contains("disabled");
 
             if (ChatRegistry.isChatting() && containsDisabled) {
-                console.log(`Chat Ended @ UUID ${ChatRegistry.getUUID()}`);
+                Logger.INFO("Chat Ended: UUID <%s>", ChatRegistry.getUUID());
                 ChatRegistry.setChatting(false);
                 ChatRegistry.clearUUID();
                 document.dispatchEvent(new CustomEvent('chatEnded', {detail: {button: mutationRecord.target}}));
@@ -75,7 +75,7 @@ class ChatRegistry {
             if (!ChatRegistry.isChatting() && !containsDisabled) {
                 ChatRegistry.setChatting(true);
                 ChatRegistry.setUUID();
-                console.log(`Chat Started @ UUID ${ChatRegistry.getUUID()}`);
+                Logger.INFO("Chat Started: UUID <%s>", ChatRegistry.getUUID());
                 document.dispatchEvent(new CustomEvent('chatStarted', {detail: {button: mutationRecord.target, uuid: ChatRegistry.getUUID()}}));
             }
 

@@ -17,13 +17,13 @@ Modal Styling
 .editToggleDisabled:hover {background: dimgray;}
 .editToggleEnabled {background-color: forestgreen;}
 .editToggleEnabled:hover {background-color: green;}
-.settingsCollapsible:hover, .active {
+.settingsCollapsable:hover, .active {
     font-size: 25px;
     transition: font-size 200ms;
 }
-.editFieldButton, .settingsCollapsible {color: white;}
-.settingsCollapsible, .editFieldButtonGray:hover {background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(110, 117, 123) 0%, rgb(66, 73, 87) 90%);}
-.settingsCollapsible, .editFieldButtonGray {
+.editFieldButton, .settingsCollapsable {color: white;}
+.settingsCollapsable, .editFieldButtonGray:hover {background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(110, 117, 123) 0%, rgb(66, 73, 87) 90%);}
+.settingsCollapsable, .editFieldButtonGray {
     transition: font-size 200ms;
     background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(137, 145, 153) 0%, rgb(79, 88, 104) 90%);
 }
@@ -46,7 +46,7 @@ body, #header {
 /*
 Secondary Colour BACKGROUND
  */
-#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .nsfwbutton {
+#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton {
     background: #ffffff;
 }
 
@@ -93,7 +93,7 @@ Tertiary colour text
     color: #525252;
 }
 
-.logwrapper, .chatmsgwrapper, .disconnectbtnwrapper, .sendbtnwrapper, .nsfwbutton, #selfvideo, #othervideo {
+.logwrapper, .chatmsgwrapper, .disconnectbtnwrapper, .sendbtnwrapper, .videoCoverButton, #selfvideo, #othervideo {
     border: 1px solid #CCC;
 }
 

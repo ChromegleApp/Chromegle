@@ -1,29 +1,29 @@
 
-class Collapsible {
-    #collapsibleWrapper
-    #collapsibleElement
-    #collapsibleInfo
+class Collapsable {
+    #collapsableWrapper
+    #collapsableElement
+    #collapsableInfo
 
-    constructor(settingsCollapsible) {
-        this.#collapsibleWrapper = settingsCollapsible.parentNode;
-        this.#collapsibleElement = settingsCollapsible;
-        this.#collapsibleInfo = this.#collapsibleElement.nextElementSibling;
+    constructor(settingsCollapsable) {
+        this.#collapsableWrapper = settingsCollapsable.parentNode;
+        this.#collapsableElement = settingsCollapsable;
+        this.#collapsableInfo = this.#collapsableElement.nextElementSibling;
     }
 
-    getId = () => this.#collapsibleElement.id;
-    isEnabled = () => this.#collapsibleInfo.style.display === "block";
+    getId = () => this.#collapsableElement.id;
+    isEnabled = () => this.#collapsableInfo.style.display === "block";
 
     enable = () => {
-        this.#collapsibleInfo.style.display = "block";
-        this.#collapsibleElement.classList.add("active");
-        this.#collapsibleElement.style.borderBottomRightRadius = "0";
-        this.#collapsibleElement.style.borderBottomLeftRadius = "0";
+        this.#collapsableInfo.style.display = "block";
+        this.#collapsableElement.classList.add("active");
+        this.#collapsableElement.style.borderBottomRightRadius = "0";
+        this.#collapsableElement.style.borderBottomLeftRadius = "0";
     }
     disable = () => {
-        this.#collapsibleInfo.style.display = "none";
-        this.#collapsibleElement.classList.remove("active");
-        this.#collapsibleElement.style.borderBottomRightRadius = "";
-        this.#collapsibleElement.style.borderBottomLeftRadius = "";
+        this.#collapsableInfo.style.display = "none";
+        this.#collapsableElement.classList.remove("active");
+        this.#collapsableElement.style.borderBottomRightRadius = "";
+        this.#collapsableElement.style.borderBottomLeftRadius = "";
     }
 
 
@@ -76,7 +76,7 @@ class SettingsMenu {
         this.#settingsModal = document.createElement("div");
         $(this.#settingsModal).load(getResourceURL("html/modal.html"));
         $("html").append(this.#settingsModal)
-        this.manageCollapsibles();
+        this.manageCollapsables();
         this.manageToggleButtons();
         this.manageSwitchButtons();
     }
@@ -109,7 +109,7 @@ class SettingsMenu {
         });
     }
 
-    manageCollapsibles = () => {
+    manageCollapsables = () => {
         this.#settingsModal.addEventListener("click", (target) => {
             let element = target.path[0];
 
@@ -117,8 +117,8 @@ class SettingsMenu {
                 config[element.id].update();
             }
 
-            // Toggle collapsibles
-            if (element.classList.contains("settingsCollapsible")) {
+            // Toggle collapsables
+            if (element.classList.contains("settingsCollapsable")) {
 
                 // Update field toggles
                 let keys = Object.keys(config);
@@ -128,23 +128,23 @@ class SettingsMenu {
                     if (cfg.getType() === "switch") config[key].update(true);
                 }
 
-                let collapsibles = document.getElementsByClassName("settingsCollapsible");
-                for (let _ of collapsibles) {
-                    let collapsible = new Collapsible(_);
+                let collapsables = document.getElementsByClassName("settingsCollapsable");
+                for (let _ of collapsables) {
+                    let collapsable = new Collapsable(_);
 
                     // The one we clicked
-                    if (element.id === collapsible.getId()) {
+                    if (element.id === collapsable.getId()) {
 
-                        if (collapsible.isEnabled()) {
-                            collapsible.disable();
+                        if (collapsable.isEnabled()) {
+                            collapsable.disable();
                         } else {
-                            collapsible.enable();
+                            collapsable.enable();
                         }
                     }
 
                     // Any other one
                     else {
-                        collapsible.disable();
+                        collapsable.disable();
 
                     }
 

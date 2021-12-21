@@ -17,10 +17,10 @@ Modal Styling
 .editToggleDisabled:hover {background: dimgray;}
 .editToggleEnabled {background-color: forestgreen;}
 .editToggleEnabled:hover {background-color: green;}
-.settingsCollapsible:hover, .active {opacity: 70%;}
-.editFieldButton, .settingsCollapsible {color: white;}
-.settingsCollapsible, .editFieldButtonGray:hover {background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(110, 117, 123) 0%, rgb(66, 73, 87) 90%);}
-.settingsCollapsible, .editFieldButtonGray {
+.settingsCollapsable:hover, .active {opacity: 70%;}
+.editFieldButton, .settingsCollapsable {color: white;}
+.settingsCollapsable, .editFieldButtonGray:hover {background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(110, 117, 123) 0%, rgb(66, 73, 87) 90%);}
+.settingsCollapsable, .editFieldButtonGray {
     background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(137, 145, 153) 0%, rgb(79, 88, 104) 90%);
 }
 .settingsModal {
@@ -42,7 +42,7 @@ body, #header {
 /*
 Secondary Colour BACKGROUND
  */
-#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .nsfwbutton, #selfvideo, #othervideo {
+#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton, #selfvideo, #othervideo {
     background: rgba(54,57,63,255);
 }
 

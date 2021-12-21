@@ -35,7 +35,6 @@ $(document).on("ready", () => {
         }
     }
 
-
     /**
      * General Start-Up
      */

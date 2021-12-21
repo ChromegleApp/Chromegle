@@ -30,13 +30,5 @@ const ButtonManager = {
 
         }),
 
-    coverButton: $(
-        `<div id="coverButton" style="-webkit-border-top-left-radius: 0.5em; display: none; cursor: pointer;" class="nsfwbutton">
-                <div class="nsfwCoverTextWrapper">
-                    <p style="margin: auto;" class="noselect">Click to Unblock</p>
-                </a>
-             </div>`
-    ).on("click", () => unblockVideo())
-
 }
 

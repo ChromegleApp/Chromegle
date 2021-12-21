@@ -43,6 +43,7 @@ class ThemeManager {
                 try {
                     fn();
                 } catch (ex) {
+                    Logger.ERROR("A theme management function has failed, stack-trace below:");
                     console.log(ex);
                 }
             })
