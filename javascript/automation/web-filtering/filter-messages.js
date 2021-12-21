@@ -1,28 +1,33 @@
 let filters = {profanity: [], sexual: [], allFilters: []}
+let filteredWords = []
+
 
 document.addEventListener(
     "pageStarted",
     () => {
-        function loadFilterFromFile(path, key) {
-            fetch(chrome.runtime.getURL(path))
-                .then(response => response.text()).then(response => response.replaceAll("\r", ""))
-                .then(response => response.split("\n"))
-                .then(data => {
-                    filters[key] = data;
-                    filters["allFilters"] = filters["allFilters"].concat(data);
-                });
-        }
-
-        loadFilterFromFile('/javascript/automation/web-filtering/profanity.txt', "profanity");
-        loadFilterFromFile('/javascript/automation/web-filtering/sexual.txt', "sexual");
-
-        statusObserver.observe(document.getElementsByClassName("logbox")[0], {attributes: true, subtree: true, childList: true});
+        loadFilterFromFile('/javascript/automation/web-filtering/profanity.txt', "profanity")
+            .then(() => {
+                loadFilterFromFile('/javascript/automation/web-filtering/sexual.txt', "sexual")
+                    .then(() => {
+                        updateFilteredWords();
+                    });
+            });
 
     }
 );
 
-let statusObserver = new MutationObserver((mutationRecord) => {
+function loadFilterFromFile(path, key) {
+    return fetch(chrome.runtime.getURL(path))
+        .then(response => response.text()).then(response => response.replaceAll("\r", ""))
+        .then(response => response.split("\n"))
+        .then(data => {
+            filters[key] = data;
+            filters["allFilters"] = filters["allFilters"].concat(data);
+        });
+}
 
+
+function updateFilteredWords() {
     let filterQuery = {};
     filterQuery[config.profanityFilterToggle.getName()] = config.profanityFilterToggle.getDefault();
     filterQuery[config.sexualFilterToggle.getName()] = config.sexualFilterToggle.getDefault();
@@ -30,7 +35,6 @@ let statusObserver = new MutationObserver((mutationRecord) => {
     chrome.storage.sync.get(filterQuery, (result) => {
 
         // Get filter config
-        let filteredWords;
         const sexualFilter = result[config.sexualFilterToggle.getName()] === "true";
         const profanityFilter = result[config.profanityFilterToggle.getName()] === "true";
 
@@ -40,23 +44,48 @@ let statusObserver = new MutationObserver((mutationRecord) => {
         else if (profanityFilter) filteredWords = filters["profanity"]
         else filteredWords = [];
 
-        // Do filtering
-        mutationRecord.forEach((mutation) => {
-            let maybeLog = $(mutation.addedNodes.item(0)).get(0);
-            if (maybeLog == null) return;
-            if (maybeLog.nodeName !== "DIV" || !maybeLog.classList.contains("logitem")) return;
+    });
+}
 
-            for (let span of maybeLog.getElementsByTagName("span")) {
-                span.textContent = filterString(span.textContent, filteredWords);
-            }
 
-        })
+document.addEventListener("storageSettingsUpdate", (detail) => {
+    const keys = Object.keys(detail["detail"]);
 
+    if (keys.includes(config.profanityFilterToggle.getName()) || keys.includes(config.sexualFilterToggle.getName())) {
+        updateFilteredWords();
+    }
+
+});
+
+document.addEventListener("chatStarted", () => {
+    statusObserver.disconnect();
+    statusObserver.observe(document.getElementsByClassName("logbox")[0], {attributes: true, subtree: true, childList: true});
+
+    $(".chatmsg").off().on("input", (event) => {
+        $(event.target).val(filterString($(event.target).val(), filteredWords));
     });
 
 });
 
 
+
+let statusObserver = new MutationObserver((mutationRecord) => {
+
+
+    // Do filtering
+    mutationRecord.forEach((mutation) => {
+
+        let maybeLog = $(mutation.addedNodes.item(0)).get(0);
+        if (maybeLog == null) return;
+        if (maybeLog.nodeName !== "DIV" || !maybeLog.classList.contains("logitem")) return;
+
+        for (let span of maybeLog.getElementsByTagName("span")) {
+            span.textContent = filterString(span.textContent, filteredWords);
+        }
+
+    })
+
+});
 
 let filterString = (message, filteredWords) => {
 

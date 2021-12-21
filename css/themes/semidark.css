@@ -49,13 +49,23 @@ Secondary Colour BACKGROUND
 /*
 Primary Colour TEXT
  */
-#intro, .disconnectbtn, .newbtn.disconnectbtn, .sendbtn, .lowersexybtnwrapper,
+#intro, .newbtn.disconnectbtn, .sendbtn, .lowersexybtnwrapper,
 .lowergaybtnwrapper, .chatmsg:focus, .statuslog, .logitem, textarea, textarea:disabled,
-.videochat .controlwrapper,.videochat .disconnectbtn,.videochat .disconnectbtnwrapper, .nsfwCoverTextWrapper {
+.videochat .controlwrapper,.videochat,.videochat .disconnectbtnwrapper, .nsfwCoverTextWrapper {
     color: #d2d2d2;
 }
 
+input {
+    background-color: #1a1a1a;
+}
+
+
+button.disconnectbtn {
+    color: #e3e3e3;
+}
+
 /*
+
 Secondary Colour TEXT
  */
 .disconnectbtnwrapper.newbtn {

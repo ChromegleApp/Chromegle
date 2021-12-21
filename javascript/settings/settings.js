@@ -1,5 +1,5 @@
 let ConstantValues = {
-    discordURL: "https://discord.com/invite/TRCNZ5vuwM",
+    discordURL: "https://discord.gg/KDqHBrZ2Yn",
     geoLocationEndpoint: "https://freegeoip.app/json/"
 }
 
@@ -17,22 +17,50 @@ class SettingsManager {
 
 }
 
+document.addEventListener("storageSettingsUpdate", (event) => {
+    Logger.INFO("Updated sync-storage configuration option on <%s> event: %s", event.type, JSON.stringify(event.detail))
+});
+
 class MutableField {
     #storageName;
     #default;
     #type;
+    #warning;
 
     constructor(config) {
         this.#storageName = config["storageName"]
         this.#default = config["default"] || null;
         this.#type = config["type"];
+        this.#warning = config["warning"];
     }
 
     updateValue(config) {
-        if (!config["confirm"] || config["confirm"] === "false" || config["confirm"] === false) return;
+        if (!config["confirm"] || config["confirm"] === "false" || config["confirm"] === false) return false;
         const override = {}
+
+        if (this.#warning != null) {
+
+            if (this.#warning["state"] == null || this.#warning["state"] === config["value"]) {
+                let result = confirm(this.#warning["message"] || null);
+
+                // Cancel
+                if (!result) {
+                    this.update(true);
+                    return false;
+                }
+
+            }
+
+        }
+
         override[this.#storageName] = config["value"]
         chrome.storage.sync.set(override);
+        document.dispatchEvent(new CustomEvent("storageSettingsUpdate", {detail: override}));
+        return true;
+    }
+
+    update(noChange) {
+        return null;
     }
 
     getType() {
@@ -99,15 +127,17 @@ class SwitchEdit extends MutableField {
 
             // Not currently Selected
             if (!currentlySelected && !noChange) {
-                this.updateValue({"confirm": "true", "value": this.#elementName});
+                let result = this.updateValue({"confirm": "true", "value": this.#elementName});
 
-                document.dispatchEvent(new CustomEvent("SwitchModify", {
-                    detail: {
-                        "element": this.#elementName,
-                        "others": this.#otherElementNames,
-                        "change": true
-                    }
-                }));
+                if (result) {
+                    document.dispatchEvent(new CustomEvent("SwitchModify", {
+                        detail: {
+                            "element": this.#elementName,
+                            "others": this.#otherElementNames,
+                            "change": true
+                        }
+                    }));
+                }
             }
 
 
@@ -155,18 +185,31 @@ class ToggleEdit extends MutableField {
         chrome.storage.sync.get(request, (result) => {
            if (noChange) {
                newResult = result[name];
+
+               document.dispatchEvent(new CustomEvent("ToggleModify", {
+                   detail: {
+                       "element": this.#elementName,
+                       "value": newResult,
+                       "change": !noChange
+                   }
+               }));
+
            } else {
                newResult = result[name] === "true" ? "false" : "true";
-               this.updateValue({"confirm": "true", "value": newResult});
+               let storageResult = this.updateValue({"confirm": "true", "value": newResult});
 
+               if (storageResult) {
+
+                   document.dispatchEvent(new CustomEvent("ToggleModify", {
+                       detail: {
+                           "element": this.#elementName,
+                           "value": newResult,
+                           "change": !noChange
+                       }
+                   }));
+               }
            }
-           document.dispatchEvent(new CustomEvent("ToggleModify", {
-                detail: {
-                    "element": this.#elementName,
-                    "value": newResult,
-                    "change": !noChange
-                }
-           }));
+
         });
     }
 
@@ -191,6 +234,10 @@ class FieldEdit extends MutableField {
     #check;
     #defaultCheck = () => true;
 
+    getPrompt() {
+        return this.#prompt;
+    }
+
     constructor(config) {
         config["type"] = "field";
         super(config);
@@ -202,7 +249,9 @@ class FieldEdit extends MutableField {
         return prompt(this.#prompt, previous);
     }
 
-    update() {
+    update(noChange) {
+        if (noChange) return;
+
         const name = this.getName();
         const request = {}
         request[name] = this.getDefault();
@@ -210,6 +259,67 @@ class FieldEdit extends MutableField {
             const response = this.getResponse(result[name]);
             this.updateValue(this.#check(response));
         })
+    }
+
+}
+
+class MultiFieldEdit extends FieldEdit {
+    #times;
+
+    constructor(config) {
+        super(config);
+        this.#times = config["times"] || 1;
+    }
+
+    static #suffixCalculation(i) {
+        let j = i % 10, k = i % 100;
+        if (j === 1 && k !== 11) return i + "st";
+        if (j === 2 && k !== 12) return i + "nd";
+        if (j === 3 && k !== 13) return i + "rd";
+        return i + "th";
+    }
+
+    setTimes(_times) {
+        this.#times = _times;
+    }
+
+    getResponse(previous) {
+        let results = [];
+        let defaults = this.getDefault();
+
+        for (let i = 0; i < this.#times; i++) {
+            results.push(prompt(this.getPrompt().replaceAll("%n", MultiFieldEdit.#suffixCalculation(i + 1)), previous[i] || defaults[i] || ""))
+        }
+
+        return results;
+    }
+}
+
+class MutableMultiEditField extends MultiFieldEdit {
+    #max;
+    #min;
+
+    constructor(config) {
+        super(config);
+        this.#max = config["max"] || null;
+        this.#min = (config["min"] != null && config["min"] >= 1) ? config["min"] : 1;
+    }
+
+    getTimes() {
+
+        let response = prompt(`How many inputs would you like to enter? (Max: ${this.#max} | Min: ${this.#min})`);
+
+        if (!isNumeric(response)) return this.#min;
+        else if (response > this.#max) return this.#max;
+        else if (response < this.#min) return this.#min;
+        else return response;
+
+    }
+
+    getResponse(_previous) {
+        this.setTimes(this.getTimes())
+        // noinspection JSValidateTypes
+        return super.getResponse(_previous);
     }
 
 }

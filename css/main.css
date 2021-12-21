@@ -105,3 +105,18 @@ html {
     left: 0;
     bottom: 0;
 }
+
+.videoScreenshotButton {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    cursor: pointer;
+}
+
+.videoScreenshotButton:hover {
+    opacity: 80%;
+}
+
+.selfVideoScreenshotButton {
+    bottom: 0;
+}

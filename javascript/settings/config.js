@@ -1,29 +1,30 @@
 const config = {
-    "greetingMessageField": new FieldEdit({
+    "greetingMessageField": new MutableMultiEditField({
         "storageName": "GREETING_MESSAGE_FIELD",
-        "prompt": "Enter a new message to display on join:",
-        "default": "Hello there!",
-        "check": (response) => {
+        "prompt": "Enter the %n message to display on join:",
+        "default": ["Hello there!"],
+        "times": 3,
+        "min": 1,
+        "max": 15,
+        "check": (_response) => {
+            const checker = arr => arr.every(v => v=== null);
 
-            if (response == null) {
+            if (_response == null || _response === "null" || (_response != null && checker(_response))) {
                 return {
                     "confirm": "false",
                     "value": null
                 };
-            } else if (response.length < 1) {
-                return {
-                    "confirm": "false",
-                    "value": null
-                };
-            } else {
-                return {
-                    "confirm": "true",
-                    "value": response
-                };
-
             }
 
-        }
+            let response = [];
+            for (let __response of _response) {
+                if (__response == null || __response.trim().length < 1) continue;
+                response.push(__response);
+            }
+
+            return {"confirm": "true", "value": response}
+
+        },
     }),
     "typingSpeedField": new FieldEdit({
         "storageName": "GREETING_TYPING_SPEED",
@@ -59,7 +60,12 @@ const config = {
     "toggleGreeting": new ToggleEdit({
         "elementName": "toggleGreeting",
         "storageName": "GREETING_TOGGLE",
-        "default": "false"
+        "default": "false",
+        "warning": {
+            "message": "Chromegle is not a spam-bot. Abusing auto-message to send recurring, frequent messages will eventually result in an Omegle ban. " +
+                "Use this feature responsibly, with a VPN. We're not responsible for any stupid things you do, nor will we cater to spam of Omegle's platform.",
+            "state": "true"
+        }
     }),
     "startTypingDelayField": new FieldEdit({
         "storageName": "GREETING_STARTING_DELAY",
@@ -157,7 +163,13 @@ const config = {
     "autoSkipToggle": new ToggleEdit({
         "elementName": "autoSkipToggle",
         "storageName": "AUTO_SKIP_TOGGLE",
-        "default": "false"
+        "default": "false",
+        "warning": {
+            "message": "Chromegle is not a spam-bot. Abusing auto-skip in combination with the auto-message feature to send recurring, frequent messages will " +
+                "eventually result in an Omegle ban. Use this feature responsibly with a VPN if you plan to combine the two. We are not responsible for " +
+                "any stupid things you do, nor will we cater to spam of Omegle's platform.",
+            "state": "true"
+        }
     }),
     "autoReconnectToggle": new ToggleEdit({
         "elementName": "autoReconnectToggle",
@@ -209,6 +221,11 @@ const config = {
         "elementName": "headerButtonsToggle",
         "storageName": "HEADER_BUTTONS_TOGGLE",
         "default": "true"
+    }),
+    "screenshotButtonToggle": new ToggleEdit({
+        "elementName": "screenshotButtonToggle",
+        "storageName": "SCREENSHOT_BUTTON_TOGGLE",
+        "default": "false"
     }),
 
 }

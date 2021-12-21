@@ -40,6 +40,7 @@
         "javascript/automation/ip-grabbing.js",
         "javascript/automation/auto-confirm.js",
         "javascript/automation/unmoderated-chat.js",
+        "javascript/automation/video-screenshot.js",
         "javascript/automation/video-blocking.js",
         "javascript/automation/sync-topics.js",
         "javascript/automation/web-filtering/filter-messages.js"

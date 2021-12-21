@@ -14,11 +14,14 @@ document.addEventListener("chatStarted", (detail) => {
     chrome.storage.sync.get(greetingQuery, (result) => {
 
         if (result[config.toggleGreeting.getName()] === "true") {
+            const textOptions = result[config.greetingMessageField.getName()]
 
-            let textContent = result[config.greetingMessageField.getName()]
-            let wpm = result[config.typingSpeedField.getName()]
-            let startDelay = result[config.startTypingDelayField.getName()]
-            let sendDelay = result[config.sendDelayField.getName()]
+            Logger.DEBUG("Retrieved auto-message text options, picking one at random: %s", JSON.stringify(textOptions));
+
+            const textContent = textOptions[[Math.floor(Math.random() * textOptions.length)]]
+            const wpm = result[config.typingSpeedField.getName()]
+            const startDelay = result[config.startTypingDelayField.getName()]
+            const sendDelay = result[config.sendDelayField.getName()]
 
             setTimeout(() => {
                 const totalTime = typingDelay(textContent, wpm);

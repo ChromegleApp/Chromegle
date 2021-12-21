@@ -36,7 +36,7 @@ class VideoBlocker {
         this.#videoElementId = videoElementId;
         this.#spinnerElementId = spinnerElementId;
         this.#disableAfterChat = disableAfterChat;
-        this.#extraButtonClasses = extraButtonClasses;
+        this.#extraButtonClasses = extraButtonClasses || [];
         this.#coverButton = this.#generateButton();
 
         $(`#${videoElementId}`).on("click", () => this.blockVideo());
@@ -84,13 +84,13 @@ class VideoBlocker {
 // On resize, resize block
 $(window).on("resize", () => {
 
-    for (let blocker of VideoBlocker.instances) {
+    VideoBlocker.instances.forEach((blocker) => {
         setTimeout(() => {
             if (blocker.getCurrentlyBlocking()) {
                 blocker.blockVideo();
             }
         }, 5);
-    }
+    });
 
 })
 

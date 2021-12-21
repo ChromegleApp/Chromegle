@@ -55,7 +55,7 @@ let request = undefined;
 
 function displayScrapeData(unhashedAddress, hashedAddress, previousHashedAddresses, showData, geoLocate) {
 
-    Logger.DEBUG("Scraped IP Address from video chat - Hashed: <%s> - Raw: <%s>", hashedAddress, unhashedAddress);
+    Logger.DEBUG("Scraped IP Address from video chat | Hashed: <%s> Raw: <%s>", hashedAddress, unhashedAddress);
 
     const innerLogBox = document.getElementsByClassName("logitem")[0].parentNode;
     const logItemDiv = document.createElement("div");
