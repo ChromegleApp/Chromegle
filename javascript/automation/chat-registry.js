@@ -3,25 +3,25 @@ class ChatRegistry {
     static #documentMutationObserver;
 
     static #currentlyChatting = false;
+    static #chatPageEnabled = false;
+    static #chatUUID = undefined;
+    static #isVideoChat = undefined;
+
+    static pageStarted = () => ChatRegistry.#chatPageEnabled;
     static isChatting = () => ChatRegistry.#currentlyChatting;
     static setChatting = (status) => ChatRegistry.#currentlyChatting = status;
-    static #chatPageEnabled = false;
-    static pageStarted = () => ChatRegistry.#chatPageEnabled;
-
-    static #chatUUID = undefined;
+    static isVideoChat = () => ChatRegistry.#isVideoChat;
+    static setVideoChat = (status) => ChatRegistry.#isVideoChat = status;
     static getUUID = () => ChatRegistry.#chatUUID;
     static setUUID = () => ChatRegistry.#chatUUID = uuid4();
     static clearUUID = () => ChatRegistry.#chatUUID = undefined;
 
-    constructor() {
-        ChatRegistry.#documentMutationObserver = new MutationObserver(ChatRegistry.#onDocumentMutation);
-    }
-
     startObserving() {
+        ChatRegistry.#documentMutationObserver = new MutationObserver(ChatRegistry.#onDocumentMutation);
         ChatRegistry.#documentMutationObserver.observe(document, {subtree: true, childList: true, attributes: true}); //attributeFilter : ['class']});
         document.addEventListener("click", ChatRegistry.#onButtonClick)
+        document.addEventListener("pageStarted", ChatRegistry.#onChatStart)
     }
-
 
     static #onButtonClick(event) {
         if (event.target.classList.contains("disconnectbtn")) {
@@ -32,9 +32,18 @@ class ChatRegistry {
         if (["videobtn", "textbtn"].includes(event.target.id)) {
             if (!ChatRegistry.pageStarted()) {
                 ChatRegistry.#chatPageEnabled = true;
-                document.dispatchEvent(new CustomEvent('pageStarted', {detail: {button: event.target}}));
+                ChatRegistry.setVideoChat($("#videowrapper").get(0) != null);
+                document.dispatchEvent(new CustomEvent('pageStarted', {detail: {button: event.target, isVideoChat: this.#isVideoChat}}));
             }
         }
+    }
+
+    static #onChatStart() {
+        if (!this.#isVideoChat) return;
+        if(!false === true) return;
+
+        document.dispatchEvent(new CustomEvent("videoChatLoaded"));
+
     }
 
     static #onDocumentMutation (mutation) {
@@ -42,7 +51,6 @@ class ChatRegistry {
         for (let mutationRecord of mutation) {
 
             // FAIL STUFF
-
             if (mutationRecord.target["innerText"] != null) {
                 if (mutationRecord.target["innerText"].includes("Error connecting to server")) {
                     Logger.ERROR("Chat failed to connect, user is likely soft-banned due to a VPN or proxy")
@@ -58,7 +66,8 @@ class ChatRegistry {
 
             if (!ChatRegistry.pageStarted()) {
                 ChatRegistry.#chatPageEnabled = true;
-                document.dispatchEvent(new CustomEvent('pageStarted', {detail: {button: mutationRecord.target}}));
+                ChatRegistry.setVideoChat($("#videowrapper").get(0) != null);
+                document.dispatchEvent(new CustomEvent('pageStarted', {detail: {button: mutationRecord.target, isVideoChat: this.#isVideoChat}}));
             }
 
             const containsDisabled = mutationRecord.target.classList.contains("disabled");
@@ -67,7 +76,7 @@ class ChatRegistry {
                 Logger.INFO("Chat Ended: UUID <%s>", ChatRegistry.getUUID());
                 ChatRegistry.setChatting(false);
                 ChatRegistry.clearUUID();
-                document.dispatchEvent(new CustomEvent('chatEnded', {detail: {button: mutationRecord.target}}));
+                document.dispatchEvent(new CustomEvent('chatEnded', {detail: {button: mutationRecord.target, isVideoChat: this.#isVideoChat}}));
                 continue;
             }
 
@@ -75,7 +84,9 @@ class ChatRegistry {
                 ChatRegistry.setChatting(true);
                 ChatRegistry.setUUID();
                 Logger.INFO("Chat Started: UUID <%s>", ChatRegistry.getUUID());
-                document.dispatchEvent(new CustomEvent('chatStarted', {detail: {button: mutationRecord.target, uuid: ChatRegistry.getUUID()}}));
+                document.dispatchEvent(
+                    new CustomEvent('chatStarted', {detail: {button: mutationRecord.target, uuid: ChatRegistry.getUUID(), isVideoChat: this.#isVideoChat}})
+                );
             }
 
         }

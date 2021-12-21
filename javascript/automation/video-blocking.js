@@ -95,9 +95,8 @@ $(window).on("resize", () => {
 })
 
 
-document.addEventListener("pageStarted", () => {
-    let videoWrapper = $("#videowrapper").get(0);
-    if (videoWrapper == null) return;
+document.addEventListener("pageStarted", (event) => {
+    if (!event["detail"]["isVideoChat"]) return;
 
     VideoBlocker.instances.push(
         new VideoBlocker(
@@ -116,8 +115,7 @@ document.addEventListener("pageStarted", () => {
         )
     );
 
-    VideoBlocker.instances.forEach((blocker) => videoWrapper.appendChild(blocker.getCoverButton().get(0)));
-
+    VideoBlocker.instances.forEach((blocker) => $("#videowrapper").get(0).appendChild(blocker.getCoverButton().get(0)));
 
     document.addEventListener("chatEnded", () => {
         VideoBlocker.instances.forEach((blocker) => {

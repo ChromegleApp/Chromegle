@@ -130,8 +130,7 @@ document.addEventListener("pageStarted", () => {
         });
     });
 
-    // displayScrapeData conveniently happens when videos are loaded, which is when we want to take screenshots!
-    window.addEventListener("displayScrapeData", () => {
+    window.addEventListener("videoChatLoaded", () => {
         VideoScreenshot.instances.forEach((instance) => {
             instance.videoButtonEnabled(true);
         });

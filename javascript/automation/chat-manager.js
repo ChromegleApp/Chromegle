@@ -1,5 +1,5 @@
 
-document.addEventListener("chatStarted", () => {
+document.addEventListener("chatStarted", (event) => {
 
     let logItems = document.getElementsByClassName("statuslog");
     for (let log of logItems) {
@@ -8,9 +8,7 @@ document.addEventListener("chatStarted", () => {
         }
     }
 
-    const isVideo = $("#videowrapper").get(0) !== undefined
-
-    if (isVideo) {
+    if (event["detail"]["isVideoChat"]) {
         let self = $("#selfvideo").get(0);
         if (self !== null) {
             $(self).css("z-index", "");

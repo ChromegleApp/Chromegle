@@ -1,8 +1,6 @@
-document.addEventListener("chatEnded", () => {
+document.addEventListener("chatEnded", (event) => {
 
-    const isVideo = $("#videowrapper").get(0) !== undefined
-
-    if (isVideo) {
+    if (!event["detail"]["isVideoChat"]) {
         return;
     }
 
