@@ -6,7 +6,7 @@
   "homepage_url": "https://github.com/isaackogan",
 
   "manifest_version": 3,
-  "version": "2.0",
+  "version": "2.1",
   "icons": {"16": "images/IconLogo.png", "48": "images/IconLogo.png", "128": "images/IconLogo.png"},
 
   "content_scripts": [
