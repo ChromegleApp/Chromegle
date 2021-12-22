@@ -183,8 +183,8 @@ const config = {
     }),
     "geoLocateToggle": new ToggleEdit({
         "elementName": "geoLocateToggle",
-        "storageName": "GEO_LOCATE_TOGGLE",
-        "default": "false"
+        "storageName": "GEOGRAPHIC_LOCATE_TOGGLE",
+        "default": "true"
     }),
     "sexualFilterToggle": new ToggleEdit({
         "elementName": "sexualFilterToggle",

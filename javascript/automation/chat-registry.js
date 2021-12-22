@@ -20,7 +20,6 @@ class ChatRegistry {
         ChatRegistry.#documentMutationObserver = new MutationObserver(ChatRegistry.#onDocumentMutation);
         ChatRegistry.#documentMutationObserver.observe(document, {subtree: true, childList: true, attributes: true}); //attributeFilter : ['class']});
         document.addEventListener("click", ChatRegistry.#onButtonClick)
-        document.addEventListener("pageStarted", ChatRegistry.#onChatStart)
     }
 
     static #onButtonClick(event) {
@@ -33,22 +32,22 @@ class ChatRegistry {
             if (!ChatRegistry.pageStarted()) {
                 ChatRegistry.#chatPageEnabled = true;
                 ChatRegistry.setVideoChat($("#videowrapper").get(0) != null);
-                document.dispatchEvent(new CustomEvent('pageStarted', {detail: {button: event.target, isVideoChat: this.#isVideoChat}}));
+                document.dispatchEvent(new CustomEvent('pageStarted', {detail: {button: event.target, isVideoChat: ChatRegistry.isVideoChat()}}));
             }
         }
-    }
-
-    static #onChatStart() {
-        if (!this.#isVideoChat) return;
-        if(!false === true) return;
-
-        document.dispatchEvent(new CustomEvent("videoChatLoaded"));
-
     }
 
     static #onDocumentMutation (mutation) {
 
         for (let mutationRecord of mutation) {
+
+            if (mutationRecord.target.id === "othervideospinner") {
+                let spinner = $(mutationRecord.target);
+                if (spinner.get(0).style.display === "none" && ChatRegistry.isChatting()) {
+                    document.dispatchEvent(new CustomEvent("videoChatLoaded"));
+                }
+                continue;
+            }
 
             // FAIL STUFF
             if (mutationRecord.target["innerText"] != null) {
@@ -67,7 +66,7 @@ class ChatRegistry {
             if (!ChatRegistry.pageStarted()) {
                 ChatRegistry.#chatPageEnabled = true;
                 ChatRegistry.setVideoChat($("#videowrapper").get(0) != null);
-                document.dispatchEvent(new CustomEvent('pageStarted', {detail: {button: mutationRecord.target, isVideoChat: this.#isVideoChat}}));
+                document.dispatchEvent(new CustomEvent('pageStarted', {detail: {button: mutationRecord.target, isVideoChat: ChatRegistry.isVideoChat()}}));
             }
 
             const containsDisabled = mutationRecord.target.classList.contains("disabled");
@@ -76,7 +75,7 @@ class ChatRegistry {
                 Logger.INFO("Chat Ended: UUID <%s>", ChatRegistry.getUUID());
                 ChatRegistry.setChatting(false);
                 ChatRegistry.clearUUID();
-                document.dispatchEvent(new CustomEvent('chatEnded', {detail: {button: mutationRecord.target, isVideoChat: this.#isVideoChat}}));
+                document.dispatchEvent(new CustomEvent('chatEnded', {detail: {button: mutationRecord.target, isVideoChat: ChatRegistry.isVideoChat()}}));
                 continue;
             }
 
@@ -85,7 +84,7 @@ class ChatRegistry {
                 ChatRegistry.setUUID();
                 Logger.INFO("Chat Started: UUID <%s>", ChatRegistry.getUUID());
                 document.dispatchEvent(
-                    new CustomEvent('chatStarted', {detail: {button: mutationRecord.target, uuid: ChatRegistry.getUUID(), isVideoChat: this.#isVideoChat}})
+                    new CustomEvent('chatStarted', {detail: {button: mutationRecord.target, uuid: ChatRegistry.getUUID(), isVideoChat: ChatRegistry.isVideoChat()}})
                 );
             }
 

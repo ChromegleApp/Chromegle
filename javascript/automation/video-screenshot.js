@@ -130,7 +130,7 @@ document.addEventListener("pageStarted", () => {
         });
     });
 
-    window.addEventListener("videoChatLoaded", () => {
+    document.addEventListener("videoChatLoaded", () => {
         VideoScreenshot.instances.forEach((instance) => {
             instance.videoButtonEnabled(true);
         });

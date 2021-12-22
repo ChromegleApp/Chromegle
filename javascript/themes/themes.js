@@ -93,7 +93,10 @@ class ThemeManager {
             $(newBanner).on("click", () => window.open(ConstantValues.discordURL));
             $("img[src$='/static/standwithhk.jpeg']").replaceWith(newBanner);
         }
-        #overrideTopicEditor = () => $(".topictageditor").get(0).style.background = null;
+        #overrideTopicEditor = () => {
+            let editor = $(".topictageditor").get(0);
+            if (editor != null) editor.style.background = null;
+        };
 
         #overrideHomePageText() {
             $("#mobilesitenote").get(0).innerHTML =
@@ -104,16 +107,23 @@ class ThemeManager {
 
         #overrideCollegeAndUnModeratedButtons() {
             const collegeButton = $("a[href='javascript:']").get(0);
-            collegeButton.id = "collegeButton";
-            collegeButton.style.background = null;
-            collegeButton.style.border = null;
-            collegeButton.style.color = null;
+
+            if (collegeButton != null) {
+                collegeButton.id = "collegeButton";
+                collegeButton.style.background = null;
+                collegeButton.style.border = null;
+                collegeButton.style.color = null;
+            }
+
 
             const videoButtonUnModerated = $("#videobtnunmoderated").get(0);
-            videoButtonUnModerated.style.background = null;
-            videoButtonUnModerated.style.border = null;
-            videoButtonUnModerated.style.padding = null;
-            videoButtonUnModerated.style.color = null;
+
+            if (videoButtonUnModerated != null) {
+                videoButtonUnModerated.style.background = null;
+                videoButtonUnModerated.style.border = null;
+                videoButtonUnModerated.style.padding = null;
+                videoButtonUnModerated.style.color = null;
+            }
 
         }
 
