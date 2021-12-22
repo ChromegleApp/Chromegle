@@ -71,6 +71,7 @@ function displayScrapeData(unhashedAddress, hashedAddress, previousHashedAddress
 
     seenBeforeDiv.appendChild($(`<span class='statuslog'>You've seen this person ${seenTimes} time${plural} before.</span>`).get(0));
     ipGrabberDiv.appendChild(createLogBoxMessage("IP Address: ", unhashedAddress)); // Add the IP first
+    if (!geoLocate) ipGrabberDiv.appendChild(createLogBoxMessage("Location: ", "Disabled (Enable in Settings)"))
 
     previousHashedAddresses[hashedAddress] = seenTimes + 1;
     chrome.storage.local.set({"PREVIOUS_HASHED_ADDRESS_LIST": previousHashedAddresses});
