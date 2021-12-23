@@ -30,7 +30,6 @@ document.addEventListener("videoChatLoaded", () => {
 
     // Get other video
     const otherVideo = $("#othervideo").get(0)
-    console.log(otherVideo.src)
 
     const screenshot = VideoScreenshot._screenshotVideo(otherVideo);
     if (screenshot === null) return;
@@ -66,6 +65,7 @@ document.addEventListener("videoChatLoaded", () => {
     xhr.ontimeout = () => {
         otherVideoBlocker.unblockVideo();
         sendNSFWMessage("NSFW detection timed out, unblocked video to preserve chat.")
+        Logger.WARNING("NSFW detection timed out, had to unblock vide to preserve chat viewing")
     }
 });
 
