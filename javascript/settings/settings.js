@@ -1,6 +1,22 @@
 let ConstantValues = {
     discordURL: "https://discord.gg/KDqHBrZ2Yn",
-    geoLocationEndpoint: "https://freegeoip.app/json/"
+    githubURL: "https://github.com/ChromegleApp/Chromegle",
+    geoLocationEndpoint: "https://freegeoip.app/json/",
+    apiURL: "https://chromegle.isaackogan.com",
+    getHelpfulTip: () => {
+        const helpfulTips = [
+            "We hope you enjoy our extension as much as we enjoyed making it!",
+            `Did you know that we have a discord server? Go <a target='_blank' href='${ConstantValues.discordURL}'>check it out</a> some time!`,
+            "Removed Herobrine as of Chromegle v2.2!",
+            "Tip: Taking advice from a Chrome extension is probably a bad idea.",
+            "How much could a wood chuck chuck if a wood chuck could chuck wood?",
+            `Did you know we're open sourced? You <a target='_blank' href'${ConstantValues.githubURL}'>can see every line</a> of code for this app online, free!`
+        ]
+
+        return helpfulTips[[Math.floor(Math.random() * helpfulTips.length)]]
+    }
+
+
 }
 
 class SettingsManager {

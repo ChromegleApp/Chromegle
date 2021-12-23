@@ -227,5 +227,15 @@ const config = {
         "storageName": "SCREENSHOT_BUTTON_TOGGLE",
         "default": "false"
     }),
+    "sexualVideoFilterToggle": new ToggleEdit({
+        "elementName": "sexualVideoFilterToggle",
+        "storageName": "SEXUAL_VIDEO_FILTER_TOGGLE",
+        "default": "false",
+        "warning": {
+            "message": "This sexual filter is in early beta! It will never capture all inappropriate images, " +
+                "only blatant and clearly displayed sexual organs, so please don't rely on it as a sure thing!",
+            "state": "true"
+        }
+    }),
 
 }

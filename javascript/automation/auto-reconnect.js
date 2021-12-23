@@ -1,6 +1,6 @@
 document.addEventListener("chatEnded", (event) => {
 
-    if (!event["detail"]["isVideoChat"]) {
+    if (event["detail"]["isVideoChat"]) {
         return;
     }
 
@@ -14,6 +14,7 @@ document.addEventListener("chatEnded", (event) => {
                 $(".disconnectbtn").trigger("click");
             }, 25);
         }
+
     });
 
 });

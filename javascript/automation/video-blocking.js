@@ -53,7 +53,7 @@ class VideoBlocker {
         $(`#${this.#videoElementId}`).css("cursor", enabled ? "pointer" : "");
     }
 
-    blockVideo() {
+    blockVideo(withText = true) {
 
         // Don't run when chatting
         if (!ChatRegistry.isChatting() && this.#disableAfterChat) {
@@ -65,20 +65,19 @@ class VideoBlocker {
             .css("display", "none")
             .get(0);
 
-        $(this.#coverButton)
+        let buttonDOM = $(this.#coverButton)
             .css("display", "flex")
             .css("width", videoElement.style.width)
             .css("height", videoElement.style.height)
-            .css("margin-top", videoElement.style.top);
+            .css("margin-top", videoElement.style.top)
+            .get(0);
 
-        if (this.#spinnerElementId != null) {
-            $(`#${this.#spinnerElementId}`).css("display", "none");
-        }
+        if (withText) $(buttonDOM.childNodes[1]).css("display", "flex");
+        else $(buttonDOM.childNodes[1]).css("display", "none");
 
     }
 
 }
-
 
 
 // On resize, resize block
@@ -94,18 +93,21 @@ $(window).on("resize", () => {
 
 })
 
+let otherVideoBlocker = undefined;
 
 document.addEventListener("pageStarted", (event) => {
     if (!event["detail"]["isVideoChat"]) return;
 
+    otherVideoBlocker = new VideoBlocker(
+        "otherVideoBlocker",
+        "othervideo",
+        "othervideospinner",
+        true,
+        ["otherVideoCover"]
+    );
+
     VideoBlocker.instances.push(
-        new VideoBlocker(
-            "otherVideoBlocker",
-            "othervideo",
-            "othervideospinner",
-            true,
-            ["otherVideoCover"]
-        ),
+        otherVideoBlocker,
         new VideoBlocker(
             "selfVideoBlocker",
             "selfvideo",

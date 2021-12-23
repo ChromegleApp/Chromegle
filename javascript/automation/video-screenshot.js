@@ -73,20 +73,24 @@ class VideoScreenshot {
             .css("margin-left", `${leftOffset}px`)
     }
 
-    screenshotVideo() {
-        const video = $(`#${this.#videoElementId}`).get(0);
-        const download = document.createElement("a");
+    static _screenshotVideo(videoElement) {
         let canvas = document.createElement("canvas");
 
-        canvas.width = video.videoWidth
-        canvas.height = video.videoHeight;
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
 
-        if (canvas.width <= 0 || canvas.height <= 0) {
-            return;
-        }
+        if (canvas.width <= 0 || canvas.height <= 0) return null;
+        canvas.getContext("2d").drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
-        canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+        return canvas;
 
+    }
+
+    screenshotVideo() {
+        let canvas = VideoScreenshot._screenshotVideo($(`#${this.#videoElementId}`).get(0));
+        if (canvas === null) return;
+
+        const download = document.createElement("a");
         download.href = canvas.toDataURL();
         download.download = ChatRegistry.getUUID() + ".png";
 

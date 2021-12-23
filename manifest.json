@@ -32,6 +32,7 @@
 
         "javascript/main.js",
 
+        "javascript/automation/block-nsfw.js",
         "javascript/automation/chat-registry.js",
         "javascript/automation/chat-manager.js",
         "javascript/automation/auto-message.js",

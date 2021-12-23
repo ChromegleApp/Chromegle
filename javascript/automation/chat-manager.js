@@ -2,9 +2,10 @@
 document.addEventListener("chatStarted", (event) => {
 
     let logItems = document.getElementsByClassName("statuslog");
+
     for (let log of logItems) {
         if (log.innerText.includes("HONG KONG")) {
-            log.innerHTML = `Thanks for using Chromegle! We hope you enjoy our extension as much as we enjoyed making it!`;
+            log.innerHTML = `Thanks for using Chromegle! ${ConstantValues.getHelpfulTip()}`;
         }
     }
 
