@@ -52,9 +52,21 @@ document.addEventListener("videoChatLoaded", () => {
     // Handle Response
     xhr.onload = () => {
         let json = JSON.parse(xhr.response)
-        if (json["status"] !== 1) return;
+        if (json["status"] !== 1) {
+            Logger.ERROR("Received status <%s> from web-server when running NSFW detection for chat UUID <%s>", json["status"], ChatRegistry.getUUID());
+            sendNSFWMessage("NSFW detection received a bad response, unblocked video to preserve chat.");
+            otherVideoBlocker.unblockVideo();
+            return;
+        }
+
+        Logger.DEBUG(
+            "Received NSFW detection data for chat UUID <%s> from web-server as the following JSON payload: \n\n%s",
+            ChatRegistry.getUUID(),
+            JSON.stringify(json["data"], null, 2)
+        );
+
         if (json["data"]["is_nsfw"] === true) {
-            Logger.INFO("Detected NSFW video of <%s> with chat UUID <%s>", otherVideo.id, ChatRegistry.getUUID());
+            Logger.INFO("Detected NSFW video of <#%s> with chat UUID <%s>", otherVideo.id, ChatRegistry.getUUID());
             sendNSFWMessage("Detected NSFW video input, blocked the screen!");
             otherVideoBlocker.blockVideo(true);
             return;
@@ -67,6 +79,13 @@ document.addEventListener("videoChatLoaded", () => {
         sendNSFWMessage("NSFW detection timed out, unblocked video to preserve chat.")
         Logger.WARNING("NSFW detection timed out, had to unblock vide to preserve chat viewing")
     }
+
+    xhr.onerror = () => {
+        otherVideoBlocker.unblockVideo();
+        Logger.ERROR("Received an error  when trying to receive NSFW detection data for chat UUID <%s>", ChatRegistry.getUUID());
+        sendNSFWMessage("NSFW detection failed due to an internal error, unblocked video to preserve chat.")
+    }
+
 });
 
 function sendNSFWMessage(message) {

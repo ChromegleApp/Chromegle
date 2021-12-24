@@ -4,7 +4,7 @@ const config = {
         "prompt": "Enter the %n message to display on join:",
         "default": ["Hello there!"],
         "times": 3,
-        "min": 1,
+        "min": 0,
         "max": 15,
         "check": (_response) => {
             const checker = arr => arr.every(v => v=== null);
@@ -236,6 +236,11 @@ const config = {
                 "only blatant and clearly displayed sexual organs, so please don't rely on it as a sure thing!",
             "state": "true"
         }
+    }),
+    "skipRepeatsToggle": new ToggleEdit({
+        "elementName": "skipRepeatsToggle",
+        "storageName": "SKIP_REPEATS_TOGGLE",
+        "default": "false"
     }),
 
 }

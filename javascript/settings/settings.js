@@ -3,6 +3,7 @@ let ConstantValues = {
     githubURL: "https://github.com/ChromegleApp/Chromegle",
     geoLocationEndpoint: "https://freegeoip.app/json/",
     apiURL: "https://chromegle.isaackogan.com",
+
     getHelpfulTip: () => {
         const helpfulTips = [
             "We hope you enjoy our extension as much as we enjoyed making it!",
@@ -10,7 +11,7 @@ let ConstantValues = {
             "Removed Herobrine as of Chromegle v2.2!",
             "Tip: Taking advice from a Chrome extension is probably a bad idea.",
             "How much could a wood chuck chuck if a wood chuck could chuck wood?",
-            `Did you know we're open sourced? You <a target='_blank' href'${ConstantValues.githubURL}'>can see every line</a> of code for this app online, free!`
+            `Did you know we're open sourced? You <a target='_blank' href="${ConstantValues.githubURL}">can see every line</a> of code for this app online, free!`
         ]
 
         return helpfulTips[[Math.floor(Math.random() * helpfulTips.length)]]
@@ -318,7 +319,7 @@ class MutableMultiEditField extends MultiFieldEdit {
     constructor(config) {
         super(config);
         this.#max = config["max"] || null;
-        this.#min = (config["min"] != null && config["min"] >= 1) ? config["min"] : 1;
+        this.#min = (config["min"] != null && config["min"] >= 1) ? config["min"] : 0;
     }
 
     getTimes() {

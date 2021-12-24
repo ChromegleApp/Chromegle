@@ -25,12 +25,17 @@ window.addEventListener("displayScrapeData", (detail) => {
             previousQuery["PREVIOUS_HASHED_ADDRESS_LIST"] = {};
 
             chrome.storage.local.get(previousQuery, (_result) => {
+                const previousHashedAddresses = _result["PREVIOUS_HASHED_ADDRESS_LIST"];
+                const seenTimes = (previousHashedAddresses[hashedAddress] == null) ? 0 : previousHashedAddresses[hashedAddress];
+                document.dispatchEvent(new CustomEvent("chatSeenTimes", {detail: {"uuid": ChatRegistry.getUUID(), "seenTimes": seenTimes}}));
+
                 displayScrapeData(
                     detail["detail"],
-                    hashedAddress, //.substr(0, hashedAddress.length / 4),
-                    _result["PREVIOUS_HASHED_ADDRESS_LIST"],
+                    hashedAddress,
+                    previousHashedAddresses,
                     result[config.ipGrabToggle.getName()] === "true",
-                    result[config.geoLocateToggle.getName()] === "true"
+                    result[config.geoLocateToggle.getName()] === "true",
+                    seenTimes
                 );
             })
 
@@ -53,7 +58,7 @@ const geoMappings = {
 }
 let request = undefined;
 
-function displayScrapeData(unhashedAddress, hashedAddress, previousHashedAddresses, showData, geoLocate) {
+function displayScrapeData(unhashedAddress, hashedAddress, previousHashedAddresses, showData, geoLocate, seenTimes) {
 
     Logger.DEBUG("Scraped IP Address from video chat | Hashed: <%s> Raw: <%s>", hashedAddress, unhashedAddress);
 
@@ -66,7 +71,6 @@ function displayScrapeData(unhashedAddress, hashedAddress, previousHashedAddress
     seenBeforeDiv.classList.add("logitem");
     ipGrabberDiv.classList.add("logitem");
 
-    const seenTimes = (previousHashedAddresses[hashedAddress] == null) ? 0 : previousHashedAddresses[hashedAddress];
     const plural = seenTimes !== 1 && seenTimes !== "1" ? "s" : "";
 
     seenBeforeDiv.appendChild($(`<span class='statuslog'>You've seen this person ${seenTimes} time${plural} before.</span>`).get(0));
