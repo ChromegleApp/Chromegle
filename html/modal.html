@@ -26,7 +26,11 @@
                             -->
                             <table class="settingsTable">
                                 <tr>
-                                    <th class="tableItemLabel">Greeting Message</th>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Greeting Message
+                                            <span class="tooltiptext">Send automatic messages at the start of each chat to greet each new stranger!</span>
+                                        </div>
+                                    </th>
                                     <th>
                                         <button class="editFieldButton editFieldButtonGray" id="greetingMessageField">Edit Field</button>
                                         <button class="editFieldButton editToggleDisabled" id="toggleGreeting">Enable</button>
@@ -34,16 +38,28 @@
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th class="tableItemLabel">Typing Speed</th>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Typing Speed
+                                            <span class="tooltiptext">Choose the speed in words-per-minute (WPM) to type your greeting message.</span>
+                                        </div>
+                                    </th>
                                     <th><button class="editFieldButton editFieldButtonGray" id="typingSpeedField">Edit Field</button></th>
 
                                 </tr>
                                 <tr>
-                                    <th class="tableItemLabel">Starting Delay</th>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Starting Delay
+                                            <span class="tooltiptext">Choose how much time to wait before starting to type your greeting in chat.</span>
+                                        </div>
+                                    </th>
                                     <th><button class="editFieldButton editFieldButtonGray" id="startTypingDelayField">Edit Field</button></th>
                                 </tr>
                                 <tr>
-                                    <th class="tableItemLabel">Sending Delay</th>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Sending Delay
+                                            <span class="tooltiptext">Choose how much time to wait after typing your greeting in chat before sending it.</span>
+                                        </div>
+                                    </th>
                                     <th><button class="editFieldButton editFieldButtonGray" id="sendDelayField">Edit Field</button></th>
                                 </tr>
 
@@ -59,30 +75,49 @@
                         <div class="settingsCollapsableItem">
                             <!-- Options
 
-
                             -->
                             <table class="settingsTable">
                                 <tr>
-                                    <th class="tableItemLabel">Auto-Skip</th>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Auto-Skip
+                                            <span class="tooltiptext">Skip to the next chat after a configurable number of seconds has passed.</span>
+                                        </div>
+                                    </th>
                                     <th>
                                         <button class="editFieldButton editToggleDisabled" id="autoSkipToggle">Enable</button>
                                         <button class="editFieldButton editFieldButtonGray" id="autoSkipDelayField">Edit Field</button>
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th class="tableItemLabel">Auto-Reconnect <span class="tableItemSubLabel">(Text Only)</span></th>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Auto-Reconnect <span class="tableItemSubLabel">(Text Only)</span>
+                                            <span class="tooltiptext">Automatically enter the next chat after your current one ends <strong>when in text mode.</strong></span>
+                                        </div>
+                                    </th>
                                     <th><button class="editFieldButton editToggleDisabled" id="autoReconnectToggle">Enable</button></th>
                                 </tr>
                                 <tr>
-                                    <th class="tableItemLabel">IP Grabbing <span class="tableItemSubLabel">(Video Only)</span> </th>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">IP Grabbing <span class="tableItemSubLabel">(Video Only)</span>
+                                            <span class="tooltiptext">Display the IP address of the person you are chatting with <strong>when in video mode.</strong></span>
+                                        </div>
+                                    </th>
                                     <th><button class="editFieldButton editToggleDisabled" id="ipGrabToggle">Enable</button></th>
                                 </tr>
                                 <tr>
-                                    <th class="tableItemLabel">IP Geolocation <span class="tableItemSubLabel">(Video Only)</span></th>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">IP Geolocation <span class="tableItemSubLabel">(Video Only)</span>
+                                            <span class="tooltiptext">Display the location of the person you are chatting with <strong>when in video mode.</strong></span>
+                                        </div>
+                                    </th>
                                     <th><button class="editFieldButton editToggleDisabled" id="geoLocateToggle">Enable</button></th>
                                 </tr>
                                 <tr>
-                                    <th class="tableItemLabel">Skip Repeats <span class="tableItemSubLabel">(Video Only)</span></th>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Skip Repeats <span class="tableItemSubLabel">(Video Only)</span>
+                                            <span class="tooltiptext">Skip people who you have chatted with before on Omegle <strong>when in video mode.</strong></span>
+                                        </div>
+                                    </th>
                                     <th><button class="editFieldButton editToggleDisabled" id="skipRepeatsToggle">Enable</button></th>
                                 </tr>
                             </table>
@@ -102,17 +137,28 @@
                             -->
                             <table class="settingsTable">
                                 <tr>
-                                    <th class="tableItemLabel">Sexual <span class="tableItemSubLabel">(Text Filter)</span></th>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Sexual <span class="tableItemSubLabel">(Video Filter) (Beta Version)</span>
+                                            <span class="tooltiptext">Detect <strong>NSFW video</strong> from your partner and automatically block their video input.</span>
+                                        </div>
+                                    </th>
+                                    <th><button class="editFieldButton editToggleDisabled" id="sexualVideoFilterToggle">Enable</button></th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Sexual <span class="tableItemSubLabel">(Text Filter)</span>
+                                            <span class="tooltiptext">Filter messages of a sexual nature sent by you or your partner <strong>in the text chat.</strong></span>
+                                        </div>
+                                    </th>
                                     <th><button class="editFieldButton editToggleDisabled" id="sexualFilterToggle">Enable</button></th>
 
                                 </tr>
                                 <tr>
-                                    <th class="tableItemLabel">Sexual <span class="tableItemSubLabel">(Video Filter) (Beta Version)</span></th>
-                                    <th><button class="editFieldButton editToggleDisabled" id="sexualVideoFilterToggle">Enable</button></th>
-
-                                </tr>
-                                <tr>
-                                    <th class="tableItemLabel">Profanity <span class="tableItemSubLabel">(Text Filter)</span></th>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Profanity <span class="tableItemSubLabel">(Text Filter)</span>
+                                            <span class="tooltiptext">Filter messages with profane words sent by you or your partner <strong>in the text chat.</strong></span>
+                                        </div>
+                                    </th>
                                     <th><button class="editFieldButton editToggleDisabled" id="profanityFilterToggle">Enable</button></th>
                                 </tr>
                             </table>
@@ -128,7 +174,11 @@
                             -->
                             <table class="settingsTable">
                                 <tr>
-                                    <th class="tableItemLabel">Themes</th>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Themes
+                                            <span class="tooltiptext">Pick between one of the three themes to customize your Omegle experience.</span>
+                                        </div>
+                                    </th>
                                     <th>
                                         <button class="editFieldButton editToggleDisabled" id="ultraDarkModeOption">Black Mode</button>
                                         <button class="editFieldButton editToggleDisabled" id="semiDarkModeOption">Dark Mode</button>
@@ -136,18 +186,25 @@
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th class="tableItemLabel">Header Buttons</th>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Header Buttons
+                                            <span class="tooltiptext">Enable or disable the language & share buttons at the top-right of the page.</span>
+                                        </div>
+                                    </th>
                                     <th>
                                         <button class="editFieldButton editToggleDisabled" id="headerButtonsToggle">Enable</button>
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th class="tableItemLabel">Screenshot Button</th>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Screenie <span class="tableItemSubLabel">(Video Only)</span>
+                                            <span class="tooltiptext">Toggle the screenshot button over your partner's video <strong>when in video mode.</strong></span>
+                                        </div>
+                                    </th>
                                     <th>
                                         <button class="editFieldButton editToggleDisabled" id="screenshotButtonToggle">Enable</button>
                                     </th>
                                 </tr>
-
 
                             </table>
 

@@ -221,7 +221,7 @@
     margin: 0 auto;
     padding: 0 18px;
     display: none;
-    overflow: hidden;
+    overflow: visible;
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
 }
@@ -229,7 +229,9 @@
 .settingsTable {
     width: 100%;
     text-align: left;
-    margin: 10px;
+    margin: 0 10px 0;
+    padding-top: 15px;
+    padding-bottom: 5px;
 }
 
 .tableItemLabel {
@@ -268,4 +270,49 @@
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    font-size: 13px;
+    visibility: hidden;
+    background-color: #212121;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1000;
+    bottom: 125%;
+    left: 25%;
+
+    width: 250px;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+    z-index: 1000;
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #212121 transparent transparent transparent;
+}
+
+.tooltiptext {
+    margin-bottom: 10px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
 }

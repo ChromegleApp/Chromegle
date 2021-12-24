@@ -49,6 +49,7 @@ class MutableField {
         this.#default = config["default"] || null;
         this.#type = config["type"];
         this.#warning = config["warning"];
+
     }
 
     updateValue(config) {

@@ -27,7 +27,7 @@ document.addEventListener('scrapeAddress', () => {
 
         }
 
-        // Return the conn
+        // Return the connection
         return conn;
 
     }
