@@ -58,8 +58,8 @@ document.addEventListener("chatEnded", () => cleanChatEnd());
 document.addEventListener("chatFailedConnect", () => cleanChatEnd());
 
 const cleanChatEnd = () => {
-    $("img[src='/static/sexbtn.png?xx']").remove();
-    $("img[src='/static/gaybtnorange.png']").remove();
+    $("img[alt='Gay']").remove();
+    $("img[alt='Sexy']").remove();
 }
 
 
