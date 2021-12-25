@@ -59,6 +59,7 @@
       "resources": [
         "/javascript/themes/types/*",
         "/css/*",
+        "/fonts/*",
         "/images/*",
         "/html/*",
         "/javascript/automation/web-accessible-scripts/*",

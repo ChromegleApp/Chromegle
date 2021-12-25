@@ -123,24 +123,34 @@ function displayGeolocation() {
         geoDataKeys.forEach(function(key) {
             const entry = geoData[key];
             if (mappingKeys.includes(key) && !((entry == null) || entry === ''))
-                ipGrabberDiv.appendChild(createLogBoxMessage(geoMappings[key] + ": ", entry));
+                ipGrabberDiv.appendChild(createLogBoxMessage(geoMappings[key] + ": ", entry, key + "_data"));
         });
 
         // Hardcoded -> If there is longitude and latitude included, add that too
         if (geoDataKeys.includes("longitude") && geoDataKeys.includes("latitude")) {
-            ipGrabberDiv.appendChild(createLogBoxMessage("Longitude/Latitude: ", geoData["longitude"] + " / " + geoData["latitude"]))
+            ipGrabberDiv.appendChild(createLogBoxMessage("Longitude/Latitude: ", geoData["longitude"] + " / " + geoData["latitude"], "long_lat_data"))
+        }
+
+        if (geoDataKeys.includes("country_code") && geoDataKeys.includes("country_name")) {
+            const countrySpan = $(`<span class='flagText'> ${getFlagEmoji(geoData["country_code"])}</span>`).get(0)
+            $("#country_name_data").get(0).appendChild(countrySpan);
         }
 
     }
 
 }
 
+const getFlagEmoji = countryCode=>String.fromCodePoint(...[...countryCode.toUpperCase()].map(x=>0x1f1a5+x.charCodeAt()))
 
-const createLogBoxMessage = (label, value) => {
+
+
+
+const createLogBoxMessage = (label, value, elementId) => {
 
     // Create a new container for the entry
     let youMsgClass = document.createElement("p");
     youMsgClass.classList.add("youmsg");
+    youMsgClass.id = elementId;
 
     // Set the field (bolded part)
     let field = document.createElement("strong");
