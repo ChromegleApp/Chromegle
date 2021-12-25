@@ -1,4 +1,5 @@
 let filterNSFWImages = "false";
+let lastRanUUID = null;
 
 function updateFilterStatus() {
     let filterQuery = {}
@@ -16,7 +17,7 @@ document.addEventListener("storageSettingsUpdate", (event) => {
     if (keys.includes(config.sexualVideoFilterToggle.getName())) {
         filterNSFWImages = event["detail"][config.sexualVideoFilterToggle.getName()]
     }
-})
+});
 
 document.addEventListener("videoChatLoaded", () => {
 
@@ -24,6 +25,14 @@ document.addEventListener("videoChatLoaded", () => {
     if (filterNSFWImages !== "true") {
         return;
     }
+
+    // Already ran
+    if (ChatRegistry.getUUID() === lastRanUUID) {
+        Logger.WARNING("Received videoChatLoaded more than once for chat UUID <%s>, should investigate.", lastRanUUID);
+        return;
+    }
+
+    lastRanUUID = ChatRegistry.getUUID();
 
     // Block pre-emptively, without text
     otherVideoBlocker.blockVideo(false);

@@ -165,23 +165,6 @@ class SwitchEdit extends MutableField {
 
 }
 
-class ThemeSwitchEdit extends SwitchEdit {
-    constructor(config) {
-        super(config);
-
-        document.addEventListener("SwitchModify", (response) => {
-            const elementName = response["detail"]["element"];
-            if (this.getElementName() === elementName) {
-                if (response["detail"]["change"]) {
-                    window.location.reload();
-                }
-            }
-
-        });
-
-    }
-}
-
 class ToggleEdit extends MutableField {
     #elementName;
 
@@ -231,20 +214,6 @@ class ToggleEdit extends MutableField {
         });
     }
 
-}
-
-class ThemeToggleEdit extends ToggleEdit {
-    constructor(config) {
-        super(config);
-
-        document.addEventListener("ToggleModify", (response) => {
-            if (response["detail"]["change"] && response["detail"]["element"] === this.getElementName()) {
-                window.location.reload();
-            }
-
-        });
-
-    }
 }
 
 class FieldEdit extends MutableField {

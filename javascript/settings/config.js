@@ -196,28 +196,28 @@ const config = {
         "storageName": "PROFANITY_FILTER_TOGGLE",
         "default": "false"
     }),
-    "ultraDarkModeOption": new ThemeSwitchEdit({
+    "ultraDarkModeOption": new SwitchEdit({
         "elementName": "ultraDarkModeOption",
         "otherElementNames": ["semiDarkModeOption", "semiLightModeOption"],
         "storageName": "THEME_CHOICE_SWITCH",
         "default": "semiLightModeOption",
         "value": "/css/themes/ultradark.css"
     }),
-    "semiDarkModeOption": new ThemeSwitchEdit({
+    "semiDarkModeOption": new SwitchEdit({
         "elementName": "semiDarkModeOption",
         "otherElementNames": ["ultraDarkModeOption", "semiLightModeOption"],
         "storageName": "THEME_CHOICE_SWITCH",
         "default": "semiLightModeOption",
         "value": "/css/themes/semidark.css"
     }),
-    "semiLightModeOption": new ThemeSwitchEdit({
+    "semiLightModeOption": new SwitchEdit({
         "elementName": "semiLightModeOption",
         "otherElementNames": ["semiDarkModeOption", "ultraDarkModeOption"],
         "storageName": "THEME_CHOICE_SWITCH",
         "default": "semiLightModeOption",
         "value": "/css/themes/semilight.css"
     }),
-    "headerButtonsToggle": new ThemeToggleEdit({
+    "headerButtonsToggle": new ToggleEdit({
         "elementName": "headerButtonsToggle",
         "storageName": "HEADER_BUTTONS_TOGGLE",
         "default": "true"

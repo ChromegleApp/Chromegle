@@ -19,9 +19,26 @@ class ThemeManager {
 
     }
 
-    loadCurrentTheme() {
-        this.OverrideManager.initialize();
+    loadCurrentTheme(initialize = true) {
+
+        if (initialize) {
+            this.OverrideManager.initialize();
+        }
+
         this.#stylesheet.href = chrome.runtime.getURL(this.#currentResourcePath)
+        this.#stylesheet.id = "customStylesheet";
+    }
+
+    toggleHeaderButton = (headerEnabled) => {
+
+        if (headerEnabled) {
+            $("#sharebuttons").css("display", "");
+            $("#onlinecount").css("margin-top", "");
+        } else {
+            $("#sharebuttons").css("display", "none");
+            $("#onlinecount").css("margin-top", "-15px");
+        }
+
     }
 
     OverrideManager = new class {
@@ -60,8 +77,7 @@ class ThemeManager {
                 let showHeaderButtons = result[config.headerButtonsToggle.getName()] === "true";
                 if (showHeaderButtons) return;
 
-                $("#sharebuttons").remove();
-                $("#onlinecount").css("margin-top", "-15px");
+                themeManager.toggleHeaderButton(showHeaderButtons);
 
             });
         }
@@ -127,6 +143,6 @@ class ThemeManager {
 
         }
 
-}
+    }
 
 }

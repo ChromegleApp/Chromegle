@@ -27,7 +27,16 @@ window.addEventListener("displayScrapeData", (detail) => {
             chrome.storage.local.get(previousQuery, (_result) => {
                 const previousHashedAddresses = _result["PREVIOUS_HASHED_ADDRESS_LIST"];
                 const seenTimes = (previousHashedAddresses[hashedAddress] == null) ? 0 : previousHashedAddresses[hashedAddress];
-                document.dispatchEvent(new CustomEvent("chatSeenTimes", {detail: {"uuid": ChatRegistry.getUUID(), "seenTimes": seenTimes}}));
+                document.dispatchEvent(new CustomEvent(
+                    "chatSeenTimes",
+                    {
+                        detail: {
+                            "uuid": ChatRegistry.getUUID(),
+                            "seenTimes": seenTimes,
+                            "ipAddress": detail["detail"]
+                        }
+                    }
+                ));
 
                 displayScrapeData(
                     detail["detail"],

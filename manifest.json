@@ -23,7 +23,8 @@
 
         "javascript/utilities/utilities.js",
         "javascript/utilities/logger.js",
-        "javascript/themes/themes.js",
+        "javascript/themes/theme-manager.js",
+        "javascript/themes/theme-registry.js",
         "javascript/display/buttons.js",
 
         "javascript/settings/menu.js",

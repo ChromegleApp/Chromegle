@@ -18,7 +18,6 @@ Modal Styling
 .editToggleEnabled {background-color: forestgreen;}
 .editToggleEnabled:hover {background-color: green;}
 .settingsCollapsable:hover, .active {
-    font-size: 25px;
     transition: font-size 200ms;
 }
 .editFieldButton, .settingsCollapsable {color: white;}
