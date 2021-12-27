@@ -122,12 +122,16 @@ html {
 }
 
 @font-face {
-    font-family: bf;
-    src: url(chrome-extension://__MSG_@@extension_id__/fonts/BabelStoneFlags.ttf);
+    font-family: nce;
+    src: url(chrome-extension://__MSG_@@extension_id__/fonts/NotoColorEmoji.ttf);
 }
 
+.nceFont {
+    font-family: nce, sans-serif;
+}
+
+
 .flagText {
-    font-family: bf, sans-serif;
     font-size: 16px;
 }
 

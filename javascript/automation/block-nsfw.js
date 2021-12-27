@@ -50,16 +50,22 @@ document.addEventListener("videoChatLoaded", () => {
             .split("data:image/png;base64,")[1]
     };
 
+    const chatUUID = ChatRegistry.getUUID();
+
     // Make Request
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `${ConstantValues.apiURL}/nsfw`);
     xhr.setRequestHeader('Accept', 'application/json');
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify(payload));
-    xhr.timeout = 1500;
+    xhr.timeout = 2000;
 
     // Handle Response
     xhr.onload = () => {
+
+        // Expired
+        if (ChatRegistry.getUUID() !== chatUUID) return;
+
         let json = JSON.parse(xhr.response)
         if (json["status"] !== 1) {
             Logger.ERROR("Received status <%s> from web-server when running NSFW detection for chat UUID <%s>", json["status"], ChatRegistry.getUUID());
@@ -84,12 +90,20 @@ document.addEventListener("videoChatLoaded", () => {
     };
 
     xhr.ontimeout = () => {
+
+        // Expired
+        if (ChatRegistry.getUUID() !== chatUUID) return;
+
         otherVideoBlocker.unblockVideo();
         sendNSFWMessage("NSFW detection timed out, unblocked video to preserve chat.")
         Logger.WARNING("NSFW detection timed out, had to unblock video to preserve chat viewing")
     }
 
     xhr.onerror = () => {
+
+        // Expired
+        if (ChatRegistry.getUUID() !== chatUUID) return;
+
         otherVideoBlocker.unblockVideo();
         Logger.ERROR("Received an error  when trying to receive NSFW detection data for chat UUID <%s>", ChatRegistry.getUUID());
         sendNSFWMessage("NSFW detection failed due to an internal error, unblocked video to preserve chat.")

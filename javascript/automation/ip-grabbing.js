@@ -132,7 +132,7 @@ function displayGeolocation() {
         }
 
         if (geoDataKeys.includes("country_code") && geoDataKeys.includes("country_name")) {
-            const countrySpan = $(`<span class='flagText'> ${getFlagEmoji(geoData["country_code"])}</span>`).get(0)
+            const countrySpan = $(`<span>  <span class='flagText nceFont'>${getFlagEmoji(geoData["country_code"])}</span></span>`).get(0)
             $("#country_name_data").get(0).appendChild(countrySpan);
         }
 
