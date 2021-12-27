@@ -2,7 +2,7 @@ Chromegle
 ==================
 A Javascript Chrome Extension for Omegle, certified for Chrome 88 and above. Just as a side-note, I used this project to teach myself the basics of the JS language and jQuery library, and while IntelliJ did a good job getting me up-to-date on the latest practices, I am a novice, and the code is not going to be spectacular.
 
- [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white&style=flat-square)](https://www.linkedin.com/in/isaac-kogan-5a45b9193/ ) ![Issues](https://img.shields.io/github/issues/ChromegleApp/Chromegle) ![Forks](https://img.shields.io/github/forks/ChromegleApp/Chromegle) ![Stars](https://img.shields.io/github/stars/ChromegleApp/Chromegle) [![Support Server](https://img.shields.io/discord/798632874776985660.svg?color=7289da&logo=discord&style=flat-square)](https://discord.gg/TRCNZ5vuwM)
+ [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white&style=flat-square)](https://www.linkedin.com/in/isaac-kogan-5a45b9193/ ) ![Issues](https://img.shields.io/github/issues/ChromegleApp/Chromegle) ![Forks](https://img.shields.io/github/forks/ChromegleApp/Chromegle) ![Stars](https://img.shields.io/github/stars/ChromegleApp/Chromegle) [![Support Server](https://img.shields.io/discord/922231395605159987.svg?color=7289da&logo=discord&style=flat-square)](https://discord.gg/KDqHBrZ2Yn)
 
 Join the support discord and DM ``fallen#9745`` for inquiries, help and suggestions.
 
