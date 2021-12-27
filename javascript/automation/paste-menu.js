@@ -14,17 +14,18 @@ class PasteMenu {
         PasteMenu.menuEnabled = menuEnabled;
         PasteMenu.#pasteMenuConfig = pasteMenuConfig || PasteMenu.#DEFAULT_STORAGE_VALUE;
 
-        const pasteMenu = $(document.createElement("div"))
-            .load(getResourceURL("html/paste.html"))
-            .css("height", $(".logwrapper").height());
-
-        $("body").get(0).appendChild(pasteMenu.get(0));
-
-        this.#registerButtons();
+        $("body")
+            .get(0)
+            .appendChild(
+                $(document.createElement("div"))
+                    .load(getResourceURL("html/paste.html"), null, () => this.#registerButtons())
+                    .get(0)
+            )
 
         document.addEventListener("chatStarted", () => {
             if (PasteMenu.menuEnabled) PasteMenu.modifyLogBox()
         })
+
         document.addEventListener("chatButtonClicked", () => {
             if (PasteMenu.menuEnabled) PasteMenu.modifyLogBox();
         });
@@ -112,27 +113,27 @@ class PasteMenu {
     }
 
     #registerButtons() {
-        setTimeout(() => {
-            $(".pasteButton")
-                .on("click", (event) => {
-                    const pasteButtonId = $(event.target).closest("a").get(0).id;
+        $("#pasteButtonMenu").css("height", $(".logwrapper").height());
 
-                    if (pasteButtonId === PasteMenu.getEditContentElementId()) {
-                        PasteMenu.editPasteButton();
-                    } else {
-                        PasteMenu.pasteButton(pasteButtonId);
-                    }
+        $(".pasteButton")
+            .on("click", (event) => {
+                const pasteButtonId = $(event.target).closest("a").get(0).id;
 
-                });
-
-            let pasteButtons = document.getElementsByClassName("pasteButton")
-            for (let button of pasteButtons) {
-                if (button.id !== PasteMenu.getEditContentElementId()) {
-                    button.title = PasteMenu.#pasteMenuConfig[button.id] || PasteMenu.#DEFAULT_PASTE_VALUE;
+                if (pasteButtonId === PasteMenu.getEditContentElementId()) {
+                    PasteMenu.editPasteButton();
+                } else {
+                    PasteMenu.pasteButton(pasteButtonId);
                 }
-            }
 
-        }, 50);
+            });
+
+        let pasteButtons = document.getElementsByClassName("pasteButton")
+        for (let button of pasteButtons) {
+            if (button.id !== PasteMenu.getEditContentElementId()) {
+                button.title = PasteMenu.#pasteMenuConfig[button.id] || PasteMenu.#DEFAULT_PASTE_VALUE;
+            }
+        }
+
     }
 
     hideMenu() {
@@ -147,7 +148,7 @@ class PasteMenu {
 
     showMenu() {
         $("#pasteButtonMenu")
-            .css("display", "block");
+            .css("display", "flex");
         PasteMenu.modifyLogBox();
         PasteMenu.menuEnabled = true;
     }
