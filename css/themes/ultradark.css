@@ -43,7 +43,7 @@ body, #header {
 /*
 Secondary Colour BACKGROUND
  */
-#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton, #selfvideo, #othervideo {
+#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton, #selfvideo, #othervideo, .pasteButton {
     background: rgb(29, 29, 31);
 }
 
@@ -52,7 +52,7 @@ Primary Colour TEXT
  */
 #intro, .disconnectbtnwrapper, .newbtn.disconnectbtn, .sendbtn, .lowersexybtnwrapper,
 .lowergaybtnwrapper, .chatmsg:focus, .statuslog, .logitem, textarea, textarea:disabled,
-.videochat .controlwrapper,.videochat,.videochat .disconnectbtnwrapper, #mobilesitenote {
+.videochat .controlwrapper,.videochat,.videochat .disconnectbtnwrapper, #mobilesitenote, .pasteButton {
     color: #9a9a9a;
 }
 
