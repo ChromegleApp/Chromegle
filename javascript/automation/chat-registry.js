@@ -1,28 +1,28 @@
-class ChatRegistry {
+const ChatRegistry = {
 
-    static #documentMutationObserver;
+    documentMutationObserver: undefined,
 
-    static #currentlyChatting = false;
-    static #chatPageEnabled = false;
-    static #chatUUID = undefined;
-    static #isVideoChat = undefined;
+    currentlyChatting: false,
+    chatPageEnabled: false,
+    chatUUID: undefined,
+    videoChatEnabled: undefined,
 
-    static pageStarted = () => ChatRegistry.#chatPageEnabled;
-    static isChatting = () => ChatRegistry.#currentlyChatting;
-    static setChatting = (status) => ChatRegistry.#currentlyChatting = status;
-    static isVideoChat = () => ChatRegistry.#isVideoChat;
-    static setVideoChat = (status) => ChatRegistry.#isVideoChat = status;
-    static getUUID = () => ChatRegistry.#chatUUID;
-    static setUUID = () => ChatRegistry.#chatUUID = uuid4();
-    static clearUUID = () => ChatRegistry.#chatUUID = undefined;
+    pageStarted: () => ChatRegistry.chatPageEnabled,
+    isChatting: () => ChatRegistry.currentlyChatting,
+    setChatting: (status) => ChatRegistry.currentlyChatting = status,
+    isVideoChat: () => ChatRegistry.videoChatEnabled,
+    setVideoChat: (status) => ChatRegistry.videoChatEnabled = status,
+    getUUID: () => ChatRegistry.chatUUID,
+    setUUID: () => ChatRegistry.chatUUID = uuid4(),
+    clearUUID: () => ChatRegistry.chatUUID = undefined,
 
     startObserving() {
-        ChatRegistry.#documentMutationObserver = new MutationObserver(ChatRegistry.#onDocumentMutation);
-        ChatRegistry.#documentMutationObserver.observe(document, {subtree: true, childList: true, attributes: true}); //attributeFilter : ['class']});
-        document.addEventListener("click", ChatRegistry.#onButtonClick)
-    }
+        ChatRegistry.documentMutationObserver = new MutationObserver(ChatRegistry.onDocumentMutation);
+        ChatRegistry.documentMutationObserver.observe(document, {subtree: true, childList: true, attributes: true}); //attributeFilter : ['class']});
+        document.addEventListener("click", ChatRegistry.onButtonClick)
+    },
 
-    static #onButtonClick(event) {
+    onButtonClick(event) {
         if (event.target.classList.contains("disconnectbtn")) {
             document.dispatchEvent(new CustomEvent('chatButtonClicked', {detail: event}));
         }
@@ -30,14 +30,14 @@ class ChatRegistry {
         // For banned -> Non-banned is able to use the onDocumentMutation
         if (["videobtn", "textbtn"].includes(event.target.id)) {
             if (!ChatRegistry.pageStarted()) {
-                ChatRegistry.#chatPageEnabled = true;
+                ChatRegistry.chatPageEnabled = true;
                 ChatRegistry.setVideoChat($("#videowrapper").get(0) != null);
                 document.dispatchEvent(new CustomEvent('pageStarted', {detail: {button: event.target, isVideoChat: ChatRegistry.isVideoChat()}}));
             }
         }
-    }
+    },
 
-    static #onDocumentMutation (mutation) {
+    onDocumentMutation (mutation) {
 
         for (let mutationRecord of mutation) {
 
@@ -64,7 +64,7 @@ class ChatRegistry {
             if (!mutationRecord.target.classList.contains("chatmsg")) continue;
 
             if (!ChatRegistry.pageStarted()) {
-                ChatRegistry.#chatPageEnabled = true;
+                ChatRegistry.chatPageEnabled = true;
                 ChatRegistry.setVideoChat($("#videowrapper").get(0) != null);
                 document.dispatchEvent(new CustomEvent('pageStarted', {detail: {button: mutationRecord.target, isVideoChat: ChatRegistry.isVideoChat()}}));
             }

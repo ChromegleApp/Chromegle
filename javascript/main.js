@@ -1,6 +1,5 @@
 let themeManager = null;
 let settingsManager = null;
-let chatRegistry = null;
 
 MicroModal.init();
 
@@ -41,8 +40,7 @@ $(document).on("ready", () => {
     {
         document.dispatchEvent(new CustomEvent("startUpEvent"));
         settingsManager = new SettingsManager();
-        chatRegistry = new ChatRegistry();
-        chatRegistry.startObserving();
+        ChatRegistry.startObserving();
     }
 
     /**
