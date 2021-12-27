@@ -1,6 +1,6 @@
 const config = {
     "greetingMessageField": new MutableMultiEditField({
-        "storageName": "GREETING_MESSAGE_FIELD",
+        "storageName": "GREETING_MESSAGE_MULTI_FIELD",
         "prompt": "Enter the %n message to display on join:",
         "default": ["Hello there!"],
         "times": 3,
@@ -242,5 +242,10 @@ const config = {
         "storageName": "SKIP_REPEATS_TOGGLE",
         "default": "false"
     }),
+    "pasteMenuToggle": new ToggleEdit({
+        "elementName": "pasteMenuToggle",
+        "storageName": "PASTE_MENU_TOGGLE",
+        "default": "false"
+    })
 
 }

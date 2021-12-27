@@ -86,7 +86,7 @@ html {
 }
 
 
-.noselect, .tableItemLabel {
+.noselect, .tableItemLabel, .flagText {
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
     -khtml-user-select: none; /* Konqueror HTML */
@@ -129,4 +129,28 @@ html {
 .flagText {
     font-family: bf, sans-serif;
     font-size: 16px;
+}
+
+.pasteButton {
+    width: 7em;
+    margin-bottom: 0.5em;
+    height: 5.45em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
+
+}
+
+.pasteButtonWrapper {
+    float: right;
+    width: 7em;
+    margin-top: 3.5em;
+    margin-right: 0.5em;
+    text-align: center;
+
+}
+
+.pasteButtonTitle {
+    font-weight: bold;
 }

@@ -86,7 +86,7 @@ document.addEventListener("videoChatLoaded", () => {
     xhr.ontimeout = () => {
         otherVideoBlocker.unblockVideo();
         sendNSFWMessage("NSFW detection timed out, unblocked video to preserve chat.")
-        Logger.WARNING("NSFW detection timed out, had to unblock vide to preserve chat viewing")
+        Logger.WARNING("NSFW detection timed out, had to unblock video to preserve chat viewing")
     }
 
     xhr.onerror = () => {

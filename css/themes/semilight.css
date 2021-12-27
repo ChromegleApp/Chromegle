@@ -49,7 +49,7 @@ Secondary Colour BACKGROUND
     background: #ffffff;
 }
 
-#selfvideo, #othervideo {
+#selfvideo, #othervideo, .pasteButtonWrapper {
     background: #3b3b3b;
 }
 

@@ -24,7 +24,7 @@ class ChatRegistry {
 
     static #onButtonClick(event) {
         if (event.target.classList.contains("disconnectbtn")) {
-            document.dispatchEvent(new CustomEvent('chatButtonClicked', {event: event}));
+            document.dispatchEvent(new CustomEvent('chatButtonClicked', {detail: event}));
         }
 
         // For banned -> Non-banned is able to use the onDocumentMutation

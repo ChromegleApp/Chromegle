@@ -42,18 +42,19 @@ body, #header {
 /*
 Secondary Colour BACKGROUND
  */
-#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton, #selfvideo, #othervideo {
+#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton, #selfvideo, #othervideo, .pasteButton {
     background: rgba(54,57,63,255);
 }
 
 /*
 Primary Colour TEXT
  */
-#intro, .newbtn.disconnectbtn, .sendbtn, .lowersexybtnwrapper,
+#intro, .newbtn.disconnectbtn, .sendbtn, .lowersexybtnwrapper, .pasteButtonTitle,
 .lowergaybtnwrapper, .chatmsg:focus, .statuslog, .logitem, textarea, textarea:disabled,
 .videochat .controlwrapper,.videochat,.videochat .disconnectbtnwrapper, .nsfwCoverTextWrapper {
     color: #d2d2d2;
 }
+
 
 input {
     background-color: #1a1a1a;
