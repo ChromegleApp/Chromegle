@@ -285,6 +285,7 @@ class MultiFieldEdit extends FieldEdit {
 class MutableMultiEditField extends MultiFieldEdit {
     #max;
     #min;
+    #defaultTimes = "1";
 
     constructor(config) {
         super(config);
@@ -294,7 +295,7 @@ class MutableMultiEditField extends MultiFieldEdit {
 
     getTimes() {
 
-        let response = prompt(`How many inputs would you like to enter? (Max: ${this.#max} | Min: ${this.#min})`);
+        let response = prompt(`How many inputs would you like to enter? (Max: ${this.#max} | Min: ${this.#min})`, this.#defaultTimes);
 
         if (!isNumeric(response)) return this.#min;
         else if (response > this.#max) return this.#max;
