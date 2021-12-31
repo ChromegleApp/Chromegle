@@ -1,6 +1,8 @@
 let filterNSFWImages = "false";
 let lastRanUUID = null;
 
+const spinner = $()
+
 function updateFilterStatus() {
     let filterQuery = {}
     filterQuery[config.sexualVideoFilterToggle.getName()] = config.sexualVideoFilterToggle.getDefault();
@@ -10,7 +12,8 @@ function updateFilterStatus() {
     });
 }
 
-document.addEventListener("pageStarted", () => updateFilterStatus())
+document.addEventListener("chatEnded", () => $("#nsfwVideoSpinner").remove());
+document.addEventListener("pageStarted", () => updateFilterStatus());
 document.addEventListener("storageSettingsUpdate", (event) => {
     const keys = Object.keys(event["detail"]);
 
@@ -37,6 +40,11 @@ document.addEventListener("videoChatLoaded", () => {
     // Block pre-emptively, without text
     otherVideoBlocker.blockVideo(false);
 
+    // Make a clone to "extend" the spinner
+    const nsfwVideoSpinner = $("#othervideospinner").clone().css("display", "block").get(0);
+    nsfwVideoSpinner.id = "nsfwVideoSpinner";
+    $("#videowrapper").get(0).appendChild(nsfwVideoSpinner)
+
     // Get other video
     const otherVideo = $("#othervideo").get(0)
 
@@ -54,20 +62,21 @@ document.addEventListener("videoChatLoaded", () => {
 
     // Make Request
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', `${ConstantValues.apiURL}/nsfw`);
+    xhr.open('POST', `${ConstantValues.apiURL}/omegle/classify_image`);
     xhr.setRequestHeader('Accept', 'application/json');
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify(payload));
-    xhr.timeout = 2000;
+    xhr.timeout = 5000; // 5 second time-out
 
     // Handle Response
     xhr.onload = () => {
+        $(nsfwVideoSpinner).remove();
 
         // Expired
         if (ChatRegistry.getUUID() !== chatUUID) return;
 
         let json = JSON.parse(xhr.response)
-        if (json["status"] !== 1) {
+        if (json["status"] !== 200) {
             Logger.ERROR("Received status <%s> from web-server when running NSFW detection for chat UUID <%s>", json["status"], ChatRegistry.getUUID());
             sendNSFWMessage("NSFW detection received a bad response, unblocked video to preserve chat.");
             otherVideoBlocker.unblockVideo();
@@ -77,10 +86,10 @@ document.addEventListener("videoChatLoaded", () => {
         Logger.DEBUG(
             "Received NSFW detection data for chat UUID <%s> from web-server as the following JSON payload: \n\n%s",
             ChatRegistry.getUUID(),
-            JSON.stringify(json["data"], null, 2)
+            JSON.stringify(json["payload"], null, 2)
         );
 
-        if (json["data"]["is_nsfw"] === true) {
+        if (json["payload"]["is_nsfw"] === true) {
             Logger.INFO("Detected NSFW video of <#%s> with chat UUID <%s>", otherVideo.id, ChatRegistry.getUUID());
             sendNSFWMessage("Detected NSFW video input, blocked the screen!");
             otherVideoBlocker.blockVideo(true);
@@ -90,16 +99,18 @@ document.addEventListener("videoChatLoaded", () => {
     };
 
     xhr.ontimeout = () => {
+        $(nsfwVideoSpinner).remove();
 
         // Expired
         if (ChatRegistry.getUUID() !== chatUUID) return;
 
         otherVideoBlocker.unblockVideo();
-        sendNSFWMessage("NSFW detection timed out, unblocked video to preserve chat.")
+        sendNSFWMessage("NSFW detection took too long, video unblocked to preserve chat. If you have bad connection, it may be best to disable NSFW detection.")
         Logger.WARNING("NSFW detection timed out, had to unblock video to preserve chat viewing")
     }
 
     xhr.onerror = () => {
+        $(nsfwVideoSpinner).remove();
 
         // Expired
         if (ChatRegistry.getUUID() !== chatUUID) return;
