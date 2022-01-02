@@ -144,8 +144,8 @@ html {
      */
     display: flex;
     flex-direction: column;
-    justify-content: center;
     justify-items: center;
+    justify-content: center;
 
 }
 
@@ -161,6 +161,7 @@ html {
     text-align: center;
 
 }
+
 
 .pasteButtonTitle {
     font-weight: bold;
@@ -178,4 +179,8 @@ html {
     border-right: 8px solid transparent;
     border-top: 8px solid #ccc;
     animation: spinner .6s linear infinite;
+}
+
+.btnkbshortcut {
+    color: red;
 }
