@@ -1,15 +1,22 @@
-function autoConfirm() {
-    // Click the checkboxes
-    $("input[type=checkbox]:not(:checked)").trigger("click");
+const ConfirmManager = {
 
-    // Confirm join
-    $("input[type=button][value='Confirm & continue']").trigger("click");
+    initialize() {
+        ConfirmManager._registerEvents();
+    },
+
+    _registerEvents() {
+        ["#textbtn", "#videobtn", "#videobtnunmoderated"].forEach((button) => {
+            $(button).on('click', () => ConfirmManager.autoConfirm());
+        });
+    },
+
+    autoConfirm() {
+        // Click the checkboxes
+        $("input[type=checkbox]:not(:checked)").trigger("click");
+
+        // Confirm join
+        $("input[type=button][value='Confirm & continue']").trigger("click");
+    }
 }
 
-document.addEventListener("startUpEvent",() => {
 
-    ["#textbtn", "#videobtn", "#videobtnunmoderated"].forEach((button) => {
-        $(button).on('click', () => autoConfirm());
-    });
-
-});

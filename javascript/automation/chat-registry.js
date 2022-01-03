@@ -1,7 +1,6 @@
 const ChatRegistry = {
 
     documentMutationObserver: undefined,
-
     currentlyChatting: false,
     chatPageEnabled: false,
     chatUUID: undefined,
@@ -16,13 +15,13 @@ const ChatRegistry = {
     setUUID: () => ChatRegistry.chatUUID = uuid4(),
     clearUUID: () => ChatRegistry.chatUUID = undefined,
 
-    startObserving() {
-        ChatRegistry.documentMutationObserver = new MutationObserver(ChatRegistry.onDocumentMutation);
+    initialize() {
+        ChatRegistry.documentMutationObserver = new MutationObserver(ChatRegistry._onDocumentMutation);
         ChatRegistry.documentMutationObserver.observe(document, {subtree: true, childList: true, attributes: true}); //attributeFilter : ['class']});
-        document.addEventListener("click", ChatRegistry.onButtonClick)
+        document.addEventListener("click", ChatRegistry._onButtonClick)
     },
 
-    onButtonClick(event) {
+    _onButtonClick(event) {
         if (event.target.classList.contains("disconnectbtn")) {
             document.dispatchEvent(new CustomEvent('chatButtonClicked', {detail: event}));
         }
@@ -37,7 +36,7 @@ const ChatRegistry = {
         }
     },
 
-    onDocumentMutation (mutation) {
+    _onDocumentMutation (mutation) {
 
         for (let mutationRecord of mutation) {
 

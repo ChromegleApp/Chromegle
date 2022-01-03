@@ -1,99 +1,115 @@
-let filters = {profanity: [], sexual: [], allFilters: []}
-let filteredWords = []
+const FilterManager = {
+    filters: {profanity: [], sexual: [], allFilters: []},
+    filteredWords: [],
 
+    initialize: () => {
+        FilterManager._pageStarted();
+        FilterManager._storageUpdate();
+        FilterManager._chatStarted();
+    },
 
-document.addEventListener(
-    "pageStarted",
-    () => {
-        loadFilterFromFile('/javascript/automation/web-filtering/profanity.txt', "profanity")
-            .then(() => {
-                loadFilterFromFile('/javascript/automation/web-filtering/sexual.txt', "sexual")
-                    .then(() => {
-                        updateFilteredWords();
-                    });
+    _chatStarted() {
+        document.addEventListener("chatStarted", () => {
+            FilterManager.statusObserver.disconnect();
+            FilterManager.statusObserver.observe(
+                document.getElementsByClassName("logbox")[0], {attributes: true, subtree: true, childList: true}
+            );
+
+            $(".chatmsg").off().on("input", (event) => {
+                $(event.target).val(FilterManager.filterString($(event.target).val(), FilterManager.filteredWords));
             });
 
-    }
-);
-
-function loadFilterFromFile(path, key) {
-    return fetch(chrome.runtime.getURL(path))
-        .then(response => response.text()).then(response => response.replaceAll("\r", ""))
-        .then(response => response.split("\n"))
-        .then(data => {
-            filters[key] = data;
-            filters["allFilters"] = filters["allFilters"].concat(data);
         });
-}
+    },
 
+    _storageUpdate() {
+        document.addEventListener("storageSettingsUpdate", (detail) => {
+            const keys = Object.keys(detail["detail"]);
 
-function updateFilteredWords() {
-    let filterQuery = {};
-    filterQuery[config.profanityFilterToggle.getName()] = config.profanityFilterToggle.getDefault();
-    filterQuery[config.sexualFilterToggle.getName()] = config.sexualFilterToggle.getDefault();
+            if (keys.includes(config.profanityFilterToggle.getName()) || keys.includes(config.sexualFilterToggle.getName())) {
+                FilterManager.updateFilteredWords();
+            }
 
-    chrome.storage.sync.get(filterQuery, (result) => {
+        });
+    },
 
-        // Get filter config
-        const sexualFilter = result[config.sexualFilterToggle.getName()] === "true";
-        const profanityFilter = result[config.profanityFilterToggle.getName()] === "true";
+    _pageStarted() {
+        document.addEventListener(
+            "pageStarted",
+            () => {
+                FilterManager.loadFilterFromFile('/javascript/automation/web-filtering/profanity.txt', "profanity")
+                    .then(() => {
+                        FilterManager.loadFilterFromFile('/javascript/automation/web-filtering/sexual.txt', "sexual")
+                            .then(() => {
+                                FilterManager.updateFilteredWords();
+                            });
+                    });
 
-        // Apply filter config
-        if (sexualFilter && profanityFilter) filteredWords = filters["allFilters"]
-        else if (sexualFilter) filteredWords = filters["sexual"]
-        else if (profanityFilter) filteredWords = filters["profanity"]
-        else filteredWords = [];
+            }
+        );
+    },
 
-    });
-}
+    loadFilterFromFile(path, key) {
+        return fetch(chrome.runtime.getURL(path))
+            .then(response => response.text()).then(response => response.replaceAll("\r", ""))
+            .then(response => response.split("\n"))
+            .then(data => {
+                FilterManager.filters[key] = data;
+                FilterManager.filters["allFilters"] = FilterManager.filters["allFilters"].concat(data);
+            });
+    },
 
+    updateFilteredWords() {
+        let filterQuery = {};
+        filterQuery[config.profanityFilterToggle.getName()] = config.profanityFilterToggle.getDefault();
+        filterQuery[config.sexualFilterToggle.getName()] = config.sexualFilterToggle.getDefault();
 
-document.addEventListener("storageSettingsUpdate", (detail) => {
-    const keys = Object.keys(detail["detail"]);
+        chrome.storage.sync.get(filterQuery, (result) => {
 
-    if (keys.includes(config.profanityFilterToggle.getName()) || keys.includes(config.sexualFilterToggle.getName())) {
-        updateFilteredWords();
-    }
+            // Get filter config
+            const sexualFilter = result[config.sexualFilterToggle.getName()] === "true";
+            const profanityFilter = result[config.profanityFilterToggle.getName()] === "true";
 
-});
+            // Apply filter config
+            if (sexualFilter && profanityFilter) FilterManager.filteredWords = FilterManager.filters["allFilters"]
+            else if (sexualFilter) FilterManager.filteredWords = FilterManager.filters["sexual"]
+            else if (profanityFilter) FilterManager.filteredWords = FilterManager.filters["profanity"]
+            else FilterManager.filteredWords = [];
 
-document.addEventListener("chatStarted", () => {
-    statusObserver.disconnect();
-    statusObserver.observe(document.getElementsByClassName("logbox")[0], {attributes: true, subtree: true, childList: true});
+        });
+    },
 
-    $(".chatmsg").off().on("input", (event) => {
-        $(event.target).val(filterString($(event.target).val(), filteredWords));
-    });
+    statusObserver: new MutationObserver((mutationRecord) => {
 
-});
+        // Do filtering
+        mutationRecord.forEach((mutation) => {
 
+            let maybeLog = $(mutation.addedNodes.item(0)).get(0);
+            if (maybeLog == null) return;
+            if (maybeLog.nodeName !== "DIV" || !maybeLog.classList.contains("logitem")) return;
 
+            for (let span of maybeLog.getElementsByTagName("span")) {
+                span.textContent = FilterManager.filterString(span.textContent, FilterManager.filteredWords);
+            }
 
-let statusObserver = new MutationObserver((mutationRecord) => {
+        })
 
+    }),
 
-    // Do filtering
-    mutationRecord.forEach((mutation) => {
+    filterString(message, filteredWords) {
 
-        let maybeLog = $(mutation.addedNodes.item(0)).get(0);
-        if (maybeLog == null) return;
-        if (maybeLog.nodeName !== "DIV" || !maybeLog.classList.contains("logitem")) return;
-
-        for (let span of maybeLog.getElementsByTagName("span")) {
-            span.textContent = filterString(span.textContent, filteredWords);
+        for (let word of filteredWords) {
+            message = message.replaceAll(word, "*".repeat(word.length))
         }
 
-    })
+        return message;
 
-});
-
-let filterString = (message, filteredWords) => {
-
-    for (let word of filteredWords) {
-        message = message.replaceAll(word, "*".repeat(word.length))
     }
 
-    return message;
-
 }
+
+
+
+
+
 

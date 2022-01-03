@@ -20,15 +20,21 @@ const ButtonManager = {
             chrome.storage.sync.get(showQuery, (result) => {
 
                 const enabled = !(result[config.ipGrabToggle.getName()] === "true");
-                ipGrabberDiv.style.display = enabled ? "" : "none";
+                IPGrabberManager.ipGrabberDiv.style.display = enabled ? "" : "none";
 
-                if (enabled) ButtonManager.ipToggleButton.html(disableTag);
-                else ButtonManager.ipToggleButton.html(enableTag);
+                if (enabled) ButtonManager.ipToggleButton.html(IPGrabberManager.disableTag);
+                else ButtonManager.ipToggleButton.html(IPGrabberManager.enableTag);
                 config.ipGrabToggle.update();
 
             });
 
         }),
+
+    ipBlockButton: (unhashedAddress, hashedAddress) => {
+        return $(`<button value="${unhashedAddress}" class="ipBlockButton">(Block IP)</button>`)
+            .on("click", () => blockAddress(unhashedAddress, hashedAddress))
+            .get(0);
+    }
 
 }
 

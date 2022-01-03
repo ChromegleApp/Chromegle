@@ -38,9 +38,24 @@ $(document).on("ready", () => {
      * General Start-Up
      */
     {
-        document.dispatchEvent(new CustomEvent("startUpEvent"));
+
+        ConfigManager.initialize();
         settingsManager = new SettingsManager();
-        ChatRegistry.startObserving();
+        TopicSyncManager.initialize();
+        ChatRegistry.initialize();
+        PasteMenu.initialize();
+        ChatManager.initialize();
+        FilterManager.initialize();
+        ConfirmManager.initialize();
+        GreetingManager.initialize();
+        ReconnectManager.initialize();
+        AutoSkipManager.initialize();
+        VideoFilterManager.initialize();
+        IPGrabberManager.initialize();
+        UnmoderatedChatManager.initialize();
+        VideoBlockerManager.initialize();
+        VideoScreenshotManager.initialize();
+
     }
 
     /**

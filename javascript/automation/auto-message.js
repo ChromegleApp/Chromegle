@@ -1,83 +1,88 @@
-// noinspection JSUnresolvedFunction
+const GreetingManager = {
 
-document.addEventListener("chatStarted", (detail) => {
+    initialize: () => GreetingManager._chatStarted(),
+    typingDelay: (text, wpm) => (60 / (wpm === null ? 0.1 : wpm)) * (text.length / 8) * 1000,
 
-    let greetingQuery = {};
-    const uuid = detail["detail"]["uuid"];
+    _chatStarted() {
+        document.addEventListener("chatStarted", (detail) => {
 
-    greetingQuery[config.toggleGreeting.getName()] = config.toggleGreeting.getDefault();
-    greetingQuery[config.startTypingDelayField.getName()] = config.startTypingDelayField.getDefault();
-    greetingQuery[config.greetingMessageField.getName()] = config.greetingMessageField.getDefault();
-    greetingQuery[config.typingSpeedField.getName()] = config.typingSpeedField.getDefault();
-    greetingQuery[config.sendDelayField.getName()] = config.sendDelayField.getDefault();
+            let greetingQuery = {};
+            const uuid = detail["detail"]["uuid"];
 
-    chrome.storage.sync.get(greetingQuery, (result) => {
+            greetingQuery[config.toggleGreeting.getName()] = config.toggleGreeting.getDefault();
+            greetingQuery[config.startTypingDelayField.getName()] = config.startTypingDelayField.getDefault();
+            greetingQuery[config.greetingMessageField.getName()] = config.greetingMessageField.getDefault();
+            greetingQuery[config.typingSpeedField.getName()] = config.typingSpeedField.getDefault();
+            greetingQuery[config.sendDelayField.getName()] = config.sendDelayField.getDefault();
 
-        if (result[config.toggleGreeting.getName()] === "true") {
-            const textOptions = result[config.greetingMessageField.getName()]
+            chrome.storage.sync.get(greetingQuery, (result) => {
 
-            Logger.DEBUG("Retrieved auto-message text options, picking one at random: %s", JSON.stringify(textOptions));
+                if (result[config.toggleGreeting.getName()] === "true") {
+                    const textOptions = result[config.greetingMessageField.getName()]
 
-            const textContent = textOptions[[Math.floor(Math.random() * textOptions.length)]]
-            const wpm = result[config.typingSpeedField.getName()]
-            const startDelay = result[config.startTypingDelayField.getName()]
-            const sendDelay = result[config.sendDelayField.getName()]
+                    Logger.DEBUG("Retrieved auto-message text options, picking one at random: %s", JSON.stringify(textOptions));
 
-            setTimeout(() => {
-                const totalTime = typingDelay(textContent, wpm);
-                const timePerMessage = totalTime / textContent.length;
+                    const textContent = textOptions[[Math.floor(Math.random() * textOptions.length)]]
+                    const wpm = result[config.typingSpeedField.getName()]
+                    const startDelay = result[config.startTypingDelayField.getName()]
+                    const sendDelay = result[config.sendDelayField.getName()]
 
-                writeMessage($(".chatmsg"), textContent, timePerMessage, sendDelay * 1000, uuid);
-            }, startDelay * 1000);
+                    setTimeout(() => {
+                        const totalTime = GreetingManager.typingDelay(textContent, wpm);
+                        const timePerMessage = totalTime / textContent.length;
 
-        }
-    })
+                        GreetingManager.writeMessage($(".chatmsg"), textContent, timePerMessage, sendDelay * 1000, uuid);
+                    }, startDelay * 1000);
 
+                }
+            })
+        });
+    },
 
-});
-
-const typingDelay = (text, wpm) => {
-    return (60 / (wpm === null ? 0.1 : wpm)) * (text.length / 8) * 1000;
-}
-
-function writeMessage(writeBox, text, perLetterDelay, finalSendDelay, uuid) {
-
-    if (uuid !== ChatRegistry.getUUID()) {
-        return;
-    }
-
-    if (text.length === 0) {
-        setTimeout(() => {
-            $(".sendbtn").trigger("click");
-        }, finalSendDelay);
-        return;
-    }
-
-    setTimeout(function () {
+    writeMessage(writeBox, text, perLetterDelay, finalSendDelay, uuid) {
 
         if (uuid !== ChatRegistry.getUUID()) {
             return;
         }
 
-        if ($(writeBox).get(0).classList.contains("disabled")) {
+        if (text.length === 0) {
+            setTimeout(() => {
+                $(".sendbtn").trigger("click");
+            }, finalSendDelay);
             return;
         }
 
-        let keydown = document.createEvent('KeyboardEvent');
-        let keyup = document.createEvent('KeyboardEvent');
+        setTimeout(function () {
 
-        keydown.initKeyboardEvent("keydown", true, true, undefined, false, false, false, false, text[0], text[0]);
-        keyup.initKeyboardEvent("keyup", true, true, undefined, false, false, false, false, text[0], text[0]);
+            if (uuid !== ChatRegistry.getUUID()) {
+                return;
+            }
 
-        writeBox.get(0).dispatchEvent(keydown);
-        writeBox.get(0).dispatchEvent(keyup);
-        writeBox.val(writeBox.val() + text[0]);
+            if ($(writeBox).get(0).classList.contains("disabled")) {
+                return;
+            }
 
-        writeMessage(writeBox, text.substring(1, text.length), perLetterDelay, finalSendDelay, uuid);
+            let keydown = document.createEvent('KeyboardEvent');
+            let keyup = document.createEvent('KeyboardEvent');
 
-    }, perLetterDelay);
+            keydown.initKeyboardEvent("keydown", true, true, undefined, false, false, false, false, text[0], text[0]);
+            keyup.initKeyboardEvent("keyup", true, true, undefined, false, false, false, false, text[0], text[0]);
+
+            writeBox.get(0).dispatchEvent(keydown);
+            writeBox.get(0).dispatchEvent(keyup);
+            writeBox.val(writeBox.val() + text[0]);
+
+            GreetingManager.writeMessage(writeBox, text.substring(1, text.length), perLetterDelay, finalSendDelay, uuid);
+
+        }, perLetterDelay);
+
+    }
 
 }
+
+
+
+
 
 
 

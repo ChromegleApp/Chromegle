@@ -99,68 +99,82 @@ class VideoScreenshot {
     }
 }
 
-// On resize, resize block
-$(window).on("resize", () => {
+const VideoScreenshotManager = {
 
-    VideoScreenshot.instances.forEach((instance) => {
-        setTimeout(() => instance.updateButtonPosition(), 5);
-    });
+    initialize() {
+        $(window).on("resize", () => VideoScreenshotManager._onWindowResize());
+        document.addEventListener("pageStarted", () => VideoScreenshotManager._pageStarted());
+        document.addEventListener("storageSettingsUpdate", (detail) => VideoScreenshotManager._storageSettingsUpdate(detail));
 
-})
+    },
 
+    _onWindowResize() {
 
-document.addEventListener("pageStarted", () => {
-    let videoWrapper = $("#videowrapper").get(0);
-    if (videoWrapper == null) return;
-
-    VideoScreenshot.instances.push(
-        new VideoScreenshot(
-            "otherVideoScreenshot",
-            "othervideo",
-            true
-        )
-    );
-
-    VideoScreenshot.instances.forEach((instance) => {
-        videoWrapper.appendChild(instance.getScreenshotButton().get(0));
-        instance.updateButtonPosition();
-    });
-
-    document.addEventListener("chatEnded", () => {
         VideoScreenshot.instances.forEach((instance) => {
-            if (instance.getDisableAfterChat()) {
-                instance.videoButtonEnabled(false)
-            }
+            setTimeout(() => instance.updateButtonPosition(), 5);
         });
-    });
 
-    document.addEventListener("videoChatLoaded", () => {
+    },
+
+    _pageStarted() {
+        let videoWrapper = $("#videowrapper").get(0);
+        if (videoWrapper == null) return;
+
+        VideoScreenshot.instances.push(
+            new VideoScreenshot(
+                "otherVideoScreenshot",
+                "othervideo",
+                true
+            )
+        );
+
         VideoScreenshot.instances.forEach((instance) => {
-            instance.videoButtonEnabled(true);
+            videoWrapper.appendChild(instance.getScreenshotButton().get(0));
+            instance.updateButtonPosition();
         });
-    })
 
-    let hiddenQuery = {}
-    hiddenQuery[config.screenshotButtonToggle.getName()] = config.screenshotButtonToggle.getDefault();
-
-    chrome.storage.sync.get(hiddenQuery, (result) => {
-        VideoScreenshot.instances.forEach((instance) => {
-            instance.videoButtonHidden(!(result[config.screenshotButtonToggle.getName()] === "true"));
+        document.addEventListener("chatEnded", () => {
+            VideoScreenshot.instances.forEach((instance) => {
+                if (instance.getDisableAfterChat()) {
+                    instance.videoButtonEnabled(false)
+                }
+            });
         });
-    })
+
+        document.addEventListener("videoChatLoaded", () => {
+            VideoScreenshot.instances.forEach((instance) => {
+                instance.videoButtonEnabled(true);
+            });
+        })
+
+        let hiddenQuery = {}
+        hiddenQuery[config.screenshotButtonToggle.getName()] = config.screenshotButtonToggle.getDefault();
+
+        chrome.storage.sync.get(hiddenQuery, (result) => {
+            VideoScreenshot.instances.forEach((instance) => {
+                instance.videoButtonHidden(!(result[config.screenshotButtonToggle.getName()] === "true"));
+            });
+        })
 
 
-});
+    },
 
-document.addEventListener("storageSettingsUpdate", (detail) => {
-    const result = detail["detail"][config.screenshotButtonToggle.getName()];
+    _storageSettingsUpdate(detail) {
+        const result = detail["detail"][config.screenshotButtonToggle.getName()];
 
-    if (result != null) {
-        VideoScreenshot.instances.forEach((instance) => {
-            instance.videoButtonHidden(!(result === "true"));
-        });
+        if (result != null) {
+            VideoScreenshot.instances.forEach((instance) => {
+                instance.videoButtonHidden(!(result === "true"));
+            });
+        }
+
     }
 
-});
+}
+
+
+
+
+
 
 

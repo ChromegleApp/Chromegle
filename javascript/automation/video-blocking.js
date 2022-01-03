@@ -1,8 +1,4 @@
-
-
 class VideoBlocker {
-    static instances = [];
-
     #currentlyBlocking = false;
     #coverButton;
     #buttonElementId;
@@ -79,62 +75,76 @@ class VideoBlocker {
 
 }
 
+const VideoBlockerManager = {
 
-// On resize, resize block
-$(window).on("resize", () => {
+    instances: [],
+    otherVideoBlocker: undefined,
 
-    VideoBlocker.instances.forEach((blocker) => {
-        setTimeout(() => {
-            if (blocker.getCurrentlyBlocking()) {
-                blocker.blockVideo();
-            }
-        }, 5);
-    });
+    initialize() {
+        document.addEventListener("pageStarted", (event) => VideoBlockerManager._pageStarted(event));
+        $(window).on("resize", () => VideoBlockerManager._onWindowResize())
+    },
 
-})
+    _onWindowResize() {
+        VideoBlockerManager.instances.forEach((blocker) => {
+            setTimeout(() => {
+                if (blocker.getCurrentlyBlocking()) {
+                    blocker.blockVideo();
+                }
+            }, 5);
+        });
+    },
 
-let otherVideoBlocker = undefined;
+    _pageStarted(event) {
+        if (!event["detail"]["isVideoChat"]) return;
 
-document.addEventListener("pageStarted", (event) => {
-    if (!event["detail"]["isVideoChat"]) return;
+        VideoBlockerManager.otherVideoBlocker = new VideoBlocker(
+            "otherVideoBlocker",
+            "othervideo",
+            "othervideospinner",
+            true,
+            ["otherVideoCover"]
+        );
 
-    otherVideoBlocker = new VideoBlocker(
-        "otherVideoBlocker",
-        "othervideo",
-        "othervideospinner",
-        true,
-        ["otherVideoCover"]
-    );
+        VideoBlockerManager.instances.push(
+            VideoBlockerManager.otherVideoBlocker,
+            new VideoBlocker(
+                "selfVideoBlocker",
+                "selfvideo",
+                null,
+                false,
+                ["selfVideoCover"]
+            )
+        );
 
-    VideoBlocker.instances.push(
-        otherVideoBlocker,
-        new VideoBlocker(
-            "selfVideoBlocker",
-            "selfvideo",
-            null,
-            false,
-            ["selfVideoCover"]
-        )
-    );
+        VideoBlockerManager.instances.forEach((blocker) => $("#videowrapper").get(0).appendChild(blocker.getCoverButton().get(0)));
 
-    VideoBlocker.instances.forEach((blocker) => $("#videowrapper").get(0).appendChild(blocker.getCoverButton().get(0)));
+        document.addEventListener("chatEnded", () => VideoBlockerManager.__chatEnded());
+        document.addEventListener("chatStarted", () => VideoBlockerManager.__chatStarted())
 
-    document.addEventListener("chatEnded", () => {
-        VideoBlocker.instances.forEach((blocker) => {
+
+    },
+
+    __chatEnded() {
+        VideoBlockerManager.instances.forEach((blocker) => {
             if (blocker.getDisableAfterChat()) {
                 blocker.videoPointerEnabled(false)
                 blocker.unblockVideo();
             }
         });
-    });
+    },
 
-    document.addEventListener("chatStarted", () => {
-        VideoBlocker.instances.forEach((blocker) => {
+    __chatStarted() {
+        VideoBlockerManager.instances.forEach((blocker) => {
             blocker.videoPointerEnabled(true);
         });
-    })
+    }
+
+}
 
 
-});
+
+
+
 
 

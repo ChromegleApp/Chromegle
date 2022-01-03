@@ -14,7 +14,33 @@ const PasteMenu = {
     getLocalStorageId: () => PasteMenu.LOCAL_STORAGE_ID,
     getEditContentElementId: () => PasteMenu.EDIT_CONTENT_ELEMENT_ID,
 
-    init(pasteMenuConfig, menuEnabled) {
+    initialize() {
+        document.addEventListener("pageStarted", () => PasteMenu._pageStarted());
+        document.addEventListener("storageSettingsUpdate", (detail) => PasteMenu._storageSettingsUpdate(detail));
+    },
+
+    _pageStarted() {
+        PasteMenu.getStoredChromeConfig((result) => {
+            let pasteMenuQuery = {}
+            pasteMenuQuery[config.pasteMenuToggle.getName()] = config.pasteMenuToggle.getDefault();
+
+            chrome.storage.sync.get(pasteMenuQuery, (_result) => {
+                PasteMenu._initialize(result[PasteMenu.getLocalStorageId()], _result[config.pasteMenuToggle.getName()] === "true");
+            })
+        }, true);
+    },
+
+    _storageSettingsUpdate(detail) {
+        const menuEnabled = detail["detail"][config.pasteMenuToggle.getName()]
+        if (menuEnabled != null) {
+            let isEnabled = menuEnabled === "true";
+            isEnabled ? PasteMenu.showMenu() : PasteMenu.hideMenu();
+            PasteMenu.menuIsHidden = isEnabled;
+
+        }
+    },
+
+    _initialize(pasteMenuConfig, menuEnabled) {
         PasteMenu.menuEnabled = menuEnabled;
         PasteMenu.pasteMenuConfig = pasteMenuConfig || PasteMenu.DEFAULT_STORAGE_VALUE;
 
@@ -22,8 +48,13 @@ const PasteMenu = {
 
         document.addEventListener("chatStarted", () => {if (PasteMenu.menuEnabled) PasteMenu._modifyLogBox()});
         document.addEventListener("chatButtonClicked", () => {if (PasteMenu.menuEnabled) PasteMenu._modifyLogBox();});
+        document.addEventListener("keyup", (event) => {
+            if (event.key === "Escape" && PasteMenu.menuEnabled) setTimeout(() => PasteMenu._modifyLogBox(), 0);
+        })
+
 
     },
+
 
     getStoredChromeConfig(callback) {
         let pasteMenuQuery = {}
@@ -108,6 +139,7 @@ const PasteMenu = {
 
             $("#pasteButtonMenu").css("height", $(".logwrapper").height());
 
+
             $(".pasteButton")
                 .on("click", (event) => {
                     const pasteButtonId = $(event.target).closest("a").get(0).id;
@@ -118,6 +150,7 @@ const PasteMenu = {
                 });
 
             let pasteButtons = document.getElementsByClassName("pasteButton")
+
 
             for (let button of pasteButtons) {
                 if (button.id !== PasteMenu.getEditContentElementId()) {
@@ -141,24 +174,4 @@ const PasteMenu = {
 }
 
 
-document.addEventListener("pageStarted", () => {
-    PasteMenu.getStoredChromeConfig((result) => {
-        let pasteMenuQuery = {}
-        pasteMenuQuery[config.pasteMenuToggle.getName()] = config.pasteMenuToggle.getDefault();
 
-        chrome.storage.sync.get(pasteMenuQuery, (_result) => {
-            PasteMenu.init(result[PasteMenu.getLocalStorageId()], _result[config.pasteMenuToggle.getName()] === "true");
-        })
-    }, true);
-});
-
-document.addEventListener("storageSettingsUpdate", (detail) => {
-    const menuEnabled = detail["detail"][config.pasteMenuToggle.getName()]
-    if (menuEnabled != null) {
-        let isEnabled = menuEnabled === "true";
-        isEnabled ? PasteMenu.showMenu() : PasteMenu.hideMenu();
-        PasteMenu.menuIsHidden = isEnabled;
-
-    }
-
-});

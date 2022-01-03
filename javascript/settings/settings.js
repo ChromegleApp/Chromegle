@@ -39,6 +39,8 @@ document.addEventListener("storageSettingsUpdate", (event) => {
 });
 
 class MutableField {
+    static localValues;
+
     #storageName;
     #default;
     #type;
@@ -50,6 +52,14 @@ class MutableField {
         this.#type = config["type"];
         this.#warning = config["warning"];
 
+    }
+
+    getLocalValue() {
+        return MutableField.localValues[this.#storageName];
+    }
+
+    setLocalValue(value) {
+        MutableField.localValues[this.#storageName] = value;
     }
 
     updateValue(config) {
