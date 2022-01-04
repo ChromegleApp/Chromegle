@@ -54,13 +54,13 @@ const VideoFilterManager = {
         xhr.timeout = 5000; // 5 second time-out
 
         // Handle Response
-        xhr.onload = () => VideoFilterManager._onload(nsfwVideoSpinner, chatUUID, otherVideo);
+        xhr.onload = () => VideoFilterManager._onload(nsfwVideoSpinner, chatUUID, otherVideo, xhr);
         xhr.ontimeout = () => VideoFilterManager._ontimeout(nsfwVideoSpinner, chatUUID)
         xhr.onerror = () => VideoFilterManager._onerror(nsfwVideoSpinner, chatUUID)
 
     },
 
-    _onload(nsfwVideoSpinner, chatUUID, otherVideo) {
+    _onload(nsfwVideoSpinner, chatUUID, otherVideo, xhr) {
         {
             $(nsfwVideoSpinner).remove();
 
@@ -87,7 +87,7 @@ const VideoFilterManager = {
                 VideoBlockerManager.otherVideoBlocker.blockVideo(true);
                 return;
             }
-            otherVideoBlocker.unblockVideo();
+            VideoBlockerManager.otherVideoBlocker.unblockVideo();
         }
     },
 
@@ -119,6 +119,7 @@ const VideoFilterManager = {
         seenBeforeDiv.classList.add("logitem");
         seenBeforeDiv.appendChild($(`<span style="color: red;" class='statuslog'>${message}</span>`).get(0));
         innerLogBox.append(seenBeforeDiv);
+        return seenBeforeDiv;
     }
 
 }

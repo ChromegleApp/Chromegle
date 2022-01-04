@@ -45,8 +45,12 @@ body, #header {
 /*
 Secondary Colour BACKGROUND
  */
-#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton, .pasteButton {
+#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .pasteButton {
     background: #ffffff;
+}
+
+.videoCoverButton {
+    background: #3b3b3b;
 }
 
 #selfvideo, #othervideo {
@@ -64,7 +68,7 @@ Primary Colour TEXT
  */
 #intro,  .newbtn.disconnectbtn, .sendbtn, .lowersexybtnwrapper,
 .lowergaybtnwrapper, .chatmsg:focus, .statuslog, .logitem, textarea, textarea:disabled,
-.videochat .controlwrapper,.videochat .disconnectbtn,.videochat .disconnectbtnwrapper, #mobilesitenote, input, .nsfwCoverTextWrapper,
+.videochat .controlwrapper,.videochat .disconnectbtn,.videochat .disconnectbtnwrapper, #mobilesitenote, input,
 #chattypeorcell, .chattypeorcell {
     color: #454545;
 }
@@ -92,7 +96,15 @@ Tertiary colour text
     color: #525252;
 }
 
-.logwrapper, .chatmsgwrapper, .disconnectbtnwrapper, .sendbtnwrapper, .videoCoverButton, #selfvideo, #othervideo, .pasteButton {
+
+/*
+Tertiary colour text
+ */
+.nsfwCoverTextWrapper {
+    color: whitesmoke;
+}
+
+.logwrapper, .chatmsgwrapper, .disconnectbtnwrapper, .sendbtnwrapper, #selfvideo, #othervideo, .pasteButton {
     border: 1px solid #CCC;
 }
 

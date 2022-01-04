@@ -67,6 +67,16 @@ html {
     border: none;
 }
 
+.ipUnblockButton {
+    color: red;
+    cursor: pointer;
+    border-radius: .5em;
+    background: none;
+    font-weight: bold;
+    border: none;
+    font-size: .9em;
+}
+
 .statusItem {
     color: #208ffe;
     font-size: .9em;
@@ -193,4 +203,29 @@ html {
 
 .btnkbshortcut {
     color: red;
+}
+
+.ipListTable {
+    width: 100%;
+    vertical-align: center;
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+}
+.ipListTable tr {
+    background: rgb(224, 224, 224);
+    color: rgba(0,0,0,.8);
+}
+
+.ipListTable th, .ipListTable td {
+    padding: 10px;
+}
+
+.ipListTableUnblockButton {
+    color: inherit;
+    border: none;
+    background: none;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 0;
 }

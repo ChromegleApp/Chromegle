@@ -39,32 +39,39 @@ const IPGrabberManager = {
         chrome.storage.sync.get(scrapeQuery, (result) => {
             sha1(detail["detail"]).then((hashedAddress) => {
 
-                let previousQuery = {}
-                previousQuery["PREVIOUS_HASHED_ADDRESS_LIST"] = {};
+                // Skip if blocked
+                IPBlockingManager._receivedAddress(detail["detail"], hashedAddress, (skippedChat) => {
 
-                chrome.storage.local.get(previousQuery, (_result) => {
-                    const previousHashedAddresses = _result["PREVIOUS_HASHED_ADDRESS_LIST"];
-                    const seenTimes = (previousHashedAddresses[hashedAddress] == null) ? 0 : previousHashedAddresses[hashedAddress];
-                    document.dispatchEvent(new CustomEvent(
-                        "chatSeenTimes",
-                        {
-                            detail: {
-                                "uuid": ChatRegistry.getUUID(),
-                                "seenTimes": seenTimes,
-                                "ipAddress": detail["detail"]
+                    if (skippedChat) return;
+
+                    let previousQuery = {}
+                    previousQuery["PREVIOUS_HASHED_ADDRESS_LIST"] = {};
+
+                    chrome.storage.local.get(previousQuery, (_result) => {
+                        const previousHashedAddresses = _result["PREVIOUS_HASHED_ADDRESS_LIST"];
+                        const seenTimes = (previousHashedAddresses[hashedAddress] == null) ? 0 : previousHashedAddresses[hashedAddress];
+                        document.dispatchEvent(new CustomEvent(
+                            "chatSeenTimes",
+                            {
+                                detail: {
+                                    "uuid": ChatRegistry.getUUID(),
+                                    "seenTimes": seenTimes,
+                                    "ipAddress": detail["detail"]
+                                }
                             }
-                        }
-                    ));
+                        ));
 
-                    IPGrabberManager.displayScrapeData(
-                        detail["detail"],
-                        hashedAddress,
-                        previousHashedAddresses,
-                        result[config.ipGrabToggle.getName()] === "true",
-                        result[config.geoLocateToggle.getName()] === "true",
-                        seenTimes
-                    );
-                })
+                        IPGrabberManager.displayScrapeData(
+                            detail["detail"],
+                            hashedAddress,
+                            previousHashedAddresses,
+                            result[config.ipGrabToggle.getName()] === "true",
+                            result[config.geoLocateToggle.getName()] === "true",
+                            seenTimes
+                        );
+                    });
+
+                });
 
             });
 
@@ -90,7 +97,7 @@ const IPGrabberManager = {
 
             seenBeforeDiv.appendChild($(`<span class='statuslog'>You've seen this person ${seenTimes} time${plural} before.</span>`).get(0));
             const ipMessage = IPGrabberManager.createLogBoxMessage("IP Address: ", unhashedAddress)
-            ipMessage.appendChild(ButtonManager.ipBlockButton(unhashedAddress, hashedAddress))
+            ipMessage.appendChild(ButtonManager.ipBlockButton(unhashedAddress))
 
             IPGrabberManager.ipGrabberDiv.appendChild(ipMessage); // Add the IP first
             if (!geoLocate) IPGrabberManager.ipGrabberDiv.appendChild(IPGrabberManager.createLogBoxMessage("Location: ", "Disabled (Enable in Settings)"))
@@ -182,3 +189,195 @@ const IPGrabberManager = {
 
     }
 }
+
+
+const IPBlockingManager = {
+
+    LOCAL_STORAGE_ID: "IP_BLOCK_CONFIG",
+    DEFAULT_STORAGE_VALUE: [],
+
+    initialize() {
+        IPBlockingMenu.initialize()
+    },
+
+    _receivedAddress(unhashedAddress, hashedAddress, callback) {
+
+        IPBlockingManager.getStoredChromeConfig((result) => {
+            result = result[IPBlockingManager.LOCAL_STORAGE_ID];
+            const skipChat = result.includes(hashedAddress)
+
+            if (skipChat) {
+                VideoFilterManager.sendNSFWMessage(`Skipped the blocked IP address ${unhashedAddress}`)
+                    .appendChild(ButtonManager.ipUnblockButton(unhashedAddress))
+                AutoSkipManager.skipIfPossible();
+            }
+
+            callback(skipChat);
+
+        });
+
+    },
+
+    getStoredChromeConfig(callback) {
+        let blockQuery = {}
+        blockQuery[IPBlockingManager.LOCAL_STORAGE_ID] = IPBlockingManager.DEFAULT_STORAGE_VALUE;
+        chrome.storage.local.get(blockQuery, callback);
+    },
+
+    setStoredChromeConfig(newConfig) {
+        if (newConfig == null) return;
+
+        let blockQuery = {}
+        blockQuery[IPBlockingManager.LOCAL_STORAGE_ID] = (newConfig || IPBlockingManager.DEFAULT_STORAGE_VALUE);
+
+        chrome.storage.local.set(blockQuery);
+    },
+
+    unblockAddress(unhashedAddress, inChat = true) {
+        const confirmUnblock = confirm(`Are you sure you want to unblock ${unhashedAddress}?`);
+        if (!confirmUnblock) return false;
+
+        IPBlockingManager.getStoredChromeConfig((result) => {
+            result = result[IPBlockingManager.LOCAL_STORAGE_ID];
+
+            if (result.includes(unhashedAddress)) {
+                const index = result.indexOf(unhashedAddress);
+                if (index > -1) result.splice(index, 1);
+
+                IPBlockingManager.setStoredChromeConfig(result);
+
+                if (inChat) {
+                    VideoFilterManager.sendNSFWMessage(
+                        `Unblocked the IP address ${unhashedAddress}`
+                    );
+                    AutoSkipManager.skipIfPossible();
+                }
+            }
+
+        });
+
+        return true;
+    },
+
+    blockAddress(unhashedAddress) {
+        const confirmBlock = confirm(`Are you sure you want to block ${unhashedAddress}?`);
+        if (!confirmBlock) return;
+
+        IPBlockingManager.getStoredChromeConfig((result) => {
+            result = result[IPBlockingManager.LOCAL_STORAGE_ID];
+
+            if (!result.includes(unhashedAddress)) {
+                result.push(unhashedAddress);
+                IPBlockingManager.setStoredChromeConfig(result);
+
+                VideoFilterManager.sendNSFWMessage(
+                    `Blocked the IP address ${unhashedAddress}${ChatRegistry.isChatting() ? " and skipped the current chat" : ""}`
+                ).appendChild(ButtonManager.ipUnblockButton(unhashedAddress));
+                AutoSkipManager.skipIfPossible();
+            }
+
+        });
+
+    }
+
+
+}
+
+
+const IPBlockingMenu = {
+
+    settingsModal: undefined,
+    settingsModalElementId: "modal-2",
+
+    initialize() {
+        IPBlockingMenu.settingsModal = document.createElement("div");
+        $(IPBlockingMenu.settingsModal).load(getResourceURL("html/blocked.html"));
+        $("html").append(IPBlockingMenu.settingsModal)
+    },
+
+    _modifyIfEmpty(size) {
+        if (size > 0) return;
+
+        $(".ipListTable").get(0).appendChild($(`
+                <tr>
+                    <td class="ipListNumber"></td>
+                    <td>You have not blocked anyone...</td>
+                    <td></td>
+                </tr>
+        `).get(0));
+
+    },
+
+    _genEmptyTable() {
+        return $(`
+                <table class="ipListTable">
+                  <tr>
+                    <th style="width: 10%;">Number</th>
+                    <th>IP Address</th>
+                    <th>Action</th>
+                  </tr>              
+                </table>`
+        );
+    },
+
+    _buildEmptyTable(result, ipListTable) {
+        for (let i=0; i < result.length; i++) {
+
+            ipListTable.get(0).appendChild($(`
+                <tr>
+                    <td class="ipListNumber">${i + 1}.</td>
+                    <td>${result[i]}</td>
+                    <td><button class="ipListTableUnblockButton" value="${result[i]}">Unblock</button></td>
+                </tr>
+                `).get(0))
+        }
+
+    },
+
+    _onUnblockButtonClick(event) {
+        let confirmed = IPBlockingManager.unblockAddress(event.target.value, false);
+        if (!confirmed) return;
+
+        $(event.target).closest("tr").remove();
+
+        let results = $(".ipListTable").find(".ipListNumber");
+
+        results.each((item) => {
+            console.log(item)
+            results.get(item).innerHTML = `${item + 1}.`
+        });
+
+        IPBlockingMenu._modifyIfEmpty(document.getElementsByClassName("ipListNumber").length);
+    },
+
+    loadMenu(noChange) {
+
+        if (noChange) return;
+        settingsManager.disable();
+        IPBlockingMenu.enable();
+
+        IPBlockingManager.getStoredChromeConfig((result) => {
+            result = result[IPBlockingManager.LOCAL_STORAGE_ID];
+            const ipListTable = IPBlockingMenu._genEmptyTable();
+            IPBlockingMenu._buildEmptyTable(result, ipListTable);
+            $("#blockedListDiv").get(0).innerHTML = $('<div>').append(ipListTable).html();
+            $(".ipListTableUnblockButton").on(
+                "click", (event) => IPBlockingMenu._onUnblockButtonClick(event)
+            );
+            IPBlockingMenu._modifyIfEmpty(result.length);
+
+        });
+    },
+
+    enable() {
+        MicroModal.show(IPBlockingMenu.settingsModalElementId)
+    },
+
+    disable() {
+        MicroModal.hide(IPBlockingMenu.settingsModalElementId)
+
+    },
+
+}
+
+

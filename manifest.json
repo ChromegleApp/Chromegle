@@ -27,10 +27,6 @@
         "javascript/themes/theme-registry.js",
         "javascript/display/buttons.js",
 
-        "javascript/settings/menu.js",
-        "javascript/settings/settings.js",
-        "javascript/settings/config.js",
-
         "javascript/automation/block-nsfw.js",
         "javascript/automation/chat-registry.js",
         "javascript/automation/chat-manager.js",
@@ -38,7 +34,6 @@
         "javascript/automation/auto-skip.js",
         "javascript/automation/auto-reconnect.js",
         "javascript/automation/ip-grabbing.js",
-        "javascript/automation/ip-blocking.js",
         "javascript/automation/auto-confirm.js",
         "javascript/automation/unmoderated-chat.js",
         "javascript/automation/video-screenshot.js",
@@ -47,6 +42,9 @@
         "javascript/automation/paste-menu.js",
         "javascript/automation/web-filtering/filter-messages.js",
 
+        "javascript/settings/menu.js",
+        "javascript/settings/settings.js",
+        "javascript/settings/config.js",
         "javascript/main.js"
 
       ],

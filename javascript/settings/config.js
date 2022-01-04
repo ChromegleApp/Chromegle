@@ -246,8 +246,10 @@ const config = {
         "elementName": "pasteMenuToggle",
         "storageName": "PASTE_MENU_TOGGLE",
         "default": "false"
+    }),
+    "blockedIPList": new ExternalField({
+        "external": IPBlockingMenu.loadMenu
     })
-
 }
 
 

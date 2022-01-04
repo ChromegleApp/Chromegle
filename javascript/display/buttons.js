@@ -30,11 +30,16 @@ const ButtonManager = {
 
         }),
 
-    ipBlockButton: (unhashedAddress, hashedAddress) => {
+    ipBlockButton: (unhashedAddress) => {
         return $(`<button value="${unhashedAddress}" class="ipBlockButton">(Block IP)</button>`)
-            .on("click", () => blockAddress(unhashedAddress, hashedAddress))
+            .on("click", () => IPBlockingManager.blockAddress(unhashedAddress))
             .get(0);
-    }
+    },
 
+    ipUnblockButton: (unhashedAddress) => {
+        return $(`<button value="${unhashedAddress}" class="ipUnblockButton">(Unblock IP)</button>`)
+            .on("click", () => IPBlockingManager.unblockAddress(unhashedAddress))
+            .get(0);
+    },
 }
 

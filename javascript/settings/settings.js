@@ -32,6 +32,14 @@ class SettingsManager {
 
     }
 
+    enable() {
+        this.#menu.enable();
+    }
+
+    disable() {
+        this.#menu.disable();
+    }
+
 }
 
 document.addEventListener("storageSettingsUpdate", (event) => {
@@ -174,6 +182,7 @@ class SwitchEdit extends MutableField {
     }
 
 }
+
 
 class ToggleEdit extends MutableField {
     #elementName;
@@ -320,4 +329,19 @@ class MutableMultiEditField extends MultiFieldEdit {
         return super.getResponse(_previous);
     }
 
+}
+
+class ExternalField extends MutableField {
+    #externalFunction
+
+    constructor(config) {
+        config["type"] = "external";
+        super(config);
+        this.#externalFunction = config["external"];
+    }
+
+    update(noChange) {
+        if (noChange) return;
+        this.#externalFunction();
+    }
 }

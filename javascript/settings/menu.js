@@ -70,12 +70,13 @@ class SwitchButton {
 
 
 class SettingsMenu {
-    #settingsModal = undefined;
+    #settingsModalElement = undefined;
+    static #modalElementId = "modal-1";
 
     constructor() {
-        this.#settingsModal = document.createElement("div");
-        $(this.#settingsModal).load(getResourceURL("html/modal.html"));
-        $("html").append(this.#settingsModal)
+        this.#settingsModalElement = document.createElement("div");
+        $(this.#settingsModalElement).load(getResourceURL("html/settings.html"));
+        $("html").append(this.#settingsModalElement)
         this.manageCollapsables();
         this.manageToggleButtons();
         this.manageSwitchButtons();
@@ -110,7 +111,7 @@ class SettingsMenu {
     }
 
     manageCollapsables = () => {
-        this.#settingsModal.addEventListener("click", (target) => {
+        this.#settingsModalElement.addEventListener("click", (target) => {
             let element = target.path[0];
 
             if (element.classList.contains("editFieldButton")) {
@@ -156,7 +157,11 @@ class SettingsMenu {
     }
 
     enable = () => {
-        MicroModal.show("modal-1")
+        MicroModal.show(SettingsMenu.#modalElementId)
+    }
+
+    disable = () => {
+        MicroModal.close(SettingsMenu.#modalElementId)
     }
 
 }
