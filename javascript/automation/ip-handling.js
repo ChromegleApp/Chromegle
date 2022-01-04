@@ -207,6 +207,7 @@ const IPBlockingManager = {
             const skipChat = result.includes(hashedAddress)
 
             if (skipChat) {
+                Logger.INFO("Skipped blocked IP address <%s> with chat UUID <%s>", unhashedAddress, ChatRegistry.getUUID())
                 VideoFilterManager.sendNSFWMessage(`Skipped the blocked IP address ${unhashedAddress}`)
                     .appendChild(ButtonManager.ipUnblockButton(unhashedAddress))
                 AutoSkipManager.skipIfPossible();
@@ -247,11 +248,13 @@ const IPBlockingManager = {
                 IPBlockingManager.setStoredChromeConfig(result);
 
                 if (inChat) {
+                    Logger.INFO("Unblocked IP address <%s> in video chat", unhashedAddress)
                     VideoFilterManager.sendNSFWMessage(
-                        `Unblocked the IP address ${unhashedAddress}`
+                        `Unblocked the IP address ${unhashedAddress} in video chat`
                     );
-                    AutoSkipManager.skipIfPossible();
                 }
+            } else {
+                alert(`The IP address ${unhashedAddress} is not blocked in video chat!`)
             }
 
         });
@@ -270,10 +273,13 @@ const IPBlockingManager = {
                 result.push(unhashedAddress);
                 IPBlockingManager.setStoredChromeConfig(result);
 
+                Logger.INFO("Blocked IP address <%s> in video chat", unhashedAddress)
                 VideoFilterManager.sendNSFWMessage(
                     `Blocked the IP address ${unhashedAddress}${ChatRegistry.isChatting() ? " and skipped the current chat" : ""}`
                 ).appendChild(ButtonManager.ipUnblockButton(unhashedAddress));
                 AutoSkipManager.skipIfPossible();
+            } else {
+                alert(`The IP address ${unhashedAddress} is already blocked in video chat!`)
             }
 
         });
@@ -338,15 +344,16 @@ const IPBlockingMenu = {
         let confirmed = IPBlockingManager.unblockAddress(event.target.value, false);
         if (!confirmed) return;
 
+
         $(event.target).closest("tr").remove();
 
         let results = $(".ipListTable").find(".ipListNumber");
 
         results.each((item) => {
-            console.log(item)
             results.get(item).innerHTML = `${item + 1}.`
         });
 
+        Logger.INFO("Unblocked IP address <%s> in video chat", event.target.value)
         IPBlockingMenu._modifyIfEmpty(document.getElementsByClassName("ipListNumber").length);
     },
 

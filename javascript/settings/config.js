@@ -249,6 +249,11 @@ const config = {
     }),
     "blockedIPList": new ExternalField({
         "external": IPBlockingMenu.loadMenu
+    }),
+    "muteButtonToggle": new ToggleEdit({
+        "elementName": "muteButtonToggle",
+        "storageName": "MUTE_BUTTON_TOGGLE",
+        "default": "false"
     })
 }
 

@@ -133,9 +133,23 @@ html {
     cursor: pointer;
 }
 
-.videoScreenshotButton:hover {
+.videoScreenshotButton:hover, .videoMuteButton:hover {
     opacity: 80%;
 }
+
+.videoMuteButton {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    cursor: pointer;
+    opacity: 80%;
+    bottom: 0;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+
+
 
 .selfVideoScreenshotButton {
     bottom: 0;

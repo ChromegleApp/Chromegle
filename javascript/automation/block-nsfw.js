@@ -67,7 +67,8 @@ const VideoFilterManager = {
             // Expired
             if (ChatRegistry.getUUID() !== chatUUID) return;
 
-            let json = JSON.parse(xhr.response)
+            let json = JSON.parse(xhr.response);
+
             if (json["status"] !== 200) {
                 Logger.ERROR("Received status <%s> from web-server when running NSFW detection for chat UUID <%s>", json["status"], ChatRegistry.getUUID());
                 VideoFilterManager.sendNSFWMessage("NSFW detection received a bad response, unblocked video to preserve chat.");
@@ -81,7 +82,7 @@ const VideoFilterManager = {
                 JSON.stringify(json["payload"], null, 2)
             );
 
-            if (json["payload"]["is_nsfw"] === true) {
+            if (json["payload"]["data"]["is_nsfw"] === true) {
                 Logger.INFO("Detected NSFW video of <#%s> with chat UUID <%s>", otherVideo.id, ChatRegistry.getUUID());
                 VideoFilterManager.sendNSFWMessage("Detected NSFW video input, blocked the screen!");
                 VideoBlockerManager.otherVideoBlocker.blockVideo(true);

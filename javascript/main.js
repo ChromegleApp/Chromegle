@@ -55,6 +55,7 @@ $(document).on("ready", () => {
         UnmoderatedChatManager.initialize();
         VideoBlockerManager.initialize();
         VideoScreenshotManager.initialize();
+        MuteMicrophoneManager.initialize();
         IPBlockingManager.initialize();
     }
 

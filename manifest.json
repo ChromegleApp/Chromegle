@@ -33,7 +33,7 @@
         "javascript/automation/auto-message.js",
         "javascript/automation/auto-skip.js",
         "javascript/automation/auto-reconnect.js",
-        "javascript/automation/ip-grabbing.js",
+        "javascript/automation/ip-handling.js",
         "javascript/automation/auto-confirm.js",
         "javascript/automation/unmoderated-chat.js",
         "javascript/automation/video-screenshot.js",
@@ -41,6 +41,7 @@
         "javascript/automation/sync-topics.js",
         "javascript/automation/paste-menu.js",
         "javascript/automation/web-filtering/filter-messages.js",
+        "javascript/automation/mute-microphone.js",
 
         "javascript/settings/menu.js",
         "javascript/settings/settings.js",

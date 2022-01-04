@@ -1,5 +1,4 @@
 class VideoScreenshot {
-    static instances = [];
 
     #screenshotButton;
     #buttonElementId;
@@ -101,6 +100,8 @@ class VideoScreenshot {
 
 const VideoScreenshotManager = {
 
+    instances: [],
+
     initialize() {
         $(window).on("resize", () => VideoScreenshotManager._onWindowResize());
         document.addEventListener("pageStarted", () => VideoScreenshotManager._pageStarted());
@@ -110,7 +111,7 @@ const VideoScreenshotManager = {
 
     _onWindowResize() {
 
-        VideoScreenshot.instances.forEach((instance) => {
+        VideoScreenshotManager.instances.forEach((instance) => {
             setTimeout(() => instance.updateButtonPosition(), 5);
         });
 
@@ -120,7 +121,7 @@ const VideoScreenshotManager = {
         let videoWrapper = $("#videowrapper").get(0);
         if (videoWrapper == null) return;
 
-        VideoScreenshot.instances.push(
+        VideoScreenshotManager.instances.push(
             new VideoScreenshot(
                 "otherVideoScreenshot",
                 "othervideo",
@@ -128,13 +129,13 @@ const VideoScreenshotManager = {
             )
         );
 
-        VideoScreenshot.instances.forEach((instance) => {
+        VideoScreenshotManager.instances.forEach((instance) => {
             videoWrapper.appendChild(instance.getScreenshotButton().get(0));
             instance.updateButtonPosition();
         });
 
         document.addEventListener("chatEnded", () => {
-            VideoScreenshot.instances.forEach((instance) => {
+            VideoScreenshotManager.instances.forEach((instance) => {
                 if (instance.getDisableAfterChat()) {
                     instance.videoButtonEnabled(false)
                 }
@@ -142,7 +143,7 @@ const VideoScreenshotManager = {
         });
 
         document.addEventListener("videoChatLoaded", () => {
-            VideoScreenshot.instances.forEach((instance) => {
+            VideoScreenshotManager.instances.forEach((instance) => {
                 instance.videoButtonEnabled(true);
             });
         })
@@ -151,7 +152,7 @@ const VideoScreenshotManager = {
         hiddenQuery[config.screenshotButtonToggle.getName()] = config.screenshotButtonToggle.getDefault();
 
         chrome.storage.sync.get(hiddenQuery, (result) => {
-            VideoScreenshot.instances.forEach((instance) => {
+            VideoScreenshotManager.instances.forEach((instance) => {
                 instance.videoButtonHidden(!(result[config.screenshotButtonToggle.getName()] === "true"));
             });
         })
@@ -163,7 +164,7 @@ const VideoScreenshotManager = {
         const result = detail["detail"][config.screenshotButtonToggle.getName()];
 
         if (result != null) {
-            VideoScreenshot.instances.forEach((instance) => {
+            VideoScreenshotManager.instances.forEach((instance) => {
                 instance.videoButtonHidden(!(result === "true"));
             });
         }
