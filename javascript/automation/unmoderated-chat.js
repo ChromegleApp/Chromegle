@@ -2,8 +2,6 @@ const UnmoderatedChatManager = {
 
     initialize() {
         $(document).on("click", (event) => UnmoderatedChatManager._nsfwChatButtonClick(event))
-
-
         $("#videobtnunmoderated").on("click", () => UnmoderatedChatManager._startObserving());
         $("#videobtn").on("click", () => UnmoderatedChatManager._startObserving());
         $("#textbtn").on("click", () => UnmoderatedChatManager._startObserving());
@@ -28,6 +26,9 @@ const UnmoderatedChatManager = {
         UnmoderatedChatManager.NSFWObserver.observe(document, {attributes: true, childList: true, subtree:true});
         document.addEventListener("chatEnded", () => UnmoderatedChatManager.cleanChat());
         document.addEventListener("chatFailedConnect", () => UnmoderatedChatManager.cleanChat());
+
+        // Clean page
+        setTimeout(() => UnmoderatedChatManager.cleanPage(), 10);
 
     },
 

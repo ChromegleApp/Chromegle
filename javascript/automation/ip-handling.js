@@ -157,14 +157,18 @@ const IPGrabberManager = {
         try {
             payload = JSON.parse(IPGrabberManager.request.responseText)
         } catch (ex) {
-            IPGrabberManager.failedGeolocation("You are skipping too fast, geolocation failed. Slow down to get IP locations!");
+            VideoFilterManager.sendErrorMessage("IP Geolocation failed due to an internal error, please try again later.")
             return;
         }
 
-        // Failed request or too many requests
-        if (!payload["status"] || payload["status"] === 403) IPGrabberManager.ipGrabberDiv.appendChild(
-            IPGrabberManager.createLogBoxMessage("(Geolocation unavailable, hourly limit reached)", "")
-        );
+        if (payload['status'] && payload["status"] !== 200) {
+            VideoFilterManager.sendErrorMessage(
+                payload["status"] === 429 ?
+                    "You are skipping too fast, geolocation failed. Slow down to get IP locations!" :
+                    "IP Geolocation received a bad response, try again later."
+            );
+
+        }
 
         const mappingKeys = Object.keys(IPGrabberManager.geoMappings);
 

@@ -66,12 +66,17 @@ const VideoFilterManager = {
 
             // Expired
             if (ChatRegistry.getUUID() !== chatUUID) return;
-
             let json = JSON.parse(xhr.response);
 
-            if (json["status"] !== 200) {
-                Logger.ERROR("Received status <%s> from the Chromegle web-server when running NSFW detection for chat UUID <%s>", json["status"], ChatRegistry.getUUID());
-                VideoFilterManager.sendErrorMessage("NSFW detection received a bad response, unblocked video to preserve chat.");
+            if (json["status"] && json["status"] !== 200) {
+                Logger.ERROR("Received status <%s> from the Chromegle web-server when running NSFW detection for chat UUID <%s>\n\n%s", json["status"], ChatRegistry.getUUID(), json["message"]);
+
+                VideoFilterManager.sendErrorMessage(
+                    json["status"] === 429 ?
+                        "You are skipping too fast, NSFW detection was not completed. Slow down for NSFW detection to work." :
+                        "NSFW detection received a bad response, unblocked video to preserve chat."
+                );
+
                 VideoBlockerManager.otherVideoBlocker.unblockVideo();
                 return;
             }
@@ -110,7 +115,7 @@ const VideoFilterManager = {
         if (ChatRegistry.getUUID() !== chatUUID) return;
 
         VideoBlockerManager.otherVideoBlocker.unblockVideo();
-        Logger.ERROR("Received an error  when trying to receive NSFW detection data for chat UUID <%s>", ChatRegistry.getUUID());
+        Logger.ERROR("Received an error when trying to receive NSFW detection data for chat UUID <%s>", ChatRegistry.getUUID());
         VideoFilterManager.sendErrorMessage("NSFW detection failed due to an internal error, unblocked video to preserve chat.")
     },
 
