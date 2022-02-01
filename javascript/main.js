@@ -15,6 +15,7 @@ $(document).on("ready", () => {
             window.location.href = "https://omegle.com/static/ban.html";
         }
 
+
         // Static HTML ban screen
         if (window.location.href.includes("ban.html")) {
             $("html")
