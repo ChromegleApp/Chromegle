@@ -57,6 +57,7 @@ $(document).on("ready", () => {
         VideoScreenshotManager.initialize();
         MuteMicrophoneManager.initialize();
         IPBlockingManager.initialize();
+
     }
 
     /**

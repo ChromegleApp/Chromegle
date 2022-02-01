@@ -31,7 +31,7 @@ const ButtonManager = {
         }),
 
     ipBlockButton: (unhashedAddress) => {
-        return $(`<button value="${unhashedAddress}" class="ipBlockButton">(Block IP)</button>`)
+        return $(`<button value="${unhashedAddress}" class="ipBlockButton">(Block IP Address)</button>`)
             .on("click", () => IPBlockingManager.blockAddress(unhashedAddress))
             .get(0);
     },

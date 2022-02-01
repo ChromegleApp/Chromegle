@@ -52,6 +52,10 @@ const PasteMenu = {
             if (event.key === "Escape" && PasteMenu.menuEnabled) setTimeout(() => PasteMenu._modifyLogBox(), 0);
         })
 
+        // Resize fix
+        $(window).on("resize", () => {
+            $("#pasteButtonMenu").css("height", $(".logwrapper").height());
+        });
 
     },
 
@@ -123,6 +127,11 @@ const PasteMenu = {
                 .load(getResourceURL("html/paste.html"), null, () => PasteMenu.__registerButtons())
                 .get(0)
         )
+
+        setTimeout(() => {
+            if (!PasteMenu.menuEnabled) PasteMenu.hideMenu();
+        }, 50);
+
     },
 
     _modifyLogBox() {

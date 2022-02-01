@@ -1,7 +1,6 @@
 let ConstantValues = {
     discordURL: "https://discord.gg/KDqHBrZ2Yn",
     githubURL: "https://github.com/ChromegleApp/Chromegle",
-    geoLocationEndpoint: "https://freegeoip.app/json/",
     apiURL: "https://chromegle.isaackogan.com",
 
     getHelpfulTip: () => {

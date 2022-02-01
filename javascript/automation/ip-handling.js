@@ -3,12 +3,6 @@ const IPGrabberManager = {
     enableTag: "Show IP-Address",
     disableTag: "Hide IP-Address",
     request: undefined,
-    geoMappings: {
-        country_name: "Country",
-        region_name: "Region",
-        city: "City",
-        zip_code: "Zip Code"
-    },
 
     initialize() {
         window.addEventListener("displayScrapeData", (detail) => IPGrabberManager._displayScrapeData(detail));
@@ -82,60 +76,122 @@ const IPGrabberManager = {
 
     displayScrapeData(unhashedAddress, hashedAddress, previousHashedAddresses, showData, geoLocate, seenTimes) {
 
-            Logger.DEBUG("Scraped IP Address from video chat | Hashed: <%s> Raw: <%s>", hashedAddress, unhashedAddress);
+        Logger.DEBUG("Scraped IP Address from video chat | Hashed: <%s> Raw: <%s>", hashedAddress, unhashedAddress);
 
-            const innerLogBox = document.getElementsByClassName("logitem")[0].parentNode;
-            const logItemDiv = document.createElement("div");
-            const seenBeforeDiv = document.createElement("div")
-            IPGrabberManager.ipGrabberDiv = document.createElement("div");
+        const innerLogBox = document.getElementsByClassName("logitem")[0].parentNode;
+        const logItemDiv = document.createElement("div");
+        const seenBeforeDiv = document.createElement("div")
+        IPGrabberManager.ipGrabberDiv = document.createElement("div");
 
-            logItemDiv.classList.add("logitem");
-            seenBeforeDiv.classList.add("logitem");
-            IPGrabberManager.ipGrabberDiv.classList.add("logitem");
+        logItemDiv.classList.add("logitem");
+        seenBeforeDiv.classList.add("logitem");
+        IPGrabberManager.ipGrabberDiv.classList.add("logitem");
 
-            const plural = seenTimes !== 1 && seenTimes !== "1" ? "s" : "";
+        const plural = seenTimes !== 1 && seenTimes !== "1" ? "s" : "";
 
-            seenBeforeDiv.appendChild($(`<span class='statuslog'>You've seen this person ${seenTimes} time${plural} before.</span>`).get(0));
-            const ipMessage = IPGrabberManager.createLogBoxMessage("IP Address: ", unhashedAddress)
-            ipMessage.appendChild(ButtonManager.ipBlockButton(unhashedAddress))
+        seenBeforeDiv.appendChild($(`<span class='statuslog'>You've seen this person ${seenTimes} time${plural} before.</span>`).get(0));
+        const ipMessage = IPGrabberManager.createLogBoxMessage("IP Address: ", unhashedAddress)
+        ipMessage.appendChild(ButtonManager.ipBlockButton(unhashedAddress))
 
-            IPGrabberManager.ipGrabberDiv.appendChild(ipMessage); // Add the IP first
-            if (!geoLocate) IPGrabberManager.ipGrabberDiv.appendChild(IPGrabberManager.createLogBoxMessage("Location: ", "Disabled (Enable in Settings)"))
+        IPGrabberManager.ipGrabberDiv.appendChild(ipMessage); // Add the IP first
+        if (!geoLocate) IPGrabberManager.ipGrabberDiv.appendChild(IPGrabberManager.createLogBoxMessage("Location: ", "Disabled (Enable in Settings)"))
 
-            previousHashedAddresses[hashedAddress] = seenTimes + 1;
-            chrome.storage.local.set({"PREVIOUS_HASHED_ADDRESS_LIST": previousHashedAddresses});
+        previousHashedAddresses[hashedAddress] = seenTimes + 1;
+        chrome.storage.local.set({"PREVIOUS_HASHED_ADDRESS_LIST": previousHashedAddresses});
 
-            IPGrabberManager.ipGrabberDiv.style.display = showData ? "" : "none";
-            if (showData) ButtonManager.ipToggleButton.html(IPGrabberManager.disableTag);
-            else ButtonManager.ipToggleButton.html(IPGrabberManager.enableTag);
+        IPGrabberManager.ipGrabberDiv.style.display = showData ? "" : "none";
+        if (showData) ButtonManager.ipToggleButton.html(IPGrabberManager.disableTag);
+        else ButtonManager.ipToggleButton.html(IPGrabberManager.enableTag);
 
-            innerLogBox.appendChild(ButtonManager.ipToggleButton.get(0));
-            innerLogBox.appendChild(IPGrabberManager.ipGrabberDiv);
-            innerLogBox.append(seenBeforeDiv);
+        innerLogBox.appendChild(ButtonManager.ipToggleButton.get(0));
+        innerLogBox.appendChild(IPGrabberManager.ipGrabberDiv);
+        innerLogBox.append(seenBeforeDiv);
 
-            if (geoLocate) {
-                IPGrabberManager.request = new XMLHttpRequest();
-                IPGrabberManager.request.open("GET", ConstantValues.geoLocationEndpoint + unhashedAddress, true);
-                IPGrabberManager.request.onreadystatechange = IPGrabberManager.displayGeolocation;
-                IPGrabberManager.request.send();
-            }
+        if (geoLocate) {
+            IPGrabberManager.request = new XMLHttpRequest();
+            IPGrabberManager.request.timeout = 5000;
+            IPGrabberManager.request.open("GET", `${ConstantValues.apiURL}/omegle/geolocate/${unhashedAddress}`, true);
+            IPGrabberManager.request.onreadystatechange = IPGrabberManager.displayGeolocation;
+            IPGrabberManager.request.ontimeout = IPGrabberManager.failedGeolocation;
+            IPGrabberManager.request.send();
+        }
 
 
     },
 
+    failedGeolocation(message) {
+        VideoFilterManager.sendErrorMessage(message || "Geolocation failed, please contact us through our Discord on the home page!")
+    },
+
+    geoMappings: {
+        country: "Country",
+        region: "Region",
+        city: "City",
+        organization: "Provider"
+    },
+
+    getCurrentTime(timezone) {
+        const options = {
+            timeZone: timezone,
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        }
+
+        return (new Date()).toLocaleString("en-US", options);
+    },
+
     displayGeolocation() {
 
+        // No request
         if (IPGrabberManager.request == null) return;
+
+        // Request finished
         if (!(IPGrabberManager.request.readyState === 4)) return;
-        if (IPGrabberManager.request.status === 403) IPGrabberManager.ipGrabberDiv.appendChild(
+
+        // Parse request text
+        let payload = null;
+        try {
+            payload = JSON.parse(IPGrabberManager.request.responseText)
+        } catch (ex) {
+            IPGrabberManager.failedGeolocation("You are skipping too fast, geolocation failed. Slow down to get IP locations!");
+            return;
+        }
+
+        // Failed request or too many requests
+        if (!payload["status"] || payload["status"] === 403) IPGrabberManager.ipGrabberDiv.appendChild(
             IPGrabberManager.createLogBoxMessage("(Geolocation unavailable, hourly limit reached)", "")
         );
 
         const mappingKeys = Object.keys(IPGrabberManager.geoMappings);
 
         if (IPGrabberManager.request.status === 200) {
-            const geoData = JSON.parse(IPGrabberManager.request.responseText);
+            const geoData = payload["payload"]
             const geoDataKeys = Object.keys(geoData);
+
+            Logger.DEBUG(
+                "Received IP Scraping data for chat UUID <%s> from the Chromegle web-server as the following JSON payload: \n\n%s",
+                ChatRegistry.getUUID(),
+                JSON.stringify(geoData, null, 2)
+            );
+
+            // Hardcoded -> If there is longitude and latitude included, add that too
+            if (geoDataKeys.includes("longitude") && geoDataKeys.includes("latitude")) {
+
+                IPGrabberManager.ipGrabberDiv.appendChild(
+                    IPGrabberManager.createLogBoxMessage(
+                        "Coordinates: ",
+                        `
+                            <span>${geoData["longitude"]}/${geoData["latitude"]}</span>
+                            <a href='https://maps.google.com/maps?q=${geoData["latitude"]},${geoData["latitude"]}' target="_blank">(Google Maps)</a>
+                        `,
+                        "long_lat_data"
+                    )
+                );
+            }
 
             // Iterate through the JSON data received from the API, map the strings
             geoDataKeys.forEach(function(key) {
@@ -146,23 +202,48 @@ const IPGrabberManager = {
                     );
             });
 
-            // Hardcoded -> If there is longitude and latitude included, add that too
-            if (geoDataKeys.includes("longitude") && geoDataKeys.includes("latitude")) {
+            // Hardcoded -> If there is accuracy data, add that too
+            if (geoDataKeys.includes("accuracy")) {
                 IPGrabberManager.ipGrabberDiv.appendChild(
                     IPGrabberManager.createLogBoxMessage(
-                        "Longitude/Latitude: ", geoData["longitude"] + " / " + geoData["latitude"], "long_lat_data")
+                        "Accuracy: ", `${geoData["accuracy"]} km radius`, "accuracy_data")
                 );
             }
 
-            if (geoDataKeys.includes("country_code") && geoDataKeys.includes("country_name")) {
+            // Hardcoded -> If there is a country code && country name, add that
+            if (geoDataKeys.includes("country_code") && geoDataKeys.includes("country")) {
                 const countrySpan = $(
                     `<span>  <span class='flagText nceFont'>${IPGrabberManager.getFlagEmoji(geoData["country_code"])}</span></span>`
                 ).get(0)
-                $("#country_name_data").get(0).appendChild(countrySpan);
+                $("#country_data").get(0).appendChild(countrySpan);
+            }
+
+            // Hardcoded -> Local time
+            if (geoDataKeys.includes("timezone")) {
+                const element_id = "local_time_data"
+
+                IPGrabberManager.ipGrabberDiv.appendChild(
+                    IPGrabberManager.createLogBoxMessage(
+                        "Local Time: ",
+                        IPGrabberManager.getCurrentTime(geoData["timezone"]),
+                        element_id
+                    )
+                );
+
+                setTimeout(() => {
+                    IPGrabberManager.updateTimeLoop(ChatRegistry.getUUID(), geoData["timezone"], element_id)
+                }, 5);
+
             }
 
         }
 
+    },
+
+    updateTimeLoop(cachedUUID, timezone, element_id) {
+        if (cachedUUID !== ChatRegistry.getUUID()) return;
+        $(`#${element_id}`).get(0).childNodes[1].innerHTML = IPGrabberManager.getCurrentTime(timezone)
+        setTimeout(() => IPGrabberManager.updateTimeLoop(cachedUUID, timezone, element_id), 1000);
     },
 
     createLogBoxMessage: (label, value, elementId) => {
@@ -208,7 +289,7 @@ const IPBlockingManager = {
 
             if (skipChat) {
                 Logger.INFO("Skipped blocked IP address <%s> with chat UUID <%s>", unhashedAddress, ChatRegistry.getUUID())
-                VideoFilterManager.sendNSFWMessage(`Skipped the blocked IP address ${unhashedAddress}`)
+                VideoFilterManager.sendErrorMessage(`Skipped the blocked IP address ${unhashedAddress}`)
                     .appendChild(ButtonManager.ipUnblockButton(unhashedAddress))
                 AutoSkipManager.skipIfPossible();
             }
@@ -249,7 +330,7 @@ const IPBlockingManager = {
 
                 if (inChat) {
                     Logger.INFO("Unblocked IP address <%s> in video chat", unhashedAddress)
-                    VideoFilterManager.sendNSFWMessage(
+                    VideoFilterManager.sendErrorMessage(
                         `Unblocked the IP address ${unhashedAddress} in video chat`
                     );
                 }
@@ -274,7 +355,7 @@ const IPBlockingManager = {
                 IPBlockingManager.setStoredChromeConfig(result);
 
                 Logger.INFO("Blocked IP address <%s> in video chat", unhashedAddress)
-                VideoFilterManager.sendNSFWMessage(
+                VideoFilterManager.sendErrorMessage(
                     `Blocked the IP address ${unhashedAddress}${ChatRegistry.isChatting() ? " and skipped the current chat" : ""}`
                 ).appendChild(ButtonManager.ipUnblockButton(unhashedAddress));
                 AutoSkipManager.skipIfPossible();
@@ -382,7 +463,6 @@ const IPBlockingMenu = {
 
     disable() {
         MicroModal.hide(IPBlockingMenu.settingsModalElementId)
-
     },
 
 }

@@ -60,10 +60,9 @@ html {
 .ipBlockButton {
     cursor: pointer;
     border-radius: .5em;
-    font-size: 16px;
+    font-size: 15px;
     background: none;
-    color: #208ffe;
-    font-weight: bold;
+    color: rgba(49,166,231,255);
     border: none;
 }
 

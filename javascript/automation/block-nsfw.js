@@ -70,8 +70,8 @@ const VideoFilterManager = {
             let json = JSON.parse(xhr.response);
 
             if (json["status"] !== 200) {
-                Logger.ERROR("Received status <%s> from web-server when running NSFW detection for chat UUID <%s>", json["status"], ChatRegistry.getUUID());
-                VideoFilterManager.sendNSFWMessage("NSFW detection received a bad response, unblocked video to preserve chat.");
+                Logger.ERROR("Received status <%s> from the Chromegle web-server when running NSFW detection for chat UUID <%s>", json["status"], ChatRegistry.getUUID());
+                VideoFilterManager.sendErrorMessage("NSFW detection received a bad response, unblocked video to preserve chat.");
                 VideoBlockerManager.otherVideoBlocker.unblockVideo();
                 return;
             }
@@ -84,7 +84,7 @@ const VideoFilterManager = {
 
             if (json["payload"]["data"]["is_nsfw"] === true) {
                 Logger.INFO("Detected NSFW video of <#%s> with chat UUID <%s>", otherVideo.id, ChatRegistry.getUUID());
-                VideoFilterManager.sendNSFWMessage("Detected NSFW video input, blocked the screen!");
+                VideoFilterManager.sendErrorMessage("Detected NSFW video input, blocked the screen!");
                 VideoBlockerManager.otherVideoBlocker.blockVideo(true);
                 return;
             }
@@ -99,7 +99,7 @@ const VideoFilterManager = {
         if (ChatRegistry.getUUID() !== chatUUID) return;
 
         VideoBlockerManager.otherVideoBlocker.unblockVideo();
-        VideoFilterManager.sendNSFWMessage("NSFW detection took too long, video unblocked to preserve chat. If you have bad connection, it may be best to disable NSFW detection.")
+        VideoFilterManager.sendErrorMessage("NSFW detection took too long, video unblocked to preserve chat. If you have bad connection, it may be best to disable NSFW detection.")
         Logger.WARNING("NSFW detection timed out, had to unblock video to preserve chat viewing")
     },
 
@@ -111,10 +111,10 @@ const VideoFilterManager = {
 
         VideoBlockerManager.otherVideoBlocker.unblockVideo();
         Logger.ERROR("Received an error  when trying to receive NSFW detection data for chat UUID <%s>", ChatRegistry.getUUID());
-        VideoFilterManager.sendNSFWMessage("NSFW detection failed due to an internal error, unblocked video to preserve chat.")
+        VideoFilterManager.sendErrorMessage("NSFW detection failed due to an internal error, unblocked video to preserve chat.")
     },
 
-    sendNSFWMessage(message) {
+    sendErrorMessage(message) {
         const innerLogBox = document.getElementsByClassName("logitem")[0].parentNode;
         const seenBeforeDiv = document.createElement("div")
         seenBeforeDiv.classList.add("logitem");
