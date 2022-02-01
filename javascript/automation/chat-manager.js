@@ -15,6 +15,7 @@ const ChatManager = {
                 if (log.innerText.includes("HONG KONG")) {
                     log.innerHTML = `Thanks for using Chromegle! ${ConstantValues.getHelpfulTip()}`;
                 }
+
             }
 
             if (event["detail"]["isVideoChat"]) {
@@ -41,8 +42,12 @@ const ChatManager = {
         ChatManager.cleanEndChat();
         ChatManager.cleanMidChat();
 
-        event["detail"].innerHTML = "Chromegle: Unable to connect to Omegle. You are <a target='_blank' href='https://omegle.com/static/ban.html'>likely banned</a>" +
-            " due to a VPN or proxy, try a different one to continue.";
+        event["detail"].innerHTML = (`
+            <p class="statuslog">
+                Chromegle: Unable to connect to Omegle. You are <a target='_blank' href='https://omegle.com/static/ban.html'>likely banned</a>
+                due to a VPN or proxy, try a different one to continue.
+            </p>
+        `);
     },
 
     cleanEndChat() {
