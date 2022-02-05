@@ -190,7 +190,7 @@ const IPGrabberManager = {
                         "Coordinates: ",
                         `
                             <span>${geoData["longitude"]}/${geoData["latitude"]}</span>
-                            <a href='https://maps.google.com/maps?q=${geoData["latitude"]},${geoData["latitude"]}' target="_blank">(Google Maps)</a>
+                            <a href='https://maps.google.com/maps?q=${geoData["latitude"]},${geoData["longitude"]}' target="_blank">(Google Maps)</a>
                         `,
                         "long_lat_data"
                     )
