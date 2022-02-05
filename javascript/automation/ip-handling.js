@@ -289,7 +289,7 @@ const IPBlockingManager = {
 
         IPBlockingManager.getStoredChromeConfig((result) => {
             result = result[IPBlockingManager.LOCAL_STORAGE_ID];
-            const skipChat = result.includes(hashedAddress)
+            const skipChat = result.includes(unhashedAddress)
 
             if (skipChat) {
                 Logger.INFO("Skipped blocked IP address <%s> with chat UUID <%s>", unhashedAddress, ChatRegistry.getUUID())
