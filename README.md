@@ -27,7 +27,7 @@ you and more at https://github.com/ChromegleApp/Chromegle.
 
 * **Isaac Kogan** - *Initial work* - [isaackogan](https://github.com/isaackogan)
 
-See also the list of [contributors](https://github.com/ChromegleApp/Chromegle/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/ChromegleApp/Omegle-IP-Puller/contributors) who participated in this project.
 
 ## License
 
