@@ -1,4 +1,4 @@
-Chromegle - Omegle IP Puller
+Chromegle - Omegle IP Puller & Dark Mode
 ==================
 A Javascript Chrome (and Opera) Extension for Omegle, certified for Chrome 88 and above. 
 
