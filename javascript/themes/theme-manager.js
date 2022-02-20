@@ -121,7 +121,7 @@ class ThemeManager {
         #overrideHomePageText() {
             $("#mobilesitenote").get(0).innerHTML =
                 "Thanks for using Chromegle! Like what we've got? " +
-                "<a href='https://www.isaackogan.com'>Check out the developer</a> " +
+                "<a target='_blank' href='https://www.isaackogan.com'>Check out the developer</a> " +
                 "for more :)";
         }
 
