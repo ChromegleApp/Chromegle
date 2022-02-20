@@ -50,10 +50,7 @@ const ChatRegistry = {
 
             // FAIL STUFF
             if (mutationRecord.target["innerText"] != null) {
-                if (
-                    mutationRecord.target["innerText"].includes("Error connecting to server")
-                    || mutationRecord.target["innerText"].includes("Server was unreachable for too long")
-                ) {
+                if (mutationRecord.target["innerText"].includes("Server was unreachable for too long")) {
                     Logger.ERROR("Chat failed to connect, you are likely using a VPN or proxy which Omegle has detected and blocked.")
                     document.dispatchEvent(new CustomEvent('chatFailedConnect', {detail: mutationRecord.target}));
                     ChatRegistry.setChatting(false);

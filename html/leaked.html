@@ -1,0 +1,50 @@
+<div class="modal micromodal-slide" id="modal-3" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+            <header class="modal__header noselect">
+                <h2 class="modal__title" id="modal-1-title"><span style="font-family: nce, sans-serif">⚠️</span> Chromegle: IP Leak Warning</h2>
+                <span class="modal__close noselect" aria-label="Close modal" data-micromodal-close></span>
+            </header>
+            <main style="margin-top: 2rem; line-height: 1.5;" id="modal-1-content">
+                <div class="settingsCollapsableItem" style="display: flex; flex-direction: column; border-radius: 10px;">
+                    <h3>Your real IP Address is showing!</h3>
+                    <p style="margin-top: -7px; font-size: 12px;">
+                        Hey stranger, your real IP address has been leaked and is being detected by Omegle.
+                        <br/><br/>
+                        <strong style="font-size: 15px;">VPN Address:</strong> <span id="modal__fake_address">N/A</span>
+                        <br/>
+                        <strong style="font-size: 15px;">Real Address:</strong> <span id="modal__real__address">N/A</span>
+
+                    </p>
+                    <h3 style="width: 100%; font-size: 15px; margin-top: -2px;">Why should I care?</h3>
+                    <p style="margin-top: -7px; font-size: 12px;">
+                        Omegle abuses a vulnerability in browsers known as the
+                        <span style="color: rgba(49,166,231,255); cursor: pointer;" onclick="window.open('https://surfshark.com/webrtc-leak-test')">WebRTC Leak</span>
+                        to detect your real IP address when you are on a VPN and are using your microphone/webcam.
+                        <br/><br/>
+                        This issue only happens with <strong>poor quality</strong> VPN providers that "pretend" to be a VPN while only sending your HTTP traffic
+                        through proxies (browser extension VPNs).
+                        <br/><br/>
+                        The VPN you are using currently is <strong>vulnerable</strong> to the WebRTC leak, and Omegle can tell you are on a VPN. Because of this, they
+                        <strong>more than likely</strong> will block you from being able to connect to video chats on Omegle.
+                    </p>
+                    <h3 style="width: 100%; font-size: 15px; margin-top: -4px;">What should I do?</h3>
+                    <p style="margin-top: -7px; font-size: 12px;">
+                        Change VPN providers. In the interest of remaining a neutral party, Chromegle will not suggest a specific provider to use.
+                        <br/><br/>
+                        We have instead compiled <span style="color: rgba(49,166,231,255); cursor: pointer;" onclick="window.open('https://docs.google.com/spreadsheets/d/14FF7GixHgU3byH4FSEuA_SW8q6oNXUet6H61ErMT0P4/edit?usp=sharing')">a definitive list</span> of providers both vulnerable and not vulnerable to this issue.
+                        This uses third-party data and may be outdated, so please only use it as an advisory when testing your own VPNs against this issue.
+                        <br/><br/>
+                        When you switch VPNs, to check if you have fixed the issue reload Omegle and start a video chat.
+                        If this menu doesn't show up anymore, you're good to go!
+                        <br/><br/>
+                        Finally, <strong>DO NOT disable WebRTC.</strong> The goal is for your VPN to "leak" your fake IP address. If it doesn't
+                        leak <i>any</i> address (i.e if it detects you trying to protect yourself), Omegle will block you anyways.
+                    </p>
+                    <span id="modal__disable__check"></span>
+
+                </div>
+            </main>
+        </div>
+    </div>
+</div>

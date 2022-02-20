@@ -37,9 +37,9 @@ const FilterManager = {
         document.addEventListener(
             "pageStarted",
             () => {
-                FilterManager.loadFilterFromFile('/javascript/automation/web-filtering/profanity.txt', "profanity")
+                FilterManager.loadFilterFromFile('/javascript/modules/web-filtering/profanity.txt', "profanity")
                     .then(() => {
-                        FilterManager.loadFilterFromFile('/javascript/automation/web-filtering/sexual.txt', "sexual")
+                        FilterManager.loadFilterFromFile('/javascript/modules/web-filtering/sexual.txt', "sexual")
                             .then(() => {
                                 FilterManager.updateFilteredWords();
                             });

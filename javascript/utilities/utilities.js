@@ -28,3 +28,10 @@ async function sha1(message) {
     // convert bytes to hex string
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
+
+function isPrivateAddress(ip) {
+    let parts = ip.split('.');
+    return parts[0] === '10' ||
+        (parts[0] === '172' && (parseInt(parts[1], 10) >= 16 && parseInt(parts[1], 10) <= 31)) ||
+        (parts[0] === '192' && parts[1] === '168');
+}

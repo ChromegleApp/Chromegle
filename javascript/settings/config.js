@@ -184,7 +184,7 @@ const config = {
     "geoLocateToggle": new ToggleEdit({
         "elementName": "geoLocateToggle",
         "storageName": "GEOGRAPHIC_LOCATE_TOGGLE",
-        "default": "true"
+        "default": "false"
     }),
     "sexualFilterToggle": new ToggleEdit({
         "elementName": "sexualFilterToggle",
@@ -254,7 +254,13 @@ const config = {
         "elementName": "muteButtonToggle",
         "storageName": "MUTE_BUTTON_TOGGLE",
         "default": "false"
+    }),
+    "webrtcleakWarningToggle": new ToggleEdit({
+        "elementName": "webrtcleakWarningToggle",
+        "storageName": "WEBRTC_LEAK_WARNING_TOGGLE",
+        "default": "true"
     })
+
 }
 
 
@@ -281,7 +287,6 @@ const ConfigManager = {
          * Update Changed Values
          */
         document.addEventListener("storageSettingsUpdate", (event) => ConfigManager._storageSettingsUpdate(event));
-
 
         /**
          * Load Initial Values

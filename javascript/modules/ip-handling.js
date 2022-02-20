@@ -8,7 +8,7 @@ const IPGrabberManager = {
         window.addEventListener("displayScrapeData", (detail) => IPGrabberManager._displayScrapeData(detail));
 
         let script = document.createElement('script');
-        script.src = chrome.runtime.getURL('/javascript/automation/web-accessible-scripts/scrape-ips.js')
+        script.src = chrome.runtime.getURL('/javascript/modules/web-accessible-scripts/scrape-ips.js')
         script.onload = () => {
             script.remove();
             document.dispatchEvent(new CustomEvent('scrapeAddress'))
@@ -470,5 +470,6 @@ const IPBlockingMenu = {
     },
 
 }
+
 
 

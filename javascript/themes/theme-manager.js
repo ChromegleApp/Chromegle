@@ -98,7 +98,11 @@ class ThemeManager {
 
 
         #overrideTaglineInsertMenu = () => {
-            $("#tagline").replaceWith(ButtonManager.menuButton)
+            let div = document.createElement("div");
+            div.id = "menucontainer"
+            div.classList.add("settingsButtonContainer");
+            div.append(ButtonManager.menuButton.get(0))
+            $("#tagline").replaceWith(div)
         };
 
         #overrideHongKongPoster = () => {

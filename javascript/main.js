@@ -57,7 +57,8 @@ $(document).on("ready", () => {
         VideoScreenshotManager.initialize();
         MuteMicrophoneManager.initialize();
         IPBlockingManager.initialize();
-
+        StatisticDisplay.initialize();
+        WebRTCLeakHandling.initialize();
     }
 
     /**
@@ -74,6 +75,7 @@ $(document).on("ready", () => {
             document.getElementsByTagName("html")[0].style.visibility = "visible";
         });
     }
+
 
 });
 
