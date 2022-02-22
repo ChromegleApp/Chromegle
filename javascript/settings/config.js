@@ -181,11 +181,6 @@ const config = {
         "storageName": "IP_GRAB_TOGGLE",
         "default": "false"
     }),
-    "geoLocateToggle": new ToggleEdit({
-        "elementName": "geoLocateToggle",
-        "storageName": "GEOGRAPHIC_LOCATE_TOGGLE",
-        "default": "false"
-    }),
     "sexualFilterToggle": new ToggleEdit({
         "elementName": "sexualFilterToggle",
         "storageName": "SEXUAL_FILTER_TOGGLE",
@@ -259,7 +254,15 @@ const config = {
         "elementName": "webrtcleakWarningToggle",
         "storageName": "WEBRTC_LEAK_WARNING_TOGGLE",
         "default": "true"
-    })
+    }),
+    "voiceCommandToggle": new ToggleEdit({
+        "elementName": "voiceCommandToggle",
+        "storageName": "VOICE_COMMAND_TOGGLE",
+        "default": "false"
+    }),
+    "voiceCommandInfo": new ExternalField({
+        "external": SpeechMenu.loadMenu
+    }),
 
 }
 

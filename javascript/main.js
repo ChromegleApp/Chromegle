@@ -59,6 +59,7 @@ $(document).on("ready", () => {
         IPBlockingManager.initialize();
         StatisticDisplay.initialize();
         WebRTCLeakHandling.initialize();
+        SpeechEngineManager.initialize();
     }
 
     /**

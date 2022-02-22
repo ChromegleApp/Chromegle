@@ -293,3 +293,9 @@ html {
     cursor: pointer;
     margin: 10px auto 25px;
 }
+
+code {
+    padding: 3px;
+    color: white;
+    border-radius: 4px;
+}

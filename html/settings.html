@@ -76,6 +76,17 @@
                             <table class="settingsTable">
                                 <tr>
                                     <th class="tableItemLabel">
+                                        <div class="tooltip">Voice Commands <span class="tableItemSubLabel">(Beta Version)</span>
+                                            <span class="tooltiptext">Do simple actions like send messages, skip and start chats with your voice!</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="voiceCommandToggle">Enable</button>
+                                        <button class="editFieldButton editFieldButtonGray" id="voiceCommandInfo">More Info</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
                                         <div class="tooltip">Auto-Skip
                                             <span class="tooltiptext">Skip to the next chat after a configurable number of seconds has passed.</span>
                                         </div>
@@ -95,19 +106,11 @@
                                 </tr>
                                 <tr>
                                     <th class="tableItemLabel">
-                                        <div class="tooltip">IP Grabbing <span class="tableItemSubLabel">(Video Only)</span>
+                                        <div class="tooltip">IP Grab & Geolocate <span class="tableItemSubLabel">(Video Only)</span>
                                             <span class="tooltiptext">Display the IP address of the person you are chatting with <strong>when in video mode.</strong></span>
                                         </div>
                                     </th>
                                     <th><button class="editFieldButton editToggleDisabled" id="ipGrabToggle">Enable</button></th>
-                                </tr>
-                                <tr>
-                                    <th class="tableItemLabel">
-                                        <div class="tooltip">IP Geolocation <span class="tableItemSubLabel">(Video Only)</span>
-                                            <span class="tooltiptext">Display the location of the person you are chatting with <strong>when in video mode.</strong></span>
-                                        </div>
-                                    </th>
-                                    <th><button class="editFieldButton editToggleDisabled" id="geoLocateToggle">Enable</button></th>
                                 </tr>
                                 <tr>
                                     <th class="tableItemLabel">

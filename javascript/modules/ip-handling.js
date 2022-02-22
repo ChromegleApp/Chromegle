@@ -28,7 +28,6 @@ const IPGrabberManager = {
 
         let scrapeQuery = {}
         scrapeQuery[config.ipGrabToggle.getName()] = config.ipGrabToggle.getDefault();
-        scrapeQuery[config.geoLocateToggle.getName()] = config.geoLocateToggle.getDefault();
 
         chrome.storage.sync.get(scrapeQuery, (result) => {
             sha1(detail["detail"]).then((hashedAddress) => {
@@ -60,7 +59,7 @@ const IPGrabberManager = {
                             hashedAddress,
                             previousHashedAddresses,
                             result[config.ipGrabToggle.getName()] === "true",
-                            result[config.geoLocateToggle.getName()] === "true",
+                            true,
                             seenTimes
                         );
                     });
@@ -119,8 +118,8 @@ const IPGrabberManager = {
 
     },
 
-    failedGeolocation(message) {
-        VideoFilterManager.sendErrorMessage(message || "Geolocation failed, please contact us through our Discord on the home page!")
+    failedGeolocation(_) {
+        VideoFilterManager.sendErrorMessage("Geolocation timed out, try again later or contact us through our discord on the home page!")
     },
 
     geoMappings: {

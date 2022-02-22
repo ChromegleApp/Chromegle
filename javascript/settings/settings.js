@@ -11,7 +11,8 @@ let ConstantValues = {
             "Tip: Taking advice from a Chrome extension is probably a bad idea.",
             "How much could a wood chuck chuck if a wood chuck could chuck wood?",
             `Did you know we're open sourced? You <a target='_blank' href="${ConstantValues.githubURL}">can see every line</a> of code for this app online, free!`,
-            "\"Sometimes when I close my eyes, I can't see\" - Chromegle Community"
+            "\"Sometimes when I close my eyes, I can't see\" - Chromegle Community",
+            "I do not think, therefore I do not am."
         ]
 
         return helpfulTips[[Math.floor(Math.random() * helpfulTips.length)]]

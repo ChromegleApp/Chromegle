@@ -13,6 +13,7 @@ const AutoSkipManager = {
     },
 
     _cancelSkip() {
+        if (!ChatRegistry.isChatting()) return;
         AutoSkipManager.doSkip = false;
         $(`#${ChatRegistry.getUUID()}-logitem`).get(0).innerHTML = "<p class=statuslog>Canceled auto-skip until your next conversation, enjoy the rest of your chat.</p>";
     },
@@ -104,6 +105,20 @@ const AutoSkipManager = {
             $(".disconnectbtn")
                 .trigger("click")
                 .trigger("click");
+        } else {
+            tries = tries == null ? 0 : tries;
+            if (tries < 3) {
+                setTimeout(() => {
+                    AutoSkipManager.skipIfPossible(tries++);
+                }, 10);
+            }
+        }
+    },
+
+    startIfPossible(tries) {
+        if (($(".chatmsg").get(0).classList.contains("disabled"))) {
+            $(".disconnectbtn")
+                .trigger("click")
         } else {
             tries = tries == null ? 0 : tries;
             if (tries < 3) {
