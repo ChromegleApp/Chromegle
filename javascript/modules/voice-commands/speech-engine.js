@@ -1,5 +1,6 @@
 class ChromegleSpeechEngine {
 
+    #engineSupported;
     #engine;
     #wakeWords;
     #engineActive;
@@ -8,23 +9,46 @@ class ChromegleSpeechEngine {
     constructor(wakeWords, commandEventName) {
         this.#wakeWords = wakeWords;
         this.#commandEventName = commandEventName;
-        this.#buildEngine();
+        this.#engineSupported = this.#buildEngine();
     }
 
     #buildEngine() {
-        // noinspection JSUnresolvedFunction
-        this.#engine = new webkitSpeechRecognition();
+        try {
+            // noinspection JSUnresolvedVariable
+            this.#engine =  new (window.webkitSpeechRecognition || window.speechRecognition || window.SpeechRecognition);
+        } catch (ex) {
+
+        }
+
+        if (!this.#engine) {
+            return false;
+        }
+
+
         this.#engine.continuous = true;
         this.#engine.interimResults = false;
         this.#engine.lang = "en-US";
         this.#engine.onstart = () => ChromegleSpeechEngine.#onStart(this);
         this.#engine.onend = () => ChromegleSpeechEngine.#onEnd(this);
         this.#engine.onresult = (event) => ChromegleSpeechEngine.#onResult(this, event);
+
+        return true;
     }
 
     start() {
+
+        if (!this.#engineSupported) {
+            setTimeout(() => {
+                alert("Voice Commands are NOT supported on your browser, please disable the setting or use a supported browser.")
+                Logger.ERROR("This browser does NOT support the speech engine and Voice Commands should be disabled in Chromegle's settings.");
+            }, 150);
+            return;
+        }
+
         if (!this.#engineActive) {
-            Logger.INFO("Started Chromegle Speech Engine");
+            navigator.mediaDevices.getUserMedia({audio: true })
+                .then(() => Logger.INFO("Microphone permission enabled, started Chromegle Speech Engine"))
+                .catch(() => Logger.ERROR("Microphone permission rejected, Chromegle Speech Engine will not work"));
         }
 
         this.#engineActive = true;
@@ -32,6 +56,10 @@ class ChromegleSpeechEngine {
     }
 
     stop() {
+        if (!this.#engineSupported) {
+            return;
+        }
+
         Logger.INFO("Stopped Chromegle Speech Engine");
         this.#engineActive = false;
         this.#engine.stop();

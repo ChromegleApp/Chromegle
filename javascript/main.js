@@ -38,28 +38,39 @@ $(document).on("ready", () => {
      * General Start-Up
      */
     {
-
-        ConfigManager.initialize();
         settingsManager = new SettingsManager();
-        TopicSyncManager.initialize();
-        ChatRegistry.initialize();
-        PasteMenu.initialize();
-        ChatManager.initialize();
-        FilterManager.initialize();
-        ConfirmManager.initialize();
-        GreetingManager.initialize();
-        ReconnectManager.initialize();
-        AutoSkipManager.initialize();
-        VideoFilterManager.initialize();
-        IPGrabberManager.initialize();
-        UnmoderatedChatManager.initialize();
-        VideoBlockerManager.initialize();
-        VideoScreenshotManager.initialize();
-        MuteMicrophoneManager.initialize();
-        IPBlockingManager.initialize();
-        StatisticDisplay.initialize();
-        WebRTCLeakHandling.initialize();
-        SpeechEngineManager.initialize();
+
+        [
+            ConfigManager,
+            TopicSyncManager,
+            ChatRegistry,
+            PasteMenu,
+            ChatManager,
+            FilterManager,
+            ConfirmManager,
+            GreetingManager,
+            ReconnectManager,
+            AutoSkipManager,
+            VideoFilterManager,
+            IPGrabberManager,
+            UnmoderatedChatManager,
+            VideoBlockerManager,
+            VideoScreenshotManager,
+            MuteMicrophoneManager,
+            IPBlockingManager,
+            StatisticDisplay,
+            WebRTCLeakHandling,
+            SpeechEngineManager
+        ].forEach((manager) => {
+            try {
+                manager.initialize();
+            } catch (ex) {
+                Logger.ERROR("A module failed to initialize, stack-trace below:");
+                console.log(ex);
+            }
+        })
+
+
     }
 
     /**

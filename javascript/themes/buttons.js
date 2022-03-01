@@ -30,7 +30,7 @@ const ButtonManager = {
 
         }),
 
-    disableWebRTCCheckButton: $("<span class='noselect disableCheckButton'>Stop Showing This Menu</span>").on("click", () => {
+    disableWebRTCCheckButton: $("<span class='noselect disableCheckButton'>Disable Leak Warnings</span>").on("click", () => {
         config.webrtcleakWarningToggle.updateValue({"confirm": "true", "value": "false"});
         WebRTCLeakHandling.popup.destroy();
     }),
