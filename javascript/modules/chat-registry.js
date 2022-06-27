@@ -5,9 +5,11 @@ const ChatRegistry = {
     chatPageEnabled: false,
     chatUUID: undefined,
     videoChatEnabled: undefined,
+    videoChatLoaded: false,
 
     pageStarted: () => ChatRegistry.chatPageEnabled,
     isChatting: () => ChatRegistry.currentlyChatting,
+    setVideoChatLoaded: (status) => ChatRegistry.videoChatLoaded = status,
     setChatting: (status) => ChatRegistry.currentlyChatting = status,
     isVideoChat: () => ChatRegistry.videoChatEnabled,
     setVideoChat: (status) => ChatRegistry.videoChatEnabled = status,
@@ -44,6 +46,7 @@ const ChatRegistry = {
                 let spinner = $(mutationRecord.target);
                 if (spinner.get(0).style.display === "none" && ChatRegistry.isChatting()) {
                     document.dispatchEvent(new CustomEvent("videoChatLoaded"));
+                    ChatRegistry.setVideoChatLoaded(true);
                 }
                 continue;
             }
@@ -80,6 +83,7 @@ const ChatRegistry = {
 
             if (!ChatRegistry.isChatting() && !containsDisabled) {
                 ChatRegistry.setChatting(true);
+                ChatRegistry.setVideoChatLoaded(false);
                 ChatRegistry.setUUID();
                 Logger.INFO("Chat Started: UUID <%s>", ChatRegistry.getUUID());
                 document.dispatchEvent(

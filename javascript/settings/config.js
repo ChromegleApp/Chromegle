@@ -7,7 +7,7 @@ const config = {
         "min": 0,
         "max": 15,
         "check": (_response) => {
-            const checker = arr => arr.every(v => v=== null);
+            const checker = arr => arr.every(v => v === null);
 
             if (_response == null || _response === "null" || (_response != null && checker(_response))) {
                 return {
@@ -37,8 +37,7 @@ const config = {
                     "confirm": "false",
                     "value": null
                 };
-            }
-            else if (response > 1000) {
+            } else if (response > 1000) {
                 return {
                     "confirm": "true",
                     "value": 1000
@@ -78,8 +77,7 @@ const config = {
                     "confirm": "false",
                     "value": null
                 };
-            }
-            else if (response > 30) {
+            } else if (response > 30) {
                 return {
                     "confirm": "true",
                     "value": 30
@@ -109,8 +107,7 @@ const config = {
                     "confirm": "false",
                     "value": null
                 };
-            }
-            else if (response > 30) {
+            } else if (response > 30) {
                 return {
                     "confirm": "true",
                     "value": 30
@@ -140,8 +137,7 @@ const config = {
                     "confirm": "false",
                     "value": null
                 };
-            }
-            else if (response > 1000) {
+            } else if (response > 1000) {
                 return {
                     "confirm": "true",
                     "value": 1000
@@ -169,6 +165,55 @@ const config = {
                 "eventually result in an Omegle ban. Use this feature responsibly with a VPN if you plan to combine the two. We are not responsible for " +
                 "any stupid things you do, nor will we cater to spam of Omegle's platform.",
             "state": "true"
+        }
+    }),
+    "countrySkipToggle": new ToggleEdit({
+        "elementName": "countrySkipToggle",
+        "storageName": "COUNTRY_SKIP_TOGGLE",
+        "default": "false",
+        "warning": {
+            "message": "This feature may get you banned for spam-skipping. By enabling it you agree you are aware of the risk of being banned for mass-skipping"
+                + "users from a given country/set of countries.",
+            "state": "true"
+        }
+    }),
+    "countrySkipInfo": new FieldEdit({
+        "storageName": "COUNTRY_SKIP_FIELD",
+        "prompt": "Enter the countries you wish to skip as country codes, separated by commas. " +
+            "These can be 2 or 3 letter codes.\n\nVisit https://www.iban.com/country-codes for the full, up-to-date list of available country codes.",
+        "default": "IN,VA",
+        "check": (response) => {
+
+            // Accept all no-values
+            if (response !== "") {
+
+                // Check alphabetical
+                if (response == null || (!response.match(/^[a-zA-Z,]+$/))) {
+                    return {
+                        "confirm": "false",
+                        "value": ""
+                    };
+                }
+
+                let split = new Set();
+                for (let code of response.split(",")) {
+                    if (code.length < 2 || code.length > 3) {
+                        return {
+                            "confirm": "false",
+                            "value": ""
+                        };
+                    } else {
+                        split.add(code.toUpperCase());
+                    }
+                }
+                response = [...split].join(",")
+
+            }
+
+            return {
+                "confirm": "true",
+                "value": response
+            };
         }
     }),
     "autoReconnectToggle": new ToggleEdit({
@@ -221,6 +266,11 @@ const config = {
         "elementName": "screenshotButtonToggle",
         "storageName": "SCREENSHOT_BUTTON_TOGGLE",
         "default": "false"
+    }),
+    "fullscreenButtonToggle": new ToggleEdit({
+        "elementName": "fullscreenButtonToggle",
+        "storageName": "FULLSCREEN_BUTTON_TOGGLE",
+        "default": "true"
     }),
     "sexualVideoFilterToggle": new ToggleEdit({
         "elementName": "sexualVideoFilterToggle",

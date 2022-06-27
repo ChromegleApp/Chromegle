@@ -17,7 +17,7 @@ const IPGrabberManager = {
 
     },
 
-    getFlagEmoji: countryCode=>String.fromCodePoint(...[...countryCode.toUpperCase()].map(x=>0x1f1a5+x.charCodeAt())),
+    getFlagEmoji: countryCode => String.fromCodePoint(...[...countryCode.toUpperCase()].map(x => 0x1f1a5 + x.charCodeAt())),
 
     _displayScrapeData(detail) {
 
@@ -175,6 +175,18 @@ const IPGrabberManager = {
             const geoData = payload["payload"]
             const geoDataKeys = Object.keys(geoData);
 
+            // Skip blocked countries
+            if (config.countrySkipToggle.getLocalValue() && (geoDataKeys.includes("country_code") || geoDataKeys.includes("country_code3"))) {
+                let code = geoData["country_code"] || geoData["country_code3"]
+                if (config.countrySkipInfo.getLocalValue().toUpperCase().includes(code)) {
+                    AutoSkipManager.skipIfPossible();
+                    Logger.INFO("Detected user from blocked country in chat with UUID <%s>, skipped.", ChatRegistry.getUUID());
+                    VideoFilterManager.sendErrorMessage(`Detected user from blocked country ${geoData["country"]} (${code}), skipped chat.`);
+                }
+
+            }
+
+
             Logger.DEBUG(
                 "Received IP Scraping data for chat UUID <%s> from the Chromegle web-server as the following JSON payload: \n\n%s",
                 ChatRegistry.getUUID(),
@@ -197,7 +209,7 @@ const IPGrabberManager = {
             }
 
             // Iterate through the JSON data received from the API, map the strings
-            geoDataKeys.forEach(function(key) {
+            geoDataKeys.forEach(function (key) {
                 const entry = geoData[key];
                 if (mappingKeys.includes(key) && !((entry == null) || entry === ''))
                     IPGrabberManager.ipGrabberDiv.appendChild(
@@ -221,6 +233,14 @@ const IPGrabberManager = {
                 $("#country_data").get(0).appendChild(countrySpan);
             }
 
+            // Hardcoded -> If there is a language, add that
+            if (geoDataKeys.includes("language") && geoDataKeys.includes("country_code")) {
+                IPGrabberManager.ipGrabberDiv.appendChild(
+                    IPGrabberManager.createLogBoxMessage(
+                        "Language(s): ", geoData["language"].join(", "), "language_data")
+                );
+            }
+
             // Hardcoded -> Local time
             if (geoDataKeys.includes("timezone")) {
                 const element_id = "local_time_data"
@@ -237,6 +257,16 @@ const IPGrabberManager = {
                     IPGrabberManager.updateTimeLoop(ChatRegistry.getUUID(), geoData["timezone"], element_id)
                 }, 5);
 
+            }
+
+            // Hardcoded -> Are they a Chromegler?
+            if (geoData["chromegler"]) {
+                const logItemDiv = document.createElement("div")
+                logItemDiv.classList.add("logitem");
+                logItemDiv.appendChild(
+                    $(`<span class='statuslog' style="color: rgb(32, 143, 254);">This person is also using Chromegle, right now!</span>`).get(0)
+                );
+                document.getElementsByClassName("logitem")[0].parentNode.appendChild(logItemDiv);
             }
 
         }
@@ -411,7 +441,7 @@ const IPBlockingMenu = {
     },
 
     _buildEmptyTable(result, ipListTable) {
-        for (let i=0; i < result.length; i++) {
+        for (let i = 0; i < result.length; i++) {
 
             ipListTable.get(0).appendChild($(`
                 <tr>

@@ -1,27 +1,55 @@
-/**
- * Statistics Tracking
- *
- * Events Tracked:
- *  - Chat Start
- *  - Chat End
- *  - Omegle Open
- *
- *  NO Identifiable data is saved (IP, Location, etc) by the remote server.
- *  See the API receiving these requests at https://github.com/ChromegleApp/ChromegleAPI
- *  Everything is open source so you know how your data is being handled.
- */
-{
-    function sendStatistic(action) {
+const StatTrackManager = {
+
+    queue: [],
+
+    queueStat(action) {
+        StatTrackManager.queue.push([action, Math.floor(Date.now() / 1000)]);
+    },
+
+    initialize() {
+        StatTrackManager.queueStat("omegleOpened");
+        document.addEventListener("chatStarted", () => StatTrackManager.queueStat("chatStarted"));
+        document.addEventListener("chatEnded", () => StatTrackManager.queueStat("chatEnded"));
+        window.addEventListener("beforeunload", () => StatTrackManager.sendStats(true));
+        setTimeout(() => StatTrackManager.statLoop(), 1000);
+    },
+
+    statLoop() {
+
+        if (StatTrackManager.queue.length > 0) {
+            StatTrackManager.sendStats();
+        }
+
+        setTimeout(StatTrackManager.statLoop, 30000);
+    },
+
+    sendStats(beacon = false) {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', `${ConstantValues.apiURL}/chromegle/stats?action=${action}`);
-        xhr.send();
+        let stats = JSON.stringify({"stats": StatTrackManager.queue, "beacon": beacon});
+
+        if (beacon) {
+            navigator.sendBeacon(`${ConstantValues.apiURL}/chromegle/stats/bulk`, new Blob([JSON.stringify(stats)], {type: 'text/plain'}))
+            StatTrackManager.queue = [];
+            return;
+        }
+
+        // Send Stats
+        xhr.open('POST', `${ConstantValues.apiURL}/chromegle/stats/bulk`);
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(stats);
+
+        // Clear queue if sent successfully
+        xhr.onreadystatechange = () => {
+            if (xhr == null || !(xhr.readyState === 4)) return;
+            if (xhr.status === 200) {
+                StatTrackManager.queue = [];
+            }
+        }
     }
 
-    $(document).on("ready", () => sendStatistic("omegleOpened"));
-    document.addEventListener("chatStarted", () => sendStatistic("chatStarted"));
-    document.addEventListener("chatEnded", () => sendStatistic("chatEnded"))
-
 }
+
 
 const StatisticDisplay = {
 

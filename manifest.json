@@ -28,6 +28,8 @@
         "javascript/themes/theme-registry.js",
         "javascript/themes/buttons.js",
 
+        "javascript/modules/fullscreen-video.js",
+
         "javascript/modules/block-nsfw.js",
         "javascript/modules/chat-registry.js",
         "javascript/modules/chat-manager.js",
@@ -48,7 +50,7 @@
 
         "javascript/modules/voice-commands/speech-engine.js",
         "javascript/modules/voice-commands/intent-handlers.js",
-
+        "javascript/modules/find-users.js",
 
         "javascript/settings/menu.js",
         "javascript/settings/settings.js",

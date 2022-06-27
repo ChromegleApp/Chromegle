@@ -21,12 +21,17 @@ class ThemeManager {
 
     loadCurrentTheme(initialize = true) {
 
-        if (initialize) {
-            this.OverrideManager.initialize();
-        }
+        try {
+            if (initialize) {
+                this.OverrideManager.initialize();
+            }
 
-        this.#stylesheet.href = chrome.runtime.getURL(this.#currentResourcePath)
-        this.#stylesheet.id = "customStylesheet";
+            this.#stylesheet.href = chrome.runtime.getURL(this.#currentResourcePath)
+            this.#stylesheet.id = "customStylesheet";
+        } catch (ex) {
+            Logger.ERROR("The theme manager has failed, stack-trace below:");
+            console.log(ex);
+        }
     }
 
     toggleHeaderButton = (headerEnabled) => {

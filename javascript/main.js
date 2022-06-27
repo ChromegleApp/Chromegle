@@ -60,7 +60,10 @@ $(document).on("ready", () => {
             IPBlockingManager,
             StatisticDisplay,
             WebRTCLeakHandling,
-            SpeechEngineManager
+            SpeechEngineManager,
+            FindChromegleUsers,
+            FullScreenVideoManager,
+            StatTrackManager
         ].forEach((manager) => {
             try {
                 manager.initialize();
@@ -87,7 +90,6 @@ $(document).on("ready", () => {
             document.getElementsByTagName("html")[0].style.visibility = "visible";
         });
     }
-
 
 });
 

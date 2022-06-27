@@ -9,7 +9,7 @@ const AutoSkipManager = {
     },
 
     _skipLabelString(secondsLeft) {
-      return `Auto-skip is enabled. Skipping in ${secondsLeft} second${secondsLeft > 1 ? 's' : ''} from now unless you `;
+        return `Auto-skip is enabled. Skipping in ${secondsLeft} second${secondsLeft > 1 ? 's' : ''} from now unless you `;
     },
 
     _cancelSkip() {
@@ -40,7 +40,7 @@ const AutoSkipManager = {
                 logItem.append(afterText.get(0));
                 innerLogBox.appendChild(logItem);
 
-                setTimeout(() => AutoSkipManager._skipLoop(skipSeconds, uuid),  0);
+                setTimeout(() => AutoSkipManager._skipLoop(skipSeconds, uuid), 0);
 
             }
 
@@ -64,7 +64,7 @@ const AutoSkipManager = {
 
         AutoSkipManager.skipMenu.innerHTML = AutoSkipManager._skipLabelString(secondsLeft);
         secondsLeft -= 1;
-        setTimeout(() => AutoSkipManager._skipLoop(secondsLeft, uuid),  1000);
+        setTimeout(() => AutoSkipManager._skipLoop(secondsLeft, uuid), 1000);
     },
 
     /**
