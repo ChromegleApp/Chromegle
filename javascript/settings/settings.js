@@ -1,7 +1,7 @@
 let ConstantValues = {
-    discordURL: "https://discord.gg/KDqHBrZ2Yn",
-    githubURL: "https://github.com/ChromegleApp/Chromegle",
-    apiURL: "https://chromegle.isaackogan.com",
+    discordURL: "https://chromegle.net/discord",
+    githubURL: "https://chromegle.net/github",
+    apiURL: "https://api.chromegle.net",
 
     getHelpfulTip: () => {
         const helpfulTips = [
@@ -109,6 +109,7 @@ class MutableField {
         return this.#default;
 
     }
+
     getName() {
         return this.#storageName
     }
@@ -205,32 +206,32 @@ class ToggleEdit extends MutableField {
         let newResult;
         request[name] = this.getDefault();
         chrome.storage.sync.get(request, (result) => {
-           if (noChange) {
-               newResult = result[name];
+            if (noChange) {
+                newResult = result[name];
 
-               document.dispatchEvent(new CustomEvent("ToggleModify", {
-                   detail: {
-                       "element": this.#elementName,
-                       "value": newResult,
-                       "change": !noChange
-                   }
-               }));
+                document.dispatchEvent(new CustomEvent("ToggleModify", {
+                    detail: {
+                        "element": this.#elementName,
+                        "value": newResult,
+                        "change": !noChange
+                    }
+                }));
 
-           } else {
-               newResult = result[name] === "true" ? "false" : "true";
-               let storageResult = this.updateValue({"confirm": "true", "value": newResult});
+            } else {
+                newResult = result[name] === "true" ? "false" : "true";
+                let storageResult = this.updateValue({"confirm": "true", "value": newResult});
 
-               if (storageResult) {
+                if (storageResult) {
 
-                   document.dispatchEvent(new CustomEvent("ToggleModify", {
-                       detail: {
-                           "element": this.#elementName,
-                           "value": newResult,
-                           "change": !noChange
-                       }
-                   }));
-               }
-           }
+                    document.dispatchEvent(new CustomEvent("ToggleModify", {
+                        detail: {
+                            "element": this.#elementName,
+                            "value": newResult,
+                            "change": !noChange
+                        }
+                    }));
+                }
+            }
 
         });
     }

@@ -12,7 +12,7 @@ $(document).on("ready", () => {
         // Porn-redirect screen
         // noinspection HttpUrlsUsage
         if (window.location.href.includes("banredir.html") || window.location.href === "http://omegle.com/static/ban.html") {
-            window.location.href = "https://omegle.com/static/ban.html";
+            window.location.href = "https://chromegle.net/banned";
         }
 
         // Static HTML ban screen
@@ -61,7 +61,6 @@ $(document).on("ready", () => {
             StatisticDisplay,
             WebRTCLeakHandling,
             SpeechEngineManager,
-            FindChromegleUsers,
             FullScreenVideoManager,
             StatTrackManager
         ].forEach((manager) => {
