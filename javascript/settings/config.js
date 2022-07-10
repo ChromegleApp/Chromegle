@@ -181,7 +181,7 @@ const config = {
         "storageName": "COUNTRY_SKIP_FIELD",
         "prompt": "Enter the countries you wish to skip as country codes, separated by commas. " +
             "These can be 2 or 3 letter codes.\n\nVisit https://www.iban.com/country-codes for the full, up-to-date list of available country codes.",
-        "default": "IN,VA",
+        "default": "KP,VA",
         "check": (response) => {
 
             // Accept all no-values

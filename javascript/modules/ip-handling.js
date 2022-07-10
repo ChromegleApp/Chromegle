@@ -179,7 +179,9 @@ const IPGrabberManager = {
             if (config.countrySkipToggle.getLocalValue() && (geoDataKeys.includes("country_code") || geoDataKeys.includes("country_code3"))) {
                 let code = geoData["country_code"] || geoData["country_code3"]
                 if (config.countrySkipInfo.getLocalValue().toUpperCase().includes(code)) {
-                    AutoSkipManager.skipIfPossible();
+                    setTimeout(() => {
+                        AutoSkipManager.skipIfPossible();
+                    }, Math.floor(Math.random() * 1000) + 50)
                     Logger.INFO("Detected user from blocked country in chat with UUID <%s>, skipped.", ChatRegistry.getUUID());
                     VideoFilterManager.sendErrorMessage(`Detected user from blocked country ${geoData["country"]} (${code}), skipped chat.`);
                 }

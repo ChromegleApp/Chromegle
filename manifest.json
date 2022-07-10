@@ -2,7 +2,7 @@
   "name": "Chromegle - Omegle IP Puller & Dark Mode",
   "description": "Elevate your Omegle experience with an integrated IP puller, custom themes, nsfw-blocker and other general improvements.",
   "author": "Isaac Kogan",
-  "homepage_url": "https://github.com/isaackogan",
+  "homepage_url": "https://chromegle.net",
   "manifest_version": 3,
   "version": "4.0",
   "icons": {
