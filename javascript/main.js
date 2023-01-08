@@ -9,18 +9,13 @@ $(document).on("ready", () => {
      * Banned Pages
      */
     {
-        // Porn-redirect screen
         // noinspection HttpUrlsUsage
-        if (window.location.href.includes("banredir.html") || window.location.href === "http://omegle.com/static/ban.html") {
-            window.location.href = "https://chromegle.net/banned";
-        }
-
-        // Static HTML ban screen
-        if (window.location.href.includes("ban.html")) {
+        if (window.location.href.includes("banredir.html") || window.location.href === "http://omegle.com/static/ban.html" || window.location.href.includes("ban.html")) {
             $("html")
                 .load(chrome.runtime.getURL("/resources/html/banned.html"))
                 .css("background-color", "#17191a");
         }
+
     }
 
     /**
