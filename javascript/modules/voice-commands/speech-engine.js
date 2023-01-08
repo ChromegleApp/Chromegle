@@ -15,7 +15,7 @@ class ChromegleSpeechEngine {
     #buildEngine() {
         try {
             // noinspection JSUnresolvedVariable
-            this.#engine =  new (window.webkitSpeechRecognition || window.speechRecognition || window.SpeechRecognition);
+            this.#engine = new (window.webkitSpeechRecognition || window.speechRecognition || window.SpeechRecognition);
         } catch (ex) {
 
         }
@@ -46,7 +46,7 @@ class ChromegleSpeechEngine {
         }
 
         if (!this.#engineActive) {
-            navigator.mediaDevices.getUserMedia({audio: true })
+            navigator.mediaDevices.getUserMedia({audio: true})
                 .then(() => Logger.INFO("Microphone permission enabled, started Chromegle Speech Engine"))
                 .catch(() => Logger.ERROR("Microphone permission rejected, Chromegle Speech Engine will not work"));
         }
@@ -95,7 +95,7 @@ class ChromegleSpeechEngine {
         }
     }
 
-    static #onResult(self, event, result= "", request = null) {
+    static #onResult(self, event, result = "", request = null) {
 
         // If not a result
         if (event.type !== "result") return;
@@ -128,7 +128,6 @@ class ChromegleSpeechEngine {
     }
 
 }
-
 
 
 const SpeechEngineManager = {
@@ -200,7 +199,7 @@ const SpeechMenu = {
 
     initialize() {
         SpeechMenu.settingsModal = document.createElement("div");
-        $(SpeechMenu.settingsModal).load(getResourceURL("html/voicecmds.html"));
+        $(SpeechMenu.settingsModal).load(getResourceURL("resources/html/voicecmds.html"));
         $("html").append(SpeechMenu.settingsModal);
     },
 

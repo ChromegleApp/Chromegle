@@ -149,11 +149,11 @@ const VideoScreenshotManager = {
         })
 
         let hiddenQuery = {}
-        hiddenQuery[config.screenshotButtonToggle.getName()] = config.screenshotButtonToggle.getDefault();
+        hiddenQuery[config.videoToolsButtonToggle.getName()] = config.videoToolsButtonToggle.getDefault();
 
         chrome.storage.sync.get(hiddenQuery, (result) => {
             VideoScreenshotManager.instances.forEach((instance) => {
-                instance.videoButtonHidden(!(result[config.screenshotButtonToggle.getName()] === "true"));
+                instance.videoButtonHidden(!(result[config.videoToolsButtonToggle.getName()] === "true"));
             });
         })
 
@@ -161,7 +161,7 @@ const VideoScreenshotManager = {
     },
 
     _storageSettingsUpdate(detail) {
-        const result = detail["detail"][config.screenshotButtonToggle.getName()];
+        const result = detail["detail"][config.videoToolsButtonToggle.getName()];
 
         if (result != null) {
             VideoScreenshotManager.instances.forEach((instance) => {

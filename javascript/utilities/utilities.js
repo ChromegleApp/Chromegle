@@ -1,4 +1,3 @@
-
 function getResourceURL(path) {
     return `chrome-extension://${chrome.runtime.id}/` + path
 }
@@ -10,7 +9,7 @@ const isNumeric = (str) => {
 }
 
 const uuid4 = () => {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         let r = Math.random() * 16 | 0, uuid = c === 'x' ? r : (r & 0x3 | 0x8);
         return uuid.toString(16);
     });
@@ -39,4 +38,30 @@ function isPrivateAddress(ip) {
 
 function containsWord(array, word) {
     return array.some((element) => word.includes(element));
+}
+
+function checkImage(url, success, failure) {
+    let request = new XMLHttpRequest();
+    request.open("GET", url, true);
+    request.send();
+    request.onload = function () {
+        console.log("TD")
+        status = request.status;
+        if (request.status === 200) //if(statusText == OK)
+        {
+            success();
+        } else {
+            failure();
+        }
+    }
+}
+
+function isValidHttpsUrl(string) {
+    let url;
+    try {
+        url = new URL(string);
+    } catch (_) {
+        return false;
+    }
+    return url.protocol === "https:";
 }

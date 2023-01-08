@@ -6,15 +6,15 @@
   "manifest_version": 3,
   "version": "4.1",
   "icons": {
-    "16": "images/IconLogo.png",
-    "48": "images/IconLogo.png",
-    "128": "images/IconLogo.png"
+    "16": "resources/images/IconLogo.png",
+    "48": "resources/images/IconLogo.png",
+    "128": "resources/images/IconLogo.png"
   },
   "content_scripts": [
     {
       "css": [
-        "css/main.css",
-        "css/settings.css"
+        "resources/css/main.css",
+        "resources/css/settings.css"
       ],
       "js": [
         "javascript/libraries/jquery-2.1.1.min.js",
@@ -27,7 +27,6 @@
         "javascript/themes/theme-registry.js",
         "javascript/themes/buttons.js",
         "javascript/modules/fullscreen-video.js",
-        "javascript/modules/block-nsfw.js",
         "javascript/modules/chat-registry.js",
         "javascript/modules/chat-manager.js",
         "javascript/modules/auto-message.js",
@@ -42,13 +41,13 @@
         "javascript/modules/paste-menu.js",
         "javascript/modules/web-filtering/filter-messages.js",
         "javascript/modules/mute-microphone.js",
-        "javascript/modules/stats-handling.js",
         "javascript/modules/webrtc-tools.js",
         "javascript/modules/voice-commands/speech-engine.js",
         "javascript/modules/voice-commands/intent-handlers.js",
         "javascript/settings/menu.js",
         "javascript/settings/settings.js",
         "javascript/settings/config.js",
+        "javascript/themes/splash-image.js",
         "javascript/main.js"
       ],
       "matches": [
@@ -60,12 +59,9 @@
     {
       "resources": [
         "/javascript/themes/types/*",
-        "/css/*",
-        "/fonts/*",
-        "/images/*",
-        "/html/*",
         "/javascript/modules/web-accessible-scripts/*",
-        "/javascript/modules/web-filtering/*"
+        "/javascript/modules/web-filtering/*",
+        "/resources/*"
       ],
       "matches": [
         "*://*.omegle.com/*"

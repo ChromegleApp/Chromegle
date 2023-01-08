@@ -86,7 +86,7 @@ const AutoSkipManager = {
                             "Skipped chat with UUID <%s> on event <%s> because the user has been seen <%s> time(s) before and <%s> is enabled.",
                             event["detail"]["uuid"], "chatSeenTimes", seenTimes, config.skipRepeatsToggle.getName()
                         );
-                        VideoFilterManager.sendErrorMessage(`Skipped user with IP ${event["detail"]["ipAddress"]} as you have seen them before.`);
+                        ChatManager.sendErrorMessage(`Skipped user with IP ${event["detail"]["ipAddress"]} as you have seen them before.`);
                         AutoSkipManager.skipIfPossible();
                     }
 

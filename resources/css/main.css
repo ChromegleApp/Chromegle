@@ -1,20 +1,23 @@
 html {
     visibility: hidden;
+    background-size: cover;
 }
 
 .homeButton {
-    height: 57px; width: 236px;
-    background-size: 236px 57px;
+    height: 57px;
+    width: 265px;
+    background-size: 265px 57px;
     border: none;
     background-color: inherit;
     /*noinspection CssUnknownTarget*/
-    background-image: url("chrome-extension://__MSG_@@extension_id__/images/HomeButton.png")
+    background-image: url("chrome-extension://__MSG_@@extension_id__/resources/images/HomeButton.png")
 }
 
 .settingsButtonContainer {
     margin-top: 24px;
 
 }
+
 
 @keyframes fadein {
     0% {
@@ -27,7 +30,8 @@ html {
 
 
 .settingsButton {
-    height: 57px; width: 150px;
+    height: 57px;
+    width: 150px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
@@ -35,7 +39,8 @@ html {
 }
 
 .customDiscordBanner {
-    height: 150px; width: 287px;
+    height: 150px;
+    width: 287px;
     background-size: 287px 150px;
     background-color: inherit;
     cursor: pointer;
@@ -51,12 +56,12 @@ html {
     border-radius: .5em;
     font-size: .9em;
     background: #409ffe;
-    background-image: -o-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -moz-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -webkit-gradient(linear,0 0,0 100%,from(#80c0ff),to(#017ffe));
-    background-image: -webkit-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -ms-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: -o-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -moz-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#80c0ff), to(#017ffe));
+    background-image: -webkit-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -ms-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: linear-gradient(top, #80c0ff 0, #017ffe 100%);
     color: rgb(255, 255, 255);
     font-weight: 400;
 
@@ -66,7 +71,8 @@ html {
     border: inherit;
     margin-right: inherit;
     background-size: inherit;
-    height: inherit; width: inherit;
+    height: inherit;
+    width: inherit;
 }
 
 .ipBlockButton {
@@ -74,9 +80,10 @@ html {
     border-radius: .5em;
     font-size: 15px;
     background: none;
-    color: rgba(49,166,231,255);
+    color: rgba(49, 166, 231, 255);
     border: none;
 }
+
 .ipUnblockButton {
     color: red;
     cursor: pointer;
@@ -108,7 +115,8 @@ html {
     align-items: center;
     justify-content: center;
     display: flex;
-    margin: auto; text-align: center;
+    margin: auto;
+    text-align: center;
     font-weight: bold;
     font-size: 40px;
     transition-duration: 200ms;
@@ -166,8 +174,6 @@ html {
 }
 
 
-
-
 .selfVideoScreenshotButton {
     bottom: 0;
 }
@@ -175,7 +181,7 @@ html {
 /*noinspection ALL*/
 @font-face {
     font-family: nce;
-    src: url(chrome-extension://__MSG_@@extension_id__/fonts/NotoColorEmoji.ttf);
+    src: url(chrome-extension://__MSG_@@extension_id__/resources/fonts/NotoColorEmoji.ttf);
 }
 
 .nceFont {
@@ -244,9 +250,10 @@ html {
     justify-content: center;
     justify-items: center;
 }
+
 .ipListTable tr {
     background: rgb(224, 224, 224);
-    color: rgba(0,0,0,.8);
+    color: rgba(0, 0, 0, .8);
 }
 
 .ipListTable th, .ipListTable td {
@@ -267,22 +274,22 @@ html {
     width: 150px;
     background-size: 150px 57px;
     margin-left: 20px;
-    background-image: -o-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -moz-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -webkit-gradient(linear,0 0,0 100%,from(#80c0ff),to(#017ffe));
-    background-image: -webkit-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -ms-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: -o-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -moz-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#80c0ff), to(#017ffe));
+    background-image: -webkit-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -ms-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: linear-gradient(top, #80c0ff 0, #017ffe 100%);
     animation: 1000ms ease-out 0s 1 fadein;
 }
 
 .disableCheckButton {
-    background-image: -o-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -moz-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -webkit-gradient(linear,0 0,0 100%,from(#80c0ff),to(#017ffe));
-    background-image: -webkit-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -ms-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: -o-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -moz-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#80c0ff), to(#017ffe));
+    background-image: -webkit-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -ms-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: linear-gradient(top, #80c0ff 0, #017ffe 100%);
     color: white;
     font-size: 15px;
     text-align: center;

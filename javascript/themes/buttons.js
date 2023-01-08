@@ -1,13 +1,12 @@
-
 const ButtonManager = {
 
-    homeButton : $("<button class='homeButton'></button>")
+    homeButton: $("<button class='homeButton'></button>")
         .on('click', function () {
             if (document.getElementById("intro") === null) window.location.href = "";
 
         }),
 
-    menuButton: $(`<img src='${getResourceURL("images/SettingsButton.png")}' class='settingsButton noselect'  alt=""/>`)
+    menuButton: $(`<img src='${getResourceURL("resources/images/SettingsButton.png")}' class='settingsButton noselect'  alt=""/>`)
         .on('click', function () {
 
         }),
@@ -30,10 +29,6 @@ const ButtonManager = {
 
         }),
 
-    disableWebRTCCheckButton: $("<span class='noselect disableCheckButton'>Disable Leak Warnings</span>").on("click", () => {
-        config.webrtcleakWarningToggle.updateValue({"confirm": "true", "value": "false"});
-        WebRTCLeakHandling.popup.destroy();
-    }),
 
     autoSkipCancelButton: $(`<span class="statuslog" style="cursor: pointer; color: rgba(49,166,231,255)">cancel skipping</span>`)
         .on("click", () => AutoSkipManager._cancelSkip()),

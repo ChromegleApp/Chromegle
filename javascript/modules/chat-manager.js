@@ -4,28 +4,30 @@ const ChatManager = {
         document.addEventListener("chatFailedConnect", (event) => ChatManager._chatFailedConnect(event));
         document.addEventListener("chatEnded", () => ChatManager.cleanEndChat());
         document.addEventListener("click", () => ChatManager._onclick());
-        document.addEventListener("keyup", (event) => {if (event.key === "Escape") ChatManager._onclick()})
+        document.addEventListener("keyup", (event) => {
+            if (event.key === "Escape") ChatManager._onclick()
+        })
     },
 
     _chatStarted(event) {
 
-            let logItems = document.getElementsByClassName("statuslog");
+        let logItems = document.getElementsByClassName("statuslog");
 
-            for (let log of logItems) {
-                if (log.innerText.includes("HONG KONG")) {
-                    log.innerHTML = `Thanks for using Chromegle! ${ConstantValues.getHelpfulTip()}`;
-                }
-
+        for (let log of logItems) {
+            if (log.innerText.includes("HONG KONG")) {
+                log.innerHTML = `Thanks for using Chromegle! ${ConstantValues.getHelpfulTip()}`;
             }
 
-            if (event["detail"]["isVideoChat"]) {
-                let self = $("#selfvideo").get(0);
-                if (self !== null) {
-                    $(self).css("z-index", "");
-                }
+        }
 
-
+        if (event["detail"]["isVideoChat"]) {
+            let self = $("#selfvideo").get(0);
+            if (self !== null) {
+                $(self).css("z-index", "");
             }
+
+
+        }
     },
 
     _onclick() {
@@ -98,6 +100,15 @@ const ChatManager = {
 
             }
         }
+    },
+
+    sendErrorMessage(message) {
+        const innerLogBox = document.getElementsByClassName("logitem")[0].parentNode;
+        const seenBeforeDiv = document.createElement("div")
+        seenBeforeDiv.classList.add("logitem");
+        seenBeforeDiv.appendChild($(`<span style="color: red;" class='statuslog'>${message}</span>`).get(0));
+        innerLogBox.append(seenBeforeDiv);
+        return seenBeforeDiv;
     }
 
 }

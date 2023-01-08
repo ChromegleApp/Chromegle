@@ -49,18 +49,18 @@ const FullScreenVideoManager = {
         })
 
         let hiddenQuery = {}
-        hiddenQuery[config.fullscreenButtonToggle.getName()] = config.fullscreenButtonToggle.getDefault();
+        hiddenQuery[config.videoToolsButtonToggle.getName()] = config.videoToolsButtonToggle.getDefault();
 
         chrome.storage.sync.get(hiddenQuery, (result) => {
             FullScreenVideoManager.instances.forEach((instance) => {
-                instance.videoButtonHidden(!(result[config.fullscreenButtonToggle.getName()] === "true"));
+                instance.videoButtonHidden(!(result[config.videoToolsButtonToggle.getName()] === "true"));
             });
         })
 
     },
 
     _storageSettingsUpdate(detail) {
-        const result = detail["detail"][config.fullscreenButtonToggle.getName()];
+        const result = detail["detail"][config.videoToolsButtonToggle.getName()];
 
         if (result != null) {
             FullScreenVideoManager.instances.forEach((instance) => {
@@ -183,6 +183,7 @@ class VideoFullscreen {
 
         // Update Canvas
         updateBigVideo(video, context, cw, ch);
+
         function updateBigVideo(v, c, w, h) {
             if (v.paused || v.ended) return false;
             c.drawImage(v, 0, 0, cw, ch);
@@ -196,7 +197,7 @@ class VideoFullscreen {
         })
 
         // When window is resized, resize video
-        popup.addEventListener("resize", (event) => {
+        popup.addEventListener("resize", (_) => {
             cw = Math.floor(popup.innerWidth)
             ch = Math.floor(popup.innerHeight)
             canvas.width = cw;

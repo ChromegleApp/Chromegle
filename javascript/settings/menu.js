@@ -1,4 +1,3 @@
-
 class Collapsable {
     #collapsableWrapper
     #collapsableElement
@@ -30,8 +29,6 @@ class Collapsable {
 }
 
 
-
-
 class ToggleButton {
     #element;
 
@@ -45,7 +42,11 @@ class ToggleButton {
     }
 
     disable() {
-        this.#element.innerHTML = "Enable"
+        try {
+            this.#element.innerHTML = "Enable"
+        } catch (ex) {
+            console.log(this.#element.id, ex)
+        }
         this.#element.classList.remove("editToggleEnabled")
 
     }
@@ -75,7 +76,7 @@ class SettingsMenu {
 
     constructor() {
         this.#settingsModalElement = document.createElement("div");
-        $(this.#settingsModalElement).load(getResourceURL("html/settings.html"));
+        $(this.#settingsModalElement).load(getResourceURL("resources/html/settings.html"));
         $("html").append(this.#settingsModalElement)
         this.manageCollapsables();
         this.manageToggleButtons();

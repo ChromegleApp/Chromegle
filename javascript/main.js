@@ -18,7 +18,7 @@ $(document).on("ready", () => {
         // Static HTML ban screen
         if (window.location.href.includes("ban.html")) {
             $("html")
-                .load(chrome.runtime.getURL("/html/banned.html"))
+                .load(chrome.runtime.getURL("/resources/html/banned.html"))
                 .css("background-color", "#17191a");
         }
     }
@@ -51,27 +51,24 @@ $(document).on("ready", () => {
             GreetingManager,
             ReconnectManager,
             AutoSkipManager,
-            VideoFilterManager,
             IPGrabberManager,
             UnmoderatedChatManager,
             VideoBlockerManager,
             VideoScreenshotManager,
             MuteMicrophoneManager,
             IPBlockingManager,
-            StatisticDisplay,
             WebRTCLeakHandling,
             SpeechEngineManager,
             FullScreenVideoManager,
-            StatTrackManager
+            SplashImageHandler
         ].forEach((manager) => {
             try {
                 manager.initialize();
             } catch (ex) {
                 Logger.ERROR("A module failed to initialize, stack-trace below:");
-                console.log(ex);
+                throw ex
             }
         })
-
 
     }
 

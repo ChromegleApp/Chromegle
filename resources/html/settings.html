@@ -82,7 +82,7 @@
                             <table class="settingsTable">
                                 <tr>
                                     <th class="tableItemLabel">
-                                        <div class="tooltip">Voice Commands <span class="tableItemSubLabel">(Beta Version)</span>
+                                        <div class="tooltip">Voice Commands</span>
                                             <span class="tooltiptext">Do simple actions like send messages, skip and start chats with your voice!</span>
                                         </div>
                                     </th>
@@ -99,34 +99,24 @@
                                     </th>
                                     <th>
                                         <button class="editFieldButton editToggleDisabled" id="autoSkipToggle">Enable</button>
-                                        <button class="editFieldButton editFieldButtonGray" id="autoSkipDelayField">Edit Field</button>
+                                        <button class="editFieldButton editFieldButtonGray" id="autoSkipDelayField">Edit Delay</button>
                                     </th>
                                 </tr>
                                 <tr>
                                     <th class="tableItemLabel">
-                                        <div class="tooltip">Country-Skip
-                                            <span class="tooltiptext">Skip to the next chat if a user belongs to a given country code <strong>when in video chat</strong></span>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <button class="editFieldButton editToggleDisabled" id="countrySkipToggle">Enable</button>
-                                        <button class="editFieldButton editFieldButtonGray" id="countrySkipInfo">Edit Field</button>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="tableItemLabel">
-                                        <div class="tooltip">Auto-Reconnect <span class="tableItemSubLabel">(Text Only)</span>
+                                        <div class="tooltip">Auto-Reconnect
                                             <span class="tooltiptext">Automatically enter the next chat after your current one ends <strong>when in text mode.</strong></span>
                                         </div>
                                     </th>
                                     <th>
                                         <button class="editFieldButton editToggleDisabled" id="autoReconnectToggle">Enable</button>
+                                        <button class="editFieldButton editFieldButtonGray" id="autoReconnectType">Edit Type</button>
                                     </th>
                                 </tr>
                                 <tr>
                                     <th class="tableItemLabel">
                                         <div class="tooltip">IP Grab & Geolocate <span class="tableItemSubLabel">(Video Only)</span>
-                                            <span class="tooltiptext">Display the IP address of the person you are chatting with <strong>when in video mode.</strong></span>
+                                            <span class="tooltiptext">Display the IP address of the person you are chatting with <strong>when in video chat.</strong></span>
                                         </div>
                                     </th>
                                     <th>
@@ -136,7 +126,7 @@
                                 <tr>
                                     <th class="tableItemLabel">
                                         <div class="tooltip">Skip Repeats <span class="tableItemSubLabel">(Video Only)</span>
-                                            <span class="tooltiptext">Skip people who you have chatted with before on Omegle <strong>when in video mode.</strong></span>
+                                            <span class="tooltiptext">Skip people who you have chatted with before on Omegle <strong>when in video chat.</strong></span>
                                         </div>
                                     </th>
                                     <th>
@@ -161,7 +151,18 @@
                             <table class="settingsTable">
                                 <tr>
                                     <th class="tableItemLabel">
-                                        <div class="tooltip">Manual IP Blocking <span class="tableItemSubLabel">(Video Only)</span>
+                                        <div class="tooltip">Block Countries <span class="tableItemSubLabel">(Video Only)</span>
+                                            <span class="tooltiptext">Skip to the next chat if a user belongs to a given country code <strong>when in video chat</strong></span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editFieldButtonGray" id="countrySkipInfo">Edit Field</button>
+                                        <button class="editFieldButton editToggleDisabled" id="countrySkipToggle">Enable</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Blocked IP List <span class="tableItemSubLabel">(Video Only)</span>
                                             <span class="tooltiptext">List the IP addresses you have perma-blocked when <strong>in the video chat.</strong></span>
                                         </div>
                                     </th>
@@ -171,17 +172,7 @@
                                 </tr>
                                 <tr>
                                     <th class="tableItemLabel">
-                                        <div class="tooltip">Sexual Filter <span class="tableItemSubLabel">(Video) (Beta Version)</span>
-                                            <span class="tooltiptext">Detect <strong>NSFW video</strong> from your partner and automatically block their video input.</span>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <button class="editFieldButton editToggleDisabled" id="sexualVideoFilterToggle">Enable</button>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="tableItemLabel">
-                                        <div class="tooltip">Sexual Filter <span class="tableItemSubLabel">(Text)</span>
+                                        <div class="tooltip">Sexual Text-Filter</span>
                                             <span class="tooltiptext">Filter messages of a sexual nature sent by you or your partner <strong>in the text chat.</strong></span>
                                         </div>
                                     </th>
@@ -192,22 +183,12 @@
                                 </tr>
                                 <tr>
                                     <th class="tableItemLabel">
-                                        <div class="tooltip">Profanity Filter <span class="tableItemSubLabel">(Text)</span>
+                                        <div class="tooltip">Profanity Text-Filter</span>
                                             <span class="tooltiptext">Filter messages with profane words sent by you or your partner <strong>in the text chat.</strong></span>
                                         </div>
                                     </th>
                                     <th>
                                         <button class="editFieldButton editToggleDisabled" id="profanityFilterToggle">Enable</button>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="tableItemLabel">
-                                        <div class="tooltip">IP Leak Warning <span class="tableItemSubLabel">(Video Only)</span>
-                                            <span class="tooltiptext">Detect when your VPN is enabled and is leaking your real IP address through WebRTC <strong>in the video chat.</strong></span>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <button class="editFieldButton editToggleDisabled" id="webrtcleakWarningToggle">Enable</button>
                                     </th>
                                 </tr>
                             </table>
@@ -236,6 +217,18 @@
                                 </tr>
                                 <tr>
                                     <th class="tableItemLabel">
+                                        <div class="tooltip">Homepage Image
+                                            <span class="tooltiptext">Have your very own custom splash image on the Omegle site</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="homePageSplashToggle">Enable</button>
+                                        <button class="editFieldButton editFieldButtonGray" id="homePageSplashEdit">Image URL</button>
+                                    </th>
+                                </tr>
+
+                                <tr>
+                                    <th class="tableItemLabel">
                                         <div class="tooltip">Header Buttons
                                             <span class="tooltiptext">Enable or disable the language & share buttons at the top-right of the page.</span>
                                         </div>
@@ -246,45 +239,24 @@
                                 </tr>
                                 <tr>
                                     <th class="tableItemLabel">
-                                        <div class="tooltip">Screenshot Button
-                                            <span class="tooltiptext">Toggle the screenshot button over your partner's video <strong>when in video mode.</strong></span>
+                                        <div class="tooltip">Extra Video Tools
+                                            <span class="tooltiptext">Get a microphone, pop-out video, and screenshot button <strong>when in video chat.</strong></span>
                                         </div>
                                     </th>
                                     <th>
-                                        <button class="editFieldButton editToggleDisabled" id="screenshotButtonToggle">Enable</button>
+                                        <button class="editFieldButton editToggleDisabled" id="videoToolsButtonToggle">Enable</button>
                                     </th>
                                 </tr>
                                 <tr>
                                     <th class="tableItemLabel">
-                                        <div class="tooltip">Fullscreen Button
-                                            <span class="tooltiptext">Toggle the fullscreen button over your partner's video <strong>when in video mode.</strong></span>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <button class="editFieldButton editToggleDisabled" id="fullscreenButtonToggle">Enable</button>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="tableItemLabel">
-                                        <div class="tooltip">Microphone Button
-                                            <span class="tooltiptext">Enable or disable the mute button over your own video <strong>when in video mode.</strong></span>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <button class="editFieldButton editToggleDisabled" id="muteButtonToggle">Enable</button>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="tableItemLabel">
-                                        <div class="tooltip">Message Toolbar
-                                            <span class="tooltiptext">Toggle the message toolbar for a list of custom values to paste in your chatbox.</span>
+                                        <div class="tooltip">Message Hotbar
+                                            <span class="tooltiptext">Toggle the message hotbar for a list of custom values to paste in your chatbox.</span>
                                         </div>
                                     </th>
                                     <th>
                                         <button class="editFieldButton editToggleDisabled" id="pasteMenuToggle">Enable</button>
                                     </th>
                                 </tr>
-
 
                             </table>
 

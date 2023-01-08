@@ -1,7 +1,7 @@
 let ConstantValues = {
     discordURL: "https://chromegle.net/discord",
     githubURL: "https://chromegle.net/github",
-    apiURL: "https://api.chromegle.net",
+    apiURL: "https://get.geojs.io/",
 
     getHelpfulTip: () => {
         const helpfulTips = [
@@ -12,7 +12,6 @@ let ConstantValues = {
             "How much could a wood chuck chuck if a wood chuck could chuck wood?",
             `Did you know we're open sourced? You <a target='_blank' href="${ConstantValues.githubURL}">can see every line</a> of code for this app online, free!`,
             "\"Sometimes when I close my eyes, I can't see\" - Chromegle Community",
-
             "I do not think, therefore I do not am."
         ]
 
@@ -65,7 +64,7 @@ class MutableField {
     }
 
     getLocalValue() {
-        return MutableField.localValues[this.#storageName];
+        return MutableField?.localValues?.[this.#storageName];
     }
 
     setLocalValue(value) {

@@ -172,8 +172,8 @@ const config = {
         "storageName": "COUNTRY_SKIP_TOGGLE",
         "default": "false",
         "warning": {
-            "message": "This feature may get you banned for spam-skipping. By enabling it you agree you are aware of the risk of being banned for mass-skipping"
-                + "users from a given country/set of countries.",
+            "message": "This feature may get you banned for spam-skipping. By enabling it you agree you are aware of the risk of being banned using automation "
+                + "tools like this one provided by Chromegle.",
             "state": "true"
         }
     }),
@@ -241,46 +241,31 @@ const config = {
         "otherElementNames": ["semiDarkModeOption", "semiLightModeOption"],
         "storageName": "THEME_CHOICE_SWITCH",
         "default": "semiLightModeOption",
-        "value": "/css/themes/ultradark.css"
+        "value": "/resources/css/themes/ultradark.css"
     }),
     "semiDarkModeOption": new SwitchEdit({
         "elementName": "semiDarkModeOption",
         "otherElementNames": ["ultraDarkModeOption", "semiLightModeOption"],
         "storageName": "THEME_CHOICE_SWITCH",
         "default": "semiLightModeOption",
-        "value": "/css/themes/semidark.css"
+        "value": "/resources/css/themes/semidark.css"
     }),
     "semiLightModeOption": new SwitchEdit({
         "elementName": "semiLightModeOption",
         "otherElementNames": ["semiDarkModeOption", "ultraDarkModeOption"],
         "storageName": "THEME_CHOICE_SWITCH",
         "default": "semiLightModeOption",
-        "value": "/css/themes/semilight.css"
+        "value": "/resources/css/themes/semilight.css"
     }),
     "headerButtonsToggle": new ToggleEdit({
         "elementName": "headerButtonsToggle",
         "storageName": "HEADER_BUTTONS_TOGGLE",
         "default": "true"
     }),
-    "screenshotButtonToggle": new ToggleEdit({
-        "elementName": "screenshotButtonToggle",
-        "storageName": "SCREENSHOT_BUTTON_TOGGLE",
+    "videoToolsButtonToggle": new ToggleEdit({
+        "elementName": "videoToolsButtonToggle",
+        "storageName": "VIDEO_TOOLS_BUTTON_TOGGLE",
         "default": "false"
-    }),
-    "fullscreenButtonToggle": new ToggleEdit({
-        "elementName": "fullscreenButtonToggle",
-        "storageName": "FULLSCREEN_BUTTON_TOGGLE",
-        "default": "true"
-    }),
-    "sexualVideoFilterToggle": new ToggleEdit({
-        "elementName": "sexualVideoFilterToggle",
-        "storageName": "SEXUAL_VIDEO_FILTER_TOGGLE",
-        "default": "false",
-        "warning": {
-            "message": "This sexual filter is in early beta! It will never capture all inappropriate images, " +
-                "only blatant and clearly displayed sexual organs, so please don't rely on it as a sure thing!",
-            "state": "true"
-        }
     }),
     "skipRepeatsToggle": new ToggleEdit({
         "elementName": "skipRepeatsToggle",
@@ -295,16 +280,6 @@ const config = {
     "blockedIPList": new ExternalField({
         "external": IPBlockingMenu.loadMenu
     }),
-    "muteButtonToggle": new ToggleEdit({
-        "elementName": "muteButtonToggle",
-        "storageName": "MUTE_BUTTON_TOGGLE",
-        "default": "false"
-    }),
-    "webrtcleakWarningToggle": new ToggleEdit({
-        "elementName": "webrtcleakWarningToggle",
-        "storageName": "WEBRTC_LEAK_WARNING_TOGGLE",
-        "default": "true"
-    }),
     "voiceCommandToggle": new ToggleEdit({
         "elementName": "voiceCommandToggle",
         "storageName": "VOICE_COMMAND_TOGGLE",
@@ -313,10 +288,47 @@ const config = {
     "voiceCommandInfo": new ExternalField({
         "external": SpeechMenu.loadMenu
     }),
+    "autoReconnectType": new FieldEdit({
+        "storageName": "AUTO_RECONNECT_TYPE_FIELD",
+        "prompt": "Enter where you want auto-reconnect to be enabled." +
+            "\n\n1 = Text Chat" +
+            "\n2 = Video Chat" +
+            "\n3 = Both Chats",
+        "default": "1",
+        "check": (response) => {
 
+            // Accept all no-values
+            if (!["1", "2", "3"].includes(response)) {
+                return {
+                    "confirm": "false",
+                    "value": response
+                }
+            }
+
+            return {
+                "confirm": "true",
+                "value": response
+            };
+        }
+    }),
+    "homePageSplashToggle": new ToggleEdit({
+        "elementName": "homePageSplashToggle",
+        "storageName": "HOME_PAGE_SPLASH_TOGGLE",
+        "default": "false"
+    }),
+    "homePageSplashEdit": new FieldEdit({
+        "storageName": "HOME_PAGE_SPLASH_FIELD",
+        "prompt": "Enter a new splash background image URL:",
+        "default": "https://i.imgur.com/qa5Hkl9.jpeg",
+        "check": (response) => {
+
+            return {
+                "confirm": isValidHttpsUrl(response) ? "true" : "false",
+                "value": response
+            }
+        }
+    }),
 }
-
-
 const ConfigManager = {
 
     initialize() {
@@ -332,7 +344,11 @@ const ConfigManager = {
                 storageQuery[key] = config[key].getDefault();
             }
 
-            chrome.storage.sync.get(storageQuery, (result) => MutableField.localValues = result);
+            chrome.storage.sync.get(storageQuery, (result) => {
+                MutableField.localValues = result;
+                document.dispatchEvent(new CustomEvent("localStorageLoaded"));
+            });
+
 
         }
 

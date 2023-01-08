@@ -1,29 +1,88 @@
-
 /*
 Modal Styling
  */
-.modal__overlay {background: rgba(0,0,0,0.6);}
-.modal__container {background-color: #393940;}
-.modal__title {color: #b6b4b4;}
-.modal__close {color: #a7a7a7;}
-.modal__close:hover {color: #767676;}
-.modal__content, .modal__btn {color: rgba(0,0,0,.8);}
-.modal__btn {background-color: #e6e6e6;}
-.modal__btn-primary {background-color: #00449e;color: #fff;}
-.settingsModalCloseButton{color: #aaa}
-.settingsModalCloseButton:hover {color: #6B6B6B;}
-.settingsCollapsableItem{background-color: rgb(224, 224, 224)}
-.tableItemLabel, .tableItemSubLabel {color: #424242}
-.editToggleDisabled {background: gray;}
-.editToggleDisabled:hover {background: dimgray;}
-.editToggleEnabled {background-color: forestgreen;}
-.editToggleEnabled:hover {background-color: green;}
-.settingsCollapsable:hover, .active {opacity: 70%;}
-.editFieldButton, .settingsCollapsable {color: white;}
-.settingsCollapsable, .editFieldButtonGray:hover {background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(110, 117, 123) 0%, rgb(66, 73, 87) 90%);}
+.modal__overlay {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.modal__container {
+    background-color: #fff7ee;
+}
+
+.modal__title {
+    color: #3b3b3b;
+}
+
+.modal__close {
+    color: #a7a7a7;
+}
+
+.modal__close:hover {
+    color: #767676;
+}
+
+.modal__content, .modal__btn {
+    color: rgba(0, 0, 0, .8);
+}
+
+.modal__btn {
+    background-color: #e6e6e6;
+}
+
+.modal__btn-primary {
+    background-color: #00449e;
+    color: #fff;
+}
+
+.settingsModalCloseButton {
+    color: #aaa
+}
+
+.settingsModalCloseButton:hover {
+    color: #6B6B6B;
+}
+
+.settingsCollapsableItem {
+    background-color: rgb(224, 224, 224)
+}
+
+.tableItemLabel, .tableItemSubLabel {
+    color: #424242
+}
+
+.editToggleDisabled {
+    background: gray;
+}
+
+.editToggleDisabled:hover {
+    background: dimgray;
+}
+
+.editToggleEnabled {
+    background-color: forestgreen;
+}
+
+.editToggleEnabled:hover {
+    background-color: green;
+}
+
+.settingsCollapsable:hover, .active {
+    transition: font-size 200ms;
+}
+
+.editFieldButton, .settingsCollapsable {
+    color: white;
+}
+
+.settingsCollapsable, .editFieldButtonGray:hover {
+    background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(110, 117, 123) 0%, rgb(66, 73, 87) 90%);
+}
+
 .settingsCollapsable, .editFieldButtonGray {
+    transition: font-size 200ms;
     background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(137, 145, 153) 0%, rgb(79, 88, 104) 90%);
 }
+
 .settingsModal {
     background-color: #fefefe;
     -webkit-box-shadow: 0 0 11px 4px #6B6B6B;
@@ -34,8 +93,8 @@ Modal Styling
 /*
 Primary Colour BACKGROUND
  */
-body, #header {
-    background: rgb(10, 10, 10);
+body, #header, html {
+    background: #fff7ee;
 
 }
 
@@ -43,36 +102,78 @@ body, #header {
 /*
 Secondary Colour BACKGROUND
  */
-#intro, code, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton, #selfvideo, #othervideo, .pasteButton {
-    background: rgb(29, 29, 31);
+#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .pasteButton {
+    background: #ffffff;
+}
+
+.videoCoverButton {
+    background: #3b3b3b;
+}
+
+#selfvideo, #othervideo, code {
+    background: #3b3b3b;
+}
+
+
+#intro {
+    box-shadow: inset 0 0 0.5em #bbb;
+    -webkit-box-shadow: inset 0 0 0.5em #bbb;
 }
 
 /*
 Primary Colour TEXT
  */
-#intro, .disconnectbtnwrapper, .newbtn.disconnectbtn, .sendbtn, .lowersexybtnwrapper,
+#intro, .newbtn.disconnectbtn, .sendbtn, .lowersexybtnwrapper,
 .lowergaybtnwrapper, .chatmsg:focus, .statuslog, .logitem, textarea, textarea:disabled,
-.videochat .controlwrapper,.videochat,.videochat .disconnectbtnwrapper, #mobilesitenote, .pasteButton {
-    color: #9a9a9a;
-}
-
-input {
-    background-color: #1a1a1a;
-}
-
-button.disconnectbtn {
-    color: #e3e3e3;
-}
-
-.nsfwCoverTextWrapper {
-    color: #cbcaca;
+.videochat .controlwrapper, .videochat .disconnectbtn, .videochat .disconnectbtnwrapper, #mobilesitenote, input,
+#chattypeorcell, .chattypeorcell {
+    color: #454545;
 }
 
 /*
 Secondary Colour TEXT
  */
-.disconnectbtnwrapper.newbtn {
+.disconnectbtnwrapper.newbtn, #collegeButton, #videobtnunmoderated {
     color: rgba(54, 57, 63, 255);
+}
+
+/*
+Tertiary Colour Background
+ */
+.topictageditor, #collegeButton, #videobtnunmoderated {
+!important;
+    background: #d2d2d2;
+}
+
+
+/*
+Tertiary colour text
+ */
+.disconnectbtn, .pasteButton {
+    color: #525252;
+}
+
+
+/*
+Tertiary colour text
+ */
+.nsfwCoverTextWrapper {
+    color: whitesmoke;
+}
+
+.logwrapper, .chatmsgwrapper, .disconnectbtnwrapper, .sendbtnwrapper, #selfvideo, #othervideo, .pasteButton {
+    border: 1px solid #CCC;
+}
+
+
+.topictag {
+    color: #383838;
+    cursor: default;
+    background: #6cb5ff;
+    border-radius: .25em;
+    padding: .25em;
+    margin-right: 3px;
+    white-space: nowrap
 }
 
 .select-language-button {
@@ -85,7 +186,8 @@ Secondary Colour TEXT
     padding-top: 1px;
     padding-bottom: 2px;
     cursor: pointer;
-    zoom:1;*display: inline
+    zoom: 1;
+    *display: inline
 }
 
 
@@ -97,7 +199,7 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"
 }
 
 #header {
@@ -107,7 +209,7 @@ body {
 }
 
 a {
-    color: rgba(49,166,231,255);
+    color: rgba(49, 166, 231, 255);
     text-decoration: none;
 }
 
@@ -166,7 +268,6 @@ a {
     left: 50%;
     transform: translate(-50%, 0%);
 }
-
 
 
 #aim {
@@ -230,7 +331,7 @@ img {
 }
 
 .disconnectbtn {
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 1em;
     background: transparent;
     width: 7em;
@@ -241,16 +342,6 @@ img {
     border-bottom-left-radius: .5em;
     -moz-border-radius-bottomleft: .5em;
     -webkit-border-bottom-left-radius: .5em
-}
-
-.disconnectbtnwrapper.newbtn {
-    background: #409ffe;
-    background-image: -o-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -moz-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -webkit-gradient(linear,0 0,0 100%,from(#80c0ff),to(#017ffe));
-    background-image: -webkit-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -ms-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: linear-gradient(top,#80c0ff 0,#017ffe 100%);
 }
 
 .newbtn .disconnectbtn {
@@ -269,13 +360,13 @@ img {
     -webkit-border-bottom-right-radius: .5em
 }
 
-.lowersexybtnwrapper,.lowergaybtnwrapper {
+.lowersexybtnwrapper, .lowergaybtnwrapper {
     overflow: hidden;
     margin-right: .5em;
 }
 
-.lowersexybtn,.lowergaybtn {
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+.lowersexybtn, .lowergaybtn {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 1em;
     width: 7em;
     height: 5em;
@@ -285,7 +376,7 @@ img {
 }
 
 .sendbtn {
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 1em;
     width: 7em;
     height: 5em;
@@ -308,7 +399,7 @@ img {
 
 .chatmsg {
     width: 100%;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 1em;
     border: 0 none;
     padding: 0;
@@ -319,6 +410,7 @@ img {
     border-radius: 0;
     -webkit-border-radius: 0
 }
+
 .chatmsg:focus {
 }
 
@@ -342,7 +434,7 @@ img {
     }
 }
 
-.youmsg,.strangermsg {
+.youmsg, .strangermsg {
     margin: 0;
     padding: 0;
     -webkit-animation: msgfade .25s ease-out forwards;
@@ -350,12 +442,12 @@ img {
 }
 
 .youmsg .msgsource {
-    color: #3ea6ff;
+    color: #208ffe;
     font-weight: bold
 }
 
 .strangermsg .msgsource {
-    color: #c93838;
+    color: #ee0a0a;
     font-weight: bold
 }
 
@@ -440,7 +532,7 @@ textarea:focus {
     top: 0
 }
 
-.inconversation #adwrapper,.videochat #adwrapper {
+.inconversation #adwrapper, .videochat #adwrapper {
     display: none
 }
 
@@ -457,7 +549,7 @@ textarea:focus {
     margin-right: 0
 }
 
-.videochat .controlwrapper,.videochat .disconnectbtn,.videochat .disconnectbtnwrapper {
+.videochat .controlwrapper, .videochat .disconnectbtn, .videochat .disconnectbtnwrapper {
     border-bottom-left-radius: 0;
     -moz-border-radius-bottomleft: 0;
     -webkit-border-bottom-left-radius: 0
@@ -508,7 +600,7 @@ textarea:focus {
     -webkit-border-top-left-radius: .5em
 }
 
-#selfvideo,#othervideo {
+#selfvideo, #othervideo {
     display: block;
 }
 
@@ -552,36 +644,35 @@ textarea:focus {
     padding: 0
 }
 
-#chattypeorcell,.chattypeorcell {
-    color: #cbcbcb;
+#chattypeorcell, .chattypeorcell {
     font-size: .9em;
     font-weight: bold;
     padding: .5em !important
 }
 
-#textbtn, #videobtn, #girlsbtn, #gaybtn{
+#textbtn, #videobtn, #girlsbtn, #gaybtn {
     display: block;
     margin: auto;
     cursor: pointer;
     border-radius: 10px;
 }
 
+
 #videobtn.disabled {
     cursor: default
 }
 
-#videobtnstatus,#textbtnstatus {
+#videobtnstatus, #textbtnstatus {
     height: 2.5em;
     color: #AAA;
     font-size: .7em
 }
 
-#startachat,#intoheader {
+#startachat, #intoheader {
     text-align: center;
     margin: 0;
     padding: 0;
     margin-bottom: .2em;
-    color: #d0d0d0;
     font-weight: normal;
     font-size: 1.25em
 }
@@ -618,7 +709,7 @@ textarea:focus {
     height: 0;
 }
 
-:disabled .btnkbshortcut,[disabled] .btnkbshortcut {
+:disabled .btnkbshortcut, [disabled] .btnkbshortcut {
     color: #a1c3e6
 }
 
@@ -724,12 +815,12 @@ textarea:focus {
     border-radius: .5em;
     font-size: .9em;
     background: #409ffe;
-    background-image: -o-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -moz-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -webkit-gradient(linear,0 0,0 100%,from(#80c0ff),to(#017ffe));
-    background-image: -webkit-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: -ms-linear-gradient(top,#80c0ff 0,#017ffe 100%);
-    background-image: linear-gradient(top,#80c0ff 0,#017ffe 100%);
+    background-image: -o-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -moz-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#80c0ff), to(#017ffe));
+    background-image: -webkit-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -ms-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: linear-gradient(top, #80c0ff 0, #017ffe 100%);
     color: rgb(255, 255, 255);
     font-weight: 400;
 }
@@ -759,18 +850,13 @@ textarea:focus {
     margin-top: 1em
 }
 
-#collegeButton {
-    color: rgb(177, 180, 183);
-    background: #474b52;
-}
 
 #videobtnunmoderated {
-    color: rgb(177, 180, 183);
-    background: #474b52;
     padding: 5px;
 }
+
 .topictageditor {
-    background: #474b52;
+    color: whitesmoke;
     cursor: text;
     position: relative;
     padding: .25em;
@@ -780,15 +866,6 @@ textarea:focus {
 
 .chatbox .topictageditor {
     margin-right: .5em
-}
-
-.topictag {
-    cursor: default;
-    background: #35383b;
-    border-radius: .25em;
-    padding: .25em;
-    margin-right: 3px;
-    white-space: nowrap
 }
 
 .topictagdelete {
@@ -813,12 +890,8 @@ textarea:focus {
     background: transparent
 }
 
-input {
-    color: whitesmoke;
-}
-
 .topicplaceholder {
-    color: #b9bbbe;
+    color: #8c8c8e;
     cursor: text;
     position: absolute;
     padding-left: 1px
@@ -843,7 +916,7 @@ input {
     text-align: center
 }
 
-td #topicsettingscontainer,td #intoheader {
+td #topicsettingscontainer, td #intoheader {
     padding-right: 28px
 }
 
@@ -858,7 +931,7 @@ td #topicsettingscontainer,td #intoheader {
     margin-bottom: 1em;
     text-align: center;
     max-width: 36em;
-    background: rgb(64,64,72);
+    background: rgb(64, 64, 72);
     position: relative;
     overflow: hidden
 }
@@ -868,7 +941,7 @@ td #topicsettingscontainer,td #intoheader {
     padding: .3134em 0;
     font-size: 1.595em;
     margin: 0;
-    background: rgb(64,64,72);
+    background: rgb(64, 64, 72);
 }
 
 #monitoringnotice .content {
@@ -884,8 +957,10 @@ td #topicsettingscontainer,td #intoheader {
 #monitoringnotice.banned {
     display: block;
     padding: 10px 10px 15px;
-    color: #cbcbcb;
-    background: rgb(49, 52, 57);
+    color: rgba(32, 34, 37, 255);
+    background: #fff7ee;
+    box-shadow: inset 0 0 0.5em #bbb;
+    -webkit-box-shadow: inset 0 0 0.5em #bbb;
 }
 
 #monitoringnotice p {
@@ -932,7 +1007,7 @@ span#unmonitoredvideobtn {
     font-weight: bold
 }
 
-p+#topterms {
+p + #topterms {
     margin-top: -0.75em
 }
 
@@ -943,8 +1018,8 @@ p+#topterms {
     font-weight: normal
 }
 
-@media(max-width: 1000px) {
+@media (max-width: 1000px) {
     #headerappstore {
-        visibility:hidden !important
+        visibility: hidden !important
     }
 }

@@ -38,7 +38,7 @@ const ChatRegistry = {
         }
     },
 
-    _onDocumentMutation (mutation) {
+    _onDocumentMutation(mutation) {
 
         for (let mutationRecord of mutation) {
 
@@ -74,6 +74,7 @@ const ChatRegistry = {
             const containsDisabled = mutationRecord.target.classList.contains("disabled");
 
             if (ChatRegistry.isChatting() && containsDisabled) {
+                console.log("CHAT HAS ENDED")
                 Logger.INFO("Chat Ended: UUID <%s>", ChatRegistry.getUUID());
                 ChatRegistry.setChatting(false);
                 ChatRegistry.clearUUID();

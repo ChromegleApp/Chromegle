@@ -92,7 +92,7 @@ class ThemeManager {
         }
 
         #overrideLanguage = () => {
-          $(".goog-te-gadget-simple").removeClass("goog-te-gadget-simple").addClass("select-language-button");
+            $(".goog-te-gadget-simple").removeClass("goog-te-gadget-simple").addClass("select-language-button");
 
         };
         #overrideLinks = () => $("#feedback").remove();
@@ -112,7 +112,7 @@ class ThemeManager {
 
         #overrideHongKongPoster = () => {
             let newBanner = document.createElement("img");
-            newBanner.src = getResourceURL("images/DiscordBanner.png");
+            newBanner.src = getResourceURL("resources/images/DiscordBanner.png");
             newBanner.href = ConstantValues.discordURL;
             newBanner.classList.add("customDiscordBanner");
             $(newBanner).on("click", () => window.open(ConstantValues.discordURL));

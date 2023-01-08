@@ -1,27 +1,3 @@
-class LeakedAddressPopup {
-    #settingsModalElement = undefined;
-    static #modalElementId = "modal-3";
-    #disableButton = undefined;
-
-    constructor(fakeAddress, realAddress) {
-        this.#settingsModalElement = document.createElement("div");
-        this.#disableButton = ButtonManager
-        $(this.#settingsModalElement).load(getResourceURL("html/leaked.html"), () => {
-            $("html").append(this.#settingsModalElement);
-            $("#modal__fake_address").get(0).innerHTML = fakeAddress || "N/A";
-            $("#modal__real__address").get(0).innerHTML = realAddress || "N/A";
-            $("#modal__disable__check").replaceWith(ButtonManager.disableWebRTCCheckButton);
-            MicroModal.show(LeakedAddressPopup.#modalElementId);
-        });
-    }
-
-    destroy() {
-        MicroModal.close(LeakedAddressPopup.#modalElementId);
-        $(LeakedAddressPopup.#modalElementId).remove();
-    }
-
-}
-
 const WebRTCLeakHandling = {
 
     httpAddress: null,
@@ -31,7 +7,7 @@ const WebRTCLeakHandling = {
     popup: null,
 
     initialize() {
-        document.addEventListener("chatStarted", () => WebRTCLeakHandling.handleLeakStatus())
+
     },
 
     checkLeakStatus(address) {
@@ -64,18 +40,6 @@ const WebRTCLeakHandling = {
             WebRTCLeakHandling.httpAddress = address;
 
         });
-    },
-
-    handleLeakStatus() {
-        // Setting Disabled
-        if (config.webrtcleakWarningToggle.getLocalValue() === "false") return;
-
-        // Not leaking
-        if (!ChatRegistry.isVideoChat() || !WebRTCLeakHandling.showMenu || WebRTCLeakHandling.warnedUser) return;
-
-        WebRTCLeakHandling.warnedUser = true;
-        WebRTCLeakHandling.popup = new LeakedAddressPopup(WebRTCLeakHandling.httpAddress, WebRTCLeakHandling.leakedPubAddress);
-    },
-
+    }
 
 }

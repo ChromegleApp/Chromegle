@@ -42,6 +42,7 @@ class MuteMicrophone {
     videoButtonHidden(enabled) {
         $(this.#muteButton).css("visibility", enabled ? "hidden" : "visible");
     }
+
     static #sanitizePixelString(pixels) {
 
         return +(pixels.replaceAll("px", ""))
@@ -148,11 +149,11 @@ const MuteMicrophoneManager = {
         })
 
         let hiddenQuery = {}
-        hiddenQuery[config.muteButtonToggle.getName()] = config.muteButtonToggle.getDefault();
+        hiddenQuery[config.videoToolsButtonToggle.getName()] = config.videoToolsButtonToggle.getDefault();
 
         chrome.storage.sync.get(hiddenQuery, (result) => {
             MuteMicrophoneManager.instances.forEach((instance) => {
-                instance.videoButtonHidden(!(result[config.muteButtonToggle.getName()] === "true"));
+                instance.videoButtonHidden(!(result[config.videoToolsButtonToggle.getName()] === "true"));
             });
         })
 
@@ -160,7 +161,7 @@ const MuteMicrophoneManager = {
     },
 
     _storageSettingsUpdate(detail) {
-        const result = detail["detail"][config.muteButtonToggle.getName()];
+        const result = detail["detail"][config.videoToolsButtonToggle.getName()];
 
         if (result != null) {
             MuteMicrophoneManager.instances.forEach((instance) => {
