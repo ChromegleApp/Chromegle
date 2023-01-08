@@ -387,7 +387,9 @@ const IPBlockingManager = {
                 ChatManager.sendErrorMessage(
                     `Blocked the IP address ${unhashedAddress}${ChatRegistry.isChatting() ? " and skipped the current chat" : ""}`
                 ).appendChild(ButtonManager.ipUnblockButton(unhashedAddress));
-                AutoSkipManager.skipIfPossible();
+                if (ChatRegistry.isChatting()) {
+                    AutoSkipManager.skipIfPossible();
+                }
             } else {
                 alert(`The IP address ${unhashedAddress} is already blocked in video chat!`)
             }
