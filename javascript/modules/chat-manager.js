@@ -14,7 +14,7 @@ const ChatManager = {
         let logItems = document.getElementsByClassName("statuslog");
 
         for (let log of logItems) {
-            if (log.innerText.includes("HONG KONG")) {
+            if (log.innerText.includes("AGAINST THE CCP")) {
                 log.innerHTML = `Thanks for using Chromegle! ${ConstantValues.getHelpfulTip()}`;
             }
 
