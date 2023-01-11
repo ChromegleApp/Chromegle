@@ -113,13 +113,13 @@ class SettingsMenu {
 
     manageCollapsables = () => {
         this.#settingsModalElement.addEventListener("click", (target) => {
-            let element = target.path[0];
+            let element = target.composedPath()[0];
 
             if (element.classList.contains("editFieldButton")) {
                 config[element.id].update();
             }
 
-            // Toggle collapsables
+            // Toggle collapsibles
             if (element.classList.contains("settingsCollapsable")) {
 
                 // Update field toggles
