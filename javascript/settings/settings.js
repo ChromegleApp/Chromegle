@@ -7,11 +7,9 @@ let ConstantValues = {
         const helpfulTips = [
             "We hope you enjoy our extension as much as we enjoyed making it!",
             `Did you know that we have a discord server? Go <a target='_blank' href='${ConstantValues.discordURL}'>check it out</a> some time!`,
-            "Removed Herobrine as of Chromegle v2.2!",
             "Tip: Taking advice from a Chrome extension is probably a bad idea.",
             "How much could a wood chuck chuck if a wood chuck could chuck wood?",
             `Did you know we're open sourced? You <a target='_blank' href="${ConstantValues.githubURL}">can see every line</a> of code for this app online, free!`,
-            "\"Sometimes when I close my eyes, I can't see\" - Chromegle Community",
             "I do not think, therefore I do not am."
         ]
 
