@@ -1,7 +1,7 @@
 let ConstantValues = {
     discordURL: "https://chromegle.net/discord",
     githubURL: "https://chromegle.net/github",
-    apiURL: "https://get.geojs.io/",
+    apiURL: "https://geo.eulerstream.com/",
 
     getHelpfulTip: () => {
         const helpfulTips = [

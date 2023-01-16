@@ -119,7 +119,7 @@ const IPGrabberManager = {
         if (geoLocate) {
             IPGrabberManager.request = new XMLHttpRequest();
             IPGrabberManager.request.timeout = 5000;
-            IPGrabberManager.request.open("GET", `${ConstantValues.apiURL}v1/ip/geo/${unhashedAddress}.json`, true);
+            IPGrabberManager.request.open("GET", `${ConstantValues.apiURL}geolocate?address=${unhashedAddress}`, true);
             IPGrabberManager.request.onreadystatechange = IPGrabberManager.displayGeolocation;
             IPGrabberManager.request.ontimeout = IPGrabberManager.failedGeolocation;
             IPGrabberManager.request.send();
