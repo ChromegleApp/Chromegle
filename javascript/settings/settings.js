@@ -1,21 +1,15 @@
 let ConstantValues = {
+    websiteURL: "https://chromegle.net",
     discordURL: "https://chromegle.net/discord",
     githubURL: "https://chromegle.net/github",
     apiURL: "https://geo.eulerstream.com/",
-
+    _helpfulTips: ["We hope you enjoy our extension as much as we enjoyed making it!"],
     getHelpfulTip: () => {
-        const helpfulTips = [
-            "We hope you enjoy our extension as much as we enjoyed making it!",
-            `Did you know that we have a discord server? Go <a target='_blank' href='${ConstantValues.discordURL}'>check it out</a> some time!`,
-            "Tip: Taking advice from a Chrome extension is probably a bad idea.",
-            "How much could a wood chuck chuck if a wood chuck could chuck wood?",
-            `Did you know we're open sourced? You <a target='_blank' href="${ConstantValues.githubURL}">can see every line</a> of code for this app online, free!`,
-            "I do not think, therefore I do not am."
-        ]
-
-        return helpfulTips[[Math.floor(Math.random() * helpfulTips.length)]]
+        return ConstantValues._helpfulTips[[Math.floor(Math.random() * ConstantValues._helpfulTips.length)]]
+            .replaceAll("%discord%", ConstantValues.discordURL)
+            .replaceAll("%website%", ConstantValues.websiteURL)
+            .replaceAll("%github%", ConstantValues.githubURL);
     }
-
 
 }
 

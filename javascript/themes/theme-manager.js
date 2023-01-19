@@ -60,7 +60,8 @@ class ThemeManager {
                 this.#overrideCollegeAndUnModeratedButtons,
                 this.#overrideLinks,
                 this.#overrideHeader,
-                this.#overrideStudentChatEmoji
+                this.#overrideStudentChatEmoji,
+                this.#resizeCommonInterestsLabel
             ].forEach((fn) => {
                 try {
                     fn();
@@ -69,6 +70,11 @@ class ThemeManager {
                     console.log(ex);
                 }
             })
+        }
+
+        #resizeCommonInterestsLabel = () => {
+            $(".shoulduselikescheckbox").parent().css("font-size", "15px");
+
         }
 
         #overrideStudentChatEmoji = () => {
@@ -104,10 +110,13 @@ class ThemeManager {
 
         #overrideTaglineInsertMenu = () => {
             let div = document.createElement("div");
-            div.id = "menucontainer"
+            div.id = "menucontainer";
             div.classList.add("settingsButtonContainer");
             div.append(ButtonManager.menuButton.get(0))
-            $("#tagline").replaceWith(div)
+            $("#tagline").replaceWith(div);
+
+            // Initialize the user count manager
+            UserCountManager.initialize();
         };
 
         #overrideHongKongPoster = () => {

@@ -64,3 +64,11 @@ function isValidHttpsUrl(string) {
     }
     return url.protocol === "https:";
 }
+
+function loadHelpfulTips() {
+
+    fetch(`${ConstantValues.apiURL}tips`).then(res => res.json()).then(res => {
+        ConstantValues._helpfulTips = res;
+    });
+
+}

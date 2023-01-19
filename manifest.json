@@ -49,6 +49,7 @@
         "javascript/settings/settings.js",
         "javascript/settings/config.js",
         "javascript/themes/splash-image.js",
+        "javascript/themes/user-count.js",
         "javascript/main.js"
       ],
       "matches": [

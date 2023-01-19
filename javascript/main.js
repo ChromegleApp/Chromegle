@@ -83,5 +83,12 @@ $(document).on("ready", () => {
         });
     }
 
+    /**
+     * Load Tips
+     */
+    {
+        loadHelpfulTips();
+    }
+
 });
 

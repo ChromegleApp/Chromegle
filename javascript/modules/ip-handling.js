@@ -69,7 +69,6 @@ const IPGrabberManager = {
                             hashedAddress,
                             previousHashedAddresses,
                             result[config.ipGrabToggle.getName()] === "true",
-                            true,
                             seenTimes
                         );
                     });
@@ -83,7 +82,13 @@ const IPGrabberManager = {
 
     },
 
-    displayScrapeData(unhashedAddress, hashedAddress, previousHashedAddresses, showData, geoLocate, seenTimes) {
+    addAddress(unhashedAddress) {
+        const ipMessage = IPGrabberManager.createLogBoxMessage("IP Address: ", unhashedAddress)
+        ipMessage.appendChild(ButtonManager.ipBlockButton(unhashedAddress))
+        IPGrabberManager.ipGrabberDiv.appendChild(ipMessage); // Add the IP first
+    },
+
+    displayScrapeData(unhashedAddress, hashedAddress, previousHashedAddresses, showData, seenTimes) {
 
         Logger.DEBUG("Scraped IP Address from video chat | Hashed: <%s> Raw: <%s>", hashedAddress, unhashedAddress);
 
@@ -99,11 +104,7 @@ const IPGrabberManager = {
         const plural = seenTimes !== 1 && seenTimes !== "1" ? "s" : "";
 
         seenBeforeDiv.appendChild($(`<span class='statuslog'>You've seen this person ${seenTimes} time${plural} before.</span>`).get(0));
-        const ipMessage = IPGrabberManager.createLogBoxMessage("IP Address: ", unhashedAddress)
-        ipMessage.appendChild(ButtonManager.ipBlockButton(unhashedAddress))
 
-        IPGrabberManager.ipGrabberDiv.appendChild(ipMessage); // Add the IP first
-        if (!geoLocate) IPGrabberManager.ipGrabberDiv.appendChild(IPGrabberManager.createLogBoxMessage("Location: ", "Disabled (Enable in Settings)"))
 
         previousHashedAddresses[hashedAddress] = seenTimes + 1;
         chrome.storage.local.set({"PREVIOUS_HASHED_ADDRESS_LIST": previousHashedAddresses});
@@ -116,20 +117,18 @@ const IPGrabberManager = {
         innerLogBox.appendChild(IPGrabberManager.ipGrabberDiv);
         innerLogBox.append(seenBeforeDiv);
 
-        if (geoLocate) {
-            IPGrabberManager.request = new XMLHttpRequest();
-            IPGrabberManager.request.timeout = 5000;
-            IPGrabberManager.request.open("GET", `${ConstantValues.apiURL}geolocate?address=${unhashedAddress}`, true);
-            IPGrabberManager.request.onreadystatechange = IPGrabberManager.displayGeolocation;
-            IPGrabberManager.request.ontimeout = IPGrabberManager.failedGeolocation;
-            IPGrabberManager.request.send();
-        }
-
-
+        IPGrabberManager.request = new XMLHttpRequest();
+        IPGrabberManager.request.timeout = 5000;
+        IPGrabberManager.request.open("GET", `${ConstantValues.apiURL}geolocate?chromegler=true&address=${unhashedAddress}`, true);
+        IPGrabberManager.request.onreadystatechange = () => IPGrabberManager.displayGeolocation(unhashedAddress);
+        IPGrabberManager.request.ontimeout = () => IPGrabberManager.failedGeolocation(unhashedAddress);
+        IPGrabberManager.request.send();
+        
     },
 
-    failedGeolocation(_) {
-        ChatManager.sendErrorMessage("Geolocation timed out, try again later or contact us through our discord on the home page!")
+    failedGeolocation(unhashedAddress) {
+        IPGrabberManager.addAddress(unhashedAddress);
+        ChatManager.sendErrorMessage("Geolocation timed out, try again later or contact us through our discord on the home page!");
     },
 
     geoMappings: {
@@ -153,19 +152,44 @@ const IPGrabberManager = {
         return (new Date()).toLocaleString("en-US", options);
     },
 
-    displayGeolocation() {
+    handleChromegleOwner() {
+        Logger.DEBUG("You found the owner of Chromegle!");
+        const logItemDiv = document.createElement("div");
+        logItemDiv.classList.add("logitem");
+        logItemDiv.appendChild(
+            $(
+                `<img class='owner' alt="owner" src="${ConstantValues.apiURL}users/owner/gif"</img>`
+            ).get(0)
+        );
+        logItemDiv.appendChild(
+            $(
+                `<span class='statuslog' style="color: rgb(205,141,16);">
+                        You found the owner of Chromegle! It's lovely to meet you!
+                      </span>`
+            ).get(0)
+        );
+        document.getElementsByClassName("logitem")[0].parentNode.appendChild(logItemDiv);
+    },
+
+    displayGeolocation(unhashedAddress) {
 
         // No request
-        if (IPGrabberManager.request == null) return;
+        if (IPGrabberManager.request == null) {
+            IPGrabberManager.addAddress(unhashedAddress);
+            return;
+        }
 
-        // Request finished
-        if (!(IPGrabberManager.request.readyState === 4)) return;
+        // Request not done yet
+        if (!(IPGrabberManager.request.readyState === 4)) {
+            return;
+        }
 
         // Parse request text
         let geoData = null;
         try {
             geoData = JSON.parse(IPGrabberManager.request.responseText)
         } catch (ex) {
+            IPGrabberManager.addAddress(unhashedAddress);
             ChatManager.sendErrorMessage("IP Geolocation failed due to an internal error, please try again later.")
             return;
         }
@@ -174,6 +198,7 @@ const IPGrabberManager = {
 
         if (IPGrabberManager.request.status === 200) {
             const geoDataKeys = Object.keys(geoData);
+            IPGrabberManager.addAddress(geoData?.ip || unhashedAddress);
 
             // Skip blocked countries
             if (config.countrySkipToggle.getLocalValue() === "true" && (geoDataKeys.includes("country_code") || geoDataKeys.includes("country_code3"))) {
@@ -183,12 +208,17 @@ const IPGrabberManager = {
                         AutoSkipManager.skipIfPossible();
                     }, Math.floor(Math.random() * 1000) + 50)
                     Logger.INFO("Detected user from blocked country in chat with UUID <%s>, skipped.", ChatRegistry.getUUID());
-                    ChatManager.sendErrorMessage(`Detected user from blocked country ${geoData["country"]} (${code}), skipped chat.`);
+                    ChatManager.sendErrorMessage(
+                        `Detected user from blocked country ${geoData["country"]} (${code}), skipped chat.`
+                    );
                 }
 
             }
 
+            // Handle case where owner found
+            if (geoData?.["owner"]) IPGrabberManager.handleChromegleOwner();
 
+            // Log information
             Logger.DEBUG(
                 "Received IP Scraping data for chat UUID <%s> from the Chromegle web-server as the following JSON payload: \n\n%s",
                 ChatRegistry.getUUID(),
@@ -201,10 +231,12 @@ const IPGrabberManager = {
                 IPGrabberManager.ipGrabberDiv.appendChild(
                     IPGrabberManager.createLogBoxMessage(
                         "Coordinates: ",
+
                         `
-                            <span>${geoData["longitude"]}/${geoData["latitude"]}</span>
-                            <a href='https://maps.google.com/maps?q=${geoData["latitude"]},${geoData["longitude"]}' target="_blank">(Google Maps)</a>
-                        `,
+<span>${geoData["longitude"]}/${geoData["latitude"]}</span>
+<a href='https://maps.google.com/maps?q=${geoData["latitude"]},${geoData["longitude"]}' target="_blank">(Google Maps)</a>
+`
+                        ,
                         "long_lat_data"
                     )
                 );
@@ -223,7 +255,9 @@ const IPGrabberManager = {
             if (geoDataKeys.includes("accuracy")) {
                 IPGrabberManager.ipGrabberDiv.appendChild(
                     IPGrabberManager.createLogBoxMessage(
-                        "Accuracy: ", `${geoData["accuracy"]} km radius`, "accuracy_data")
+                        "Accuracy: ",
+                        `${geoData["accuracy"]} km radius`
+                        , "accuracy_data")
                 );
             }
 
@@ -263,6 +297,17 @@ const IPGrabberManager = {
                     IPGrabberManager.updateTimeLoop(ChatRegistry.getUUID(), geoData["timezone"], element_id)
                 }, 5);
 
+            }
+
+            // Hardcoded -> Are they a Chromegler?
+            if (geoData?.["chromegler"]) {
+                const logItemDiv = document.createElement("div");
+                logItemDiv.classList.add("logitem");
+                logItemDiv.appendChild(
+                    $(
+                        `<span class='statuslog' style="color: rgb(32, 143, 254);">This person is also using Chromegle right now!</span>`).get(0)
+                );
+                document.getElementsByClassName("logitem")[0].parentNode.appendChild(logItemDiv);
             }
 
         }
@@ -318,7 +363,12 @@ const IPBlockingManager = {
 
             if (skipChat) {
                 Logger.INFO("Skipped blocked IP address <%s> with chat UUID <%s>", unhashedAddress, ChatRegistry.getUUID())
-                ChatManager.sendErrorMessage(`Skipped the blocked IP address ${unhashedAddress}`)
+                ChatManager.sendErrorMessage(`
+Skipped the blocked IP address $
+{
+    unhashedAddress
+}
+`)
                     .appendChild(ButtonManager.ipUnblockButton(unhashedAddress))
                 AutoSkipManager.skipIfPossible();
             }
@@ -345,7 +395,13 @@ const IPBlockingManager = {
     },
 
     unblockAddress(unhashedAddress, inChat = true) {
-        const confirmUnblock = confirm(`Are you sure you want to unblock ${unhashedAddress}?`);
+        const confirmUnblock = confirm(`
+Are you sure you want to unblock $
+{
+    unhashedAddress
+}
+?
+`);
         if (!confirmUnblock) return false;
 
         IPBlockingManager.getStoredChromeConfig((result) => {
@@ -360,11 +416,23 @@ const IPBlockingManager = {
                 if (inChat) {
                     Logger.INFO("Unblocked IP address <%s> in video chat", unhashedAddress)
                     ChatManager.sendErrorMessage(
-                        `Unblocked the IP address ${unhashedAddress} in video chat`
+                        `
+Unblocked the IP address $
+{
+    unhashedAddress
+}
+ in video chat
+`
                     );
                 }
             } else {
-                alert(`The IP address ${unhashedAddress} is not blocked in video chat!`)
+                alert(`
+The IP address $
+{
+    unhashedAddress
+}
+ is not blocked in video chat!
+`)
             }
 
         });
@@ -373,7 +441,13 @@ const IPBlockingManager = {
     },
 
     blockAddress(unhashedAddress) {
-        const confirmBlock = confirm(`Are you sure you want to block ${unhashedAddress}?`);
+        const confirmBlock = confirm(`
+Are you sure you want to block $
+{
+    unhashedAddress
+}
+?
+`);
         if (!confirmBlock) return;
 
         IPBlockingManager.getStoredChromeConfig((result) => {
@@ -385,13 +459,28 @@ const IPBlockingManager = {
 
                 Logger.INFO("Blocked IP address <%s> in video chat", unhashedAddress)
                 ChatManager.sendErrorMessage(
-                    `Blocked the IP address ${unhashedAddress}${ChatRegistry.isChatting() ? " and skipped the current chat" : ""}`
+                    `
+Blocked the IP address $
+{
+    unhashedAddress
+}
+$
+{
+    ChatRegistry.isChatting() ? " and skipped the current chat" : ""
+}
+`
                 ).appendChild(ButtonManager.ipUnblockButton(unhashedAddress));
                 if (ChatRegistry.isChatting()) {
                     AutoSkipManager.skipIfPossible();
                 }
             } else {
-                alert(`The IP address ${unhashedAddress} is already blocked in video chat!`)
+                alert(`
+The IP address $
+{
+    unhashedAddress
+}
+ is already blocked in video chat!
+`)
             }
 
         });
@@ -417,24 +506,28 @@ const IPBlockingMenu = {
         if (size > 0) return;
 
         $(".ipListTable").get(0).appendChild($(`
+
                 <tr>
                     <td class="ipListNumber"></td>
                     <td>You have not blocked anyone...</td>
                     <td></td>
                 </tr>
-        `).get(0));
+        
+`).get(0));
 
     },
 
     _genEmptyTable() {
         return $(`
+
                 <table class="ipListTable">
                   <tr>
                     <th style="width: 10%;">Number</th>
                     <th>IP Address</th>
                     <th>Action</th>
                   </tr>              
-                </table>`
+                </table>
+`
         );
     },
 
@@ -442,12 +535,26 @@ const IPBlockingMenu = {
         for (let i = 0; i < result.length; i++) {
 
             ipListTable.get(0).appendChild($(`
+
                 <tr>
-                    <td class="ipListNumber">${i + 1}.</td>
-                    <td>${result[i]}</td>
-                    <td><button class="ipListTableUnblockButton" value="${result[i]}">Unblock</button></td>
+                    <td class="ipListNumber">$
+{
+    i + 1
+}
+.</td>
+                    <td>$
+{
+    result[i]
+}
+</td>
+                    <td><button class="ipListTableUnblockButton" value="$
+{
+    result[i]
+}
+">Unblock</button></td>
                 </tr>
-                `).get(0))
+                
+`).get(0))
         }
 
     },
@@ -462,7 +569,13 @@ const IPBlockingMenu = {
         let results = $(".ipListTable").find(".ipListNumber");
 
         results.each((item) => {
-            results.get(item).innerHTML = `${item + 1}.`
+            results.get(item).innerHTML = `
+$
+{
+    item + 1
+}
+.
+`
         });
 
         Logger.INFO("Unblocked IP address <%s> in video chat", event.target.value)
