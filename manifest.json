@@ -42,6 +42,7 @@
         "javascript/modules/web-filtering/filter-messages.js",
         "javascript/modules/mute-microphone.js",
         "javascript/modules/webrtc-tools.js",
+        "javascript/modules/clear-interests.js",
         "javascript/modules/voice-commands/speech-engine.js",
         "javascript/modules/voice-commands/intent-handlers.js",
         "javascript/settings/menu.js",

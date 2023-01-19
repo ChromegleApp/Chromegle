@@ -45,7 +45,6 @@ function checkImage(url, success, failure) {
     request.open("GET", url, true);
     request.send();
     request.onload = function () {
-        console.log("TD")
         status = request.status;
         if (request.status === 200) //if(statusText == OK)
         {

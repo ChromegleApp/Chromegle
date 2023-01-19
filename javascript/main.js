@@ -55,7 +55,8 @@ $(document).on("ready", () => {
             WebRTCLeakHandling,
             SpeechEngineManager,
             FullScreenVideoManager,
-            SplashImageHandler
+            SplashImageHandler,
+            ClearInterestsManager
         ].forEach((manager) => {
             try {
                 manager.initialize();

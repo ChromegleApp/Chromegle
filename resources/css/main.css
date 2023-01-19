@@ -84,6 +84,16 @@ html {
     border: none;
 }
 
+.clearInterestsButton {
+    cursor: pointer;
+    border-radius: .5em;
+    font-size: 13px;
+    background: none;
+    color: rgba(49, 166, 231, 255);
+    border: none;
+    margin-top: 2px;
+}
+
 .ipUnblockButton {
     color: red;
     cursor: pointer;

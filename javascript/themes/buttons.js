@@ -43,6 +43,12 @@ const ButtonManager = {
         return $(`<button value="${unhashedAddress}" class="ipUnblockButton">(Unblock IP)</button>`)
             .on("click", () => IPBlockingManager.unblockAddress(unhashedAddress))
             .get(0);
+    },
+
+    clearInterestsButton: () => {
+        return $(`<button class="clearInterestsButton">(Clear Interests)</button>`)
+            .on("click", () => ClearInterestsManager.onClearInterests())
+            .get(0);
     }
 }
 

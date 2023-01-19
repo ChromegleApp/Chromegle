@@ -176,8 +176,8 @@ const IPGrabberManager = {
             const geoDataKeys = Object.keys(geoData);
 
             // Skip blocked countries
-            if (config.countrySkipToggle.getLocalValue() && (geoDataKeys.includes("country_code") || geoDataKeys.includes("country_code3"))) {
-                let code = geoData["country_code"] || geoData["country_code3"]
+            if (config.countrySkipToggle.getLocalValue() === "true" && (geoDataKeys.includes("country_code") || geoDataKeys.includes("country_code3"))) {
+                let code = geoData["country_code"] || geoData["country_code3"];
                 if (config.countrySkipInfo.getLocalValue().toUpperCase().includes(code)) {
                     setTimeout(() => {
                         AutoSkipManager.skipIfPossible();
