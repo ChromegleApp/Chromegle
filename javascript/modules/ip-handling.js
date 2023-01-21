@@ -89,7 +89,6 @@ const IPGrabberManager = {
     },
 
     displayScrapeData(unhashedAddress, hashedAddress, previousHashedAddresses, showData, seenTimes) {
-
         Logger.DEBUG("Scraped IP Address from video chat | Hashed: <%s> Raw: <%s>", hashedAddress, unhashedAddress);
 
         const innerLogBox = document.getElementsByClassName("logitem")[0].parentNode;
@@ -123,7 +122,7 @@ const IPGrabberManager = {
         IPGrabberManager.request.onreadystatechange = () => IPGrabberManager.displayGeolocation(unhashedAddress);
         IPGrabberManager.request.ontimeout = () => IPGrabberManager.failedGeolocation(unhashedAddress);
         IPGrabberManager.request.send();
-        
+
     },
 
     failedGeolocation(unhashedAddress) {
@@ -363,12 +362,7 @@ const IPBlockingManager = {
 
             if (skipChat) {
                 Logger.INFO("Skipped blocked IP address <%s> with chat UUID <%s>", unhashedAddress, ChatRegistry.getUUID())
-                ChatManager.sendErrorMessage(`
-Skipped the blocked IP address $
-{
-    unhashedAddress
-}
-`)
+                ChatManager.sendErrorMessage(`Skipped the blocked IP address ${unhashedAddress}`)
                     .appendChild(ButtonManager.ipUnblockButton(unhashedAddress))
                 AutoSkipManager.skipIfPossible();
             }
@@ -395,13 +389,7 @@ Skipped the blocked IP address $
     },
 
     unblockAddress(unhashedAddress, inChat = true) {
-        const confirmUnblock = confirm(`
-Are you sure you want to unblock $
-{
-    unhashedAddress
-}
-?
-`);
+        const confirmUnblock = confirm(`Are you sure you want to unblock ${unhashedAddress}?`);
         if (!confirmUnblock) return false;
 
         IPBlockingManager.getStoredChromeConfig((result) => {
@@ -415,24 +403,11 @@ Are you sure you want to unblock $
 
                 if (inChat) {
                     Logger.INFO("Unblocked IP address <%s> in video chat", unhashedAddress)
-                    ChatManager.sendErrorMessage(
-                        `
-Unblocked the IP address $
-{
-    unhashedAddress
-}
- in video chat
-`
+                    ChatManager.sendErrorMessage(`Unblocked the IP address ${unhashedAddress} in video chat`
                     );
                 }
             } else {
-                alert(`
-The IP address $
-{
-    unhashedAddress
-}
- is not blocked in video chat!
-`)
+                alert(`The IP address ${unhashedAddress} is not blocked in video chat!`)
             }
 
         });
@@ -441,13 +416,7 @@ The IP address $
     },
 
     blockAddress(unhashedAddress) {
-        const confirmBlock = confirm(`
-Are you sure you want to block $
-{
-    unhashedAddress
-}
-?
-`);
+        const confirmBlock = confirm(`Are you sure you want to block ${unhashedAddress}?`);
         if (!confirmBlock) return;
 
         IPBlockingManager.getStoredChromeConfig((result) => {
@@ -459,28 +428,13 @@ Are you sure you want to block $
 
                 Logger.INFO("Blocked IP address <%s> in video chat", unhashedAddress)
                 ChatManager.sendErrorMessage(
-                    `
-Blocked the IP address $
-{
-    unhashedAddress
-}
-$
-{
-    ChatRegistry.isChatting() ? " and skipped the current chat" : ""
-}
-`
+                    `Blocked the IP address ${unhashedAddress}${ChatRegistry.isChatting() ? " and skipped the current chat" : ""}`
                 ).appendChild(ButtonManager.ipUnblockButton(unhashedAddress));
                 if (ChatRegistry.isChatting()) {
                     AutoSkipManager.skipIfPossible();
                 }
             } else {
-                alert(`
-The IP address $
-{
-    unhashedAddress
-}
- is already blocked in video chat!
-`)
+                alert(`The IP address ${unhashedAddress} is already blocked in video chat!`)
             }
 
         });
@@ -511,10 +465,7 @@ const IPBlockingMenu = {
                     <td class="ipListNumber"></td>
                     <td>You have not blocked anyone...</td>
                     <td></td>
-                </tr>
-        
-`).get(0));
-
+                </tr>`).get(0));
     },
 
     _genEmptyTable() {
@@ -537,24 +488,10 @@ const IPBlockingMenu = {
             ipListTable.get(0).appendChild($(`
 
                 <tr>
-                    <td class="ipListNumber">$
-{
-    i + 1
-}
-.</td>
-                    <td>$
-{
-    result[i]
-}
-</td>
-                    <td><button class="ipListTableUnblockButton" value="$
-{
-    result[i]
-}
-">Unblock</button></td>
-                </tr>
-                
-`).get(0))
+                    <td class="ipListNumber">${i + 1}.</td>
+                    <td>${result[i]}</td>
+                    <td><button class="ipListTableUnblockButton" value="${result[i]}">Unblock</button></td>
+                </tr>`).get(0))
         }
 
     },
@@ -569,13 +506,7 @@ const IPBlockingMenu = {
         let results = $(".ipListTable").find(".ipListNumber");
 
         results.each((item) => {
-            results.get(item).innerHTML = `
-$
-{
-    item + 1
-}
-.
-`
+            results.get(item).innerHTML = `${item + 1}.`
         });
 
         Logger.INFO("Unblocked IP address <%s> in video chat", event.target.value)
