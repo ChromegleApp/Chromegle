@@ -4,7 +4,7 @@
   "author": "Isaac Kogan",
   "homepage_url": "https://chromegle.net",
   "manifest_version": 3,
-  "version": "4.2.2",
+  "version": "4.2.3",
   "icons": {
     "16": "resources/images/IconLogo.png",
     "48": "resources/images/IconLogo.png",
