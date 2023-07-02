@@ -293,10 +293,29 @@ const IPGrabberManager = {
                 );
 
                 setTimeout(() => {
-                    IPGrabberManager.updateTimeLoop(ChatRegistry.getUUID(), geoData["timezone"], element_id)
+                    IPGrabberManager.updateElementLoop(ChatRegistry.getUUID(), geoData["timezone"], `#${element_id}`,
+                        (timezone) => IPGrabberManager.getCurrentTime(timezone));
                 }, 5);
 
             }
+
+            // Hardcoded -> Elapsed time since in call with peer
+            const element_id = "since_time_data"
+
+            IPGrabberManager.ipGrabberDiv.appendChild(
+                IPGrabberManager.createLogBoxMessage(
+                    "Time in call: ",
+                    "0:00",
+                    element_id
+                )
+            );
+
+            setTimeout(() => {
+                var sinceDate = new Date();
+
+                IPGrabberManager.updateElementLoop(ChatRegistry.getUUID(), geoData["timezone"], `#${element_id}`,
+                    (_) => IPGrabberManager.formatElapsedTime(sinceDate));
+            }, 5);
 
             // Hardcoded -> Are they a Chromegler?
             if (geoData?.["chromegler"]) {
@@ -313,10 +332,20 @@ const IPGrabberManager = {
 
     },
 
-    updateTimeLoop(cachedUUID, timezone, element_id) {
-        if (cachedUUID !== ChatRegistry.getUUID()) return;
-        $(`#${element_id}`).get(0).childNodes[1].innerHTML = IPGrabberManager.getCurrentTime(timezone)
-        setTimeout(() => IPGrabberManager.updateTimeLoop(cachedUUID, timezone, element_id), 1000);
+    updateElementLoop(cachedUUID, timezone, elementSelector, textFunc, interval = 1000) {	
+        if (cachedUUID !== ChatRegistry.getUUID()) return;	
+        $(elementSelector).get(0).childNodes[1].innerHTML = textFunc(timezone);	
+        setTimeout(() => IPGrabberManager.updateElementLoop(cachedUUID, timezone, elementSelector, textFunc), interval);	
+    },
+
+    formatElapsedTime(sinceDate) {
+        const diff = new Date(new Date() - new Date(sinceDate));
+
+        const hours = diff.getUTCHours();
+        const minutes = diff.getUTCMinutes().toString().padStart(2, "0");
+        const seconds = diff.getUTCSeconds().toString().padStart(2, "0");
+
+        return `${hours > 0 ? hours + ":" : ""}${minutes}:${seconds}`;
     },
 
     createLogBoxMessage: (label, value, elementId) => {
