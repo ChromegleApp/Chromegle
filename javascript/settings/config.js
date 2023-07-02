@@ -280,6 +280,9 @@ const config = {
     "blockedIPList": new ExternalField({
         "external": IPBlockingMenu.loadMenu
     }),
+    "unblockAllIPAddresses": new ExternalField({
+        "external": IPBlockingMenu.unblockAll
+    }),
     "voiceCommandToggle": new ToggleEdit({
         "elementName": "voiceCommandToggle",
         "storageName": "VOICE_COMMAND_TOGGLE",

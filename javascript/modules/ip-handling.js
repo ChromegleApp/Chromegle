@@ -513,6 +513,18 @@ const IPBlockingMenu = {
         IPBlockingMenu._modifyIfEmpty(document.getElementsByClassName("ipListNumber").length);
     },
 
+    unblockAll(noChange) {
+        if (noChange) return;
+
+        const confirmUnblock = confirm(`Are you sure you want to unblock all IP addresses?`);
+        if (!confirmUnblock) return;
+
+        IPBlockingManager.setStoredChromeConfig([]);
+
+        Logger.INFO("Unblocked all IP addresses in video chat")
+        IPBlockingMenu._modifyIfEmpty(document.getElementsByClassName("ipListNumber").length);
+    },
+
     loadMenu(noChange) {
 
         if (noChange) return;
