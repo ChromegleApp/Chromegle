@@ -459,7 +459,7 @@ const IPBlockingMenu = {
     _modifyIfEmpty(size) {
         if (size > 0) return;
 
-        $(".ipListTable").get(0).appendChild($(`
+        $(".ipListTable")?.get(0)?.appendChild($(`
 
                 <tr>
                     <td class="ipListNumber"></td>

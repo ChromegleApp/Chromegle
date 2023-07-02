@@ -11,7 +11,7 @@ class ThemeManager {
         let pageLinks = document.getElementsByTagName("link");
 
         for (let link of pageLinks) {
-            if (link.href.includes("https://www.omegle.com/static/style.css")) {
+            if (link.href.includes("/static/style.css")) {
                 this.#stylesheet = link;
             }
 
