@@ -1,56 +1,56 @@
 {
-  "name": "Chromegle - Omegle IP Puller & Dark Mode",
-  "description": "Elevate your Omegle experience with an integrated IP puller, custom themes, automation and other general improvements.",
+  "name": "Chromegle - Omegle IP & Client",
+  "description": "Elevate your Omegle experience with IP information, custom themes, automation and other general improvements.",
   "author": "Isaac Kogan",
   "homepage_url": "https://chromegle.net",
   "manifest_version": 3,
   "version": "4.2.3",
   "icons": {
-    "16": "resources/images/IconLogo.png",
-    "48": "resources/images/IconLogo.png",
-    "128": "resources/images/IconLogo.png"
+    "16": "public/images/IconLogo.png",
+    "48": "public/images/IconLogo.png",
+    "128": "public/images/IconLogo.png"
   },
+
   "content_scripts": [
     {
       "css": [
-        "resources/css/main.css",
-        "resources/css/settings.css"
+        "public/css/main.css",
+        "public/css/settings.css"
       ],
       "js": [
-        "javascript/libraries/jquery-2.1.1.min.js",
-        "javascript/libraries/js-cookie-2.2.1.min.js",
-        "javascript/libraries/micromodal.min.js",
-        "javascript/libraries/webrtc-ips.min.js",
-        "javascript/utilities/utilities.js",
-        "javascript/utilities/logger.js",
-        "javascript/themes/theme-manager.js",
-        "javascript/themes/theme-registry.js",
-        "javascript/themes/buttons.js",
-        "javascript/modules/fullscreen-video.js",
-        "javascript/modules/chat-registry.js",
-        "javascript/modules/chat-manager.js",
-        "javascript/modules/auto-message.js",
-        "javascript/modules/auto-skip.js",
-        "javascript/modules/auto-reconnect.js",
-        "javascript/modules/ip-handling.js",
-        "javascript/modules/auto-confirm.js",
-        "javascript/modules/unmoderated-chat.js",
-        "javascript/modules/video-screenshot.js",
-        "javascript/modules/video-blocking.js",
-        "javascript/modules/sync-topics.js",
-        "javascript/modules/paste-menu.js",
-        "javascript/modules/web-filtering/filter-messages.js",
-        "javascript/modules/mute-microphone.js",
-        "javascript/modules/webrtc-tools.js",
-        "javascript/modules/clear-interests.js",
-        "javascript/modules/voice-commands/speech-engine.js",
-        "javascript/modules/voice-commands/intent-handlers.js",
-        "javascript/settings/menu.js",
-        "javascript/settings/settings.js",
-        "javascript/settings/config.js",
-        "javascript/themes/splash-image.js",
-        "javascript/themes/user-count.js",
-        "javascript/main.js"
+        "src/libs/jquery-2.1.1.min.js",
+        "src/libs/js-cookie-2.2.1.min.js",
+        "src/libs/micromodal.min.js",
+        "src/core/module.js",
+        "src/mods/chat-registry.js",
+        "src/mods/chat-manager.js",
+        "src/mods/auto-message.js",
+        "src/mods/auto-skip.js",
+        "src/mods/auto-reconnect.js",
+        "src/mods/ip-handling.js",
+        "src/mods/auto-confirm.js",
+        "src/mods/unmoderated-chat.js",
+        "src/mods/sync-topics.js",
+        "src/mods/paste-menu.js",
+        "src/mods/filter-messages.js",
+        "src/mods/chat-tools/fullscreen-video.js",
+        "src/mods/chat-tools/video-screenshot.js",
+        "src/mods/chat-tools/video-blocking.js",
+        "src/mods/chat-tools/mute-microphone.js",
+        "src/mods/clear-interests.js",
+        "src/mods/broadcast.js",
+        "src/mods/voice-commands/speech-engine.js",
+        "src/mods/voice-commands/intent-handlers.js",
+        "src/ext/utilities/utilities.js",
+        "src/ext/utilities/logger.js",
+        "src/ext/themes/theme-manager.js",
+        "src/ext/themes/buttons.js",
+        "src/ext/settings/menu.js",
+        "src/ext/settings/settings.js",
+        "src/ext/settings/config.js",
+        "src/ext/themes/splash-image.js",
+        "src/ext/themes/user-count.js",
+        "src/main.js"
       ],
       "matches": [
         "*://*.omegle.com/*"
@@ -60,10 +60,9 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "/javascript/themes/types/*",
-        "/javascript/modules/web-accessible-scripts/*",
-        "/javascript/modules/web-filtering/*",
-        "/resources/*"
+        "/public/themes/types/*",
+        "/public/*",
+        "/src/ext/scrape-ips.js"
       ],
       "matches": [
         "*://*.omegle.com/*"
@@ -72,7 +71,7 @@
   ],
   "incognito": "split",
   "permissions": [
-    "storage"
+    "storage", "tabs"
   ],
   "externally_connectable": {
     "matches": [

@@ -1,0 +1,272 @@
+<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+            <header class="modal__header">
+                <h2 class="modal__title noselect" id="modal-1-title">Settings Manager</h2>
+                <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+            </header>
+            <main class="modal__content" id="modal-1-content">
+
+                <!-- Collapsable Items -->
+                <div class="settingsCollapseContainer">
+
+                    <!-- Greeting Settings -->
+                    <div class="settingsCollapsableWrapper">
+                        <button type="button" id="greetingsSettings" class="settingsCollapsable">Greeting Settings</button>
+                        <div class="settingsCollapsableItem">
+                            <!-- Options
+
+                            A) Enable Greeting
+                            B) Set WPM
+                            C) Set Send Delay
+
+                            -->
+                            <table class="settingsTable">
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Greeting Message
+                                            <span class="tooltiptext">Send automatic messages at the start of each chat to greet each new stranger!</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editFieldButtonGray" id="greetingMessageField">Edit Field</button>
+                                        <button class="editFieldButton editToggleDisabled" id="toggleGreeting">Enable</button>
+
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Typing Speed
+                                            <span class="tooltiptext">Choose the speed in words-per-minute (WPM) to type your greeting message.</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editFieldButtonGray" id="typingSpeedField">Edit Field</button>
+                                    </th>
+
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Starting Delay
+                                            <span class="tooltiptext">Choose how much time to wait before starting to type your greeting in chat.</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editFieldButtonGray" id="startTypingDelayField">Edit Field</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Sending Delay
+                                            <span class="tooltiptext">Choose how much time to wait after typing your greeting in chat before sending it.</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editFieldButtonGray" id="sendDelayField">Edit Field</button>
+                                    </th>
+                                </tr>
+
+                            </table>
+
+                        </div>
+                    </div>
+
+
+                    <!-- Automation Settings -->
+                    <div class="settingsCollapsableWrapper">
+                        <button type="button" id="automationSettings" class="settingsCollapsable">Automation Settings</button>
+                        <div class="settingsCollapsableItem">
+                            <!-- Options
+
+                            -->
+                            <table class="settingsTable">
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Voice Commands
+                                            <span class="tooltiptext">Do simple actions like send messages, skip and start chats with your voice!</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="voiceCommandToggle">Enable</button>
+                                        <button class="editFieldButton editFieldButtonGray" id="voiceCommandInfo">More Info</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Auto-Skip
+                                            <span class="tooltiptext">Skip to the next chat after a configurable number of seconds has passed.</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="autoSkipToggle">Enable</button>
+                                        <button class="editFieldButton editFieldButtonGray" id="autoSkipDelayField">Edit Delay</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Auto-Reconnect
+                                            <span class="tooltiptext">Automatically enter the next chat after your current one ends <strong>when in text mode.</strong></span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="autoReconnectToggle">Enable</button>
+                                        <button class="editFieldButton editFieldButtonGray" id="autoReconnectType">Edit Type</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">IP Grab & Geolocate <span class="tableItemSubLabel">(Video Only)</span>
+                                            <span class="tooltiptext">Display the IP address of the person you are chatting with <strong>when in video chat.</strong></span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="ipGrabToggle">Enable</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Skip Repeats <span class="tableItemSubLabel">(Video Only)</span>
+                                            <span class="tooltiptext">Skip people who you have chatted with before on Omegle <strong>when in video chat.</strong></span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="skipRepeatsToggle">Enable</button>
+                                    </th>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+
+                    <!-- Security Settings -->
+                    <div class="settingsCollapsableWrapper">
+                        <button type="button" id="filterSettings" class="settingsCollapsable">Security Settings</button>
+                        <div class="settingsCollapsableItem">
+                            <!-- Options
+
+                            A) Set auto-skip
+                            B) Toggle auto-reconnect
+
+                            -->
+                            <table class="settingsTable">
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Block Countries <span class="tableItemSubLabel">(Video Only)</span>
+                                            <span class="tooltiptext">Skip to the next chat if a user belongs to a given country code <strong>when in video chat</strong></span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editFieldButtonGray" id="countrySkipInfo">Edit Field</button>
+                                        <button class="editFieldButton editToggleDisabled" id="countrySkipToggle">Enable</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Blocked IP List <span class="tableItemSubLabel">(Video Only)</span>
+                                            <span class="tooltiptext">List the IP addresses you have perma-blocked when <strong>in the video chat.</strong></span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editFieldButtonGray" id="blockedIPList">Modify List</button>
+                                        <button class="editFieldButton editFieldButtonGray" id="unblockAllIPAddresses">Unblock All</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Sexual Text-Filter
+                                            <span class="tooltiptext">Filter messages of a sexual nature sent by you or your partner <strong>in the text chat.</strong></span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="sexualFilterToggle">Enable</button>
+                                    </th>
+
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Profanity Text-Filter
+                                            <span class="tooltiptext">Filter messages with profane words sent by you or your partner <strong>in the text chat.</strong></span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="profanityFilterToggle">Enable</button>
+                                    </th>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+
+                    <!-- Theme Settings -->
+                    <div class="settingsCollapsableWrapper">
+                        <button type="button" id="themeSettings" class="settingsCollapsable">Theme Settings</button>
+                        <div class="settingsCollapsableItem">
+                            <!-- Options
+                            -->
+                            <table class="settingsTable">
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Themes
+                                            <span class="tooltiptext">Pick between one of the three themes to customize your Omegle experience.</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="ultraDarkModeOption">Black Mode</button>
+                                        <button class="editFieldButton editToggleDisabled" id="semiDarkModeOption">Dark Mode</button>
+                                        <button class="editFieldButton editToggleDisabled" id="semiLightModeOption">Light Mode</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Homepage Image
+                                            <span class="tooltiptext">Have your very own custom splash image on the Omegle site</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="homePageSplashToggle">Enable</button>
+                                        <button class="editFieldButton editFieldButtonGray" id="homePageSplashEdit">Image URL</button>
+                                    </th>
+                                </tr>
+
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Header Buttons
+                                            <span class="tooltiptext">Enable or disable the language & share buttons at the top-right of the page.</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="headerButtonsToggle">Enable</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Extra Video Tools
+                                            <span class="tooltiptext">Get a microphone, pop-out video, and screenshot button <strong>when in video chat.</strong></span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="videoToolsButtonToggle">Enable</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Message Hotbar
+                                            <span class="tooltiptext">Toggle the message hotbar for a list of custom values to paste in your chatbox.</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="pasteMenuToggle">Enable</button>
+                                    </th>
+                                </tr>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+</div>

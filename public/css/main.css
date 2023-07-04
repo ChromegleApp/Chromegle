@@ -1,0 +1,389 @@
+
+html {
+    visibility: hidden;
+    background-size: cover;
+}
+
+.homeButton {
+    height: 57px;
+    width: 265px;
+    background-size: 265px 57px;
+    border: none;
+    background-color: inherit;
+    /*noinspection CssUnknownTarget*/
+    background-image: url("chrome-extension://__MSG_@@extension_id__/public/images/HomeButton.png")
+}
+
+.settingsButtonContainer {
+    margin-top: 24px;
+    display: flex;
+    align-items: center;
+}
+
+
+@keyframes fadein {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 100%;
+    }
+}
+
+
+.settingsButton {
+    height: 57px;
+    width: 150px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    opacity: 100%;
+}
+
+.customDiscordBanner {
+    height: 150px;
+    width: 287px;
+    background-size: 287px 150px;
+    background-color: inherit;
+    cursor: pointer;
+    z-index: 2;
+    margin-right: 20px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.ipLookupButton {
+    cursor: pointer;
+    padding: 6px;
+    border-radius: .5em;
+    font-size: .9em;
+    background: #409ffe;
+    background-image: -o-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -moz-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#80c0ff), to(#017ffe));
+    background-image: -webkit-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -ms-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    color: rgb(255, 255, 255);
+    font-weight: 400;
+
+    display: inherit;
+    position: inherit;
+    z-index: inherit;
+    border: inherit;
+    margin-right: inherit;
+    background-size: inherit;
+    height: inherit;
+    width: inherit;
+}
+
+#chromegleUserCount {
+    font-weight: 200;
+    height: 57px;
+    width: 150px;
+    background-size: 150px 57px;
+    margin-left: 20px;
+    background-image: -o-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -moz-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#80c0ff), to(#017ffe));
+    background-image: -webkit-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -ms-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    animation: 1000ms ease-out 0s 1 fadein;
+    border-radius: 10px;
+    float: top;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+}
+
+.userCountNum {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: -5px;
+    margin-left: 8px;
+    margin-top: -9px;
+}
+
+.userCountDesc {
+    text-align: center;
+    font-size: 12px;
+}
+
+.ipBlockButton {
+    cursor: pointer;
+    border-radius: .5em;
+    font-size: 15px;
+    background: none;
+    color: rgba(49, 166, 231, 255);
+    border: none;
+}
+
+.clearInterestsButton {
+    cursor: pointer;
+    border-radius: .5em;
+    font-size: 14px;
+    background: none;
+    margin-top: 1px;
+    color: rgba(49, 166, 231, 255);
+    border: none;
+}
+
+.owner {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    width: 400px;
+
+}
+
+.ipUnblockButton {
+    color: red;
+    cursor: pointer;
+    border-radius: .5em;
+    background: none;
+    font-weight: bold;
+    border: none;
+    font-size: .9em;
+}
+
+.statusItem {
+    color: #208ffe;
+    font-size: .9em;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    -webkit-animation: msgfade .25s ease-out forwards;
+    animation: msgfade .25s ease-out forwards
+}
+
+.statusItem.statusAnswer {
+    font-size: .9em;
+    font-weight: normal;
+}
+
+.nsfwCoverTextWrapper {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    font-size: 40px;
+    transition-duration: 200ms;
+
+}
+
+
+/*noinspection CssOverwrittenProperties*/
+.noselect, .tableItemLabel, .flagText {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+    user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.otherVideoCover {
+    -webkit-border-top-left-radius: 0.5em;
+
+}
+
+.selfVideoCover {
+    -webkit-border-bottom-left-radius: 0.5em;
+    left: 0;
+    bottom: 0;
+}
+
+.videoScreenshotButton {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    cursor: pointer;
+}
+
+.videoScreenshotButton:hover, .videoMuteButton:hover {
+    opacity: 80%;
+}
+
+.videoMuteButton {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    cursor: pointer;
+    opacity: 80%;
+    bottom: 0;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+
+.selfVideoScreenshotButton {
+    bottom: 0;
+}
+
+/*noinspection ALL*/
+@font-face {
+    font-family: nce;
+    src: url(chrome-extension://__MSG_@@extension_id__/public/NotoColorEmoji.ttf);
+}
+
+.nceFont {
+    font-family: nce, sans-serif;
+}
+
+
+.flagText {
+    font-size: 16px;
+}
+
+.pasteButton {
+    width: 7em;
+    margin-bottom: 0.5em;
+    /*
+        height: 5.45em;
+
+     */
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    justify-content: center;
+
+}
+
+.pasteButtonWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    float: right;
+    width: 7em;
+    margin-top: 3.5em;
+    margin-right: 0.5em;
+    text-align: center;
+
+}
+
+
+.pasteButtonTitle {
+    font-weight: bold;
+}
+
+.pasteButtonWrapper > a {
+    flex: 1;
+}
+
+#nsfwVideoSpinner {
+    display: none;
+    box-sizing: border-box;
+    position: absolute;
+    border-radius: 50%;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #ccc;
+    animation: spinner .6s linear infinite;
+}
+
+.btnkbshortcut {
+    color: red;
+}
+
+.ipListTable {
+    width: 100%;
+    vertical-align: center;
+    text-align: center;
+    justify-content: center;
+    justify-items: center;
+}
+
+.ipListTable tr {
+    background: rgb(224, 224, 224);
+    color: rgba(0, 0, 0, .8);
+}
+
+.ipListTable th, .ipListTable td {
+    padding: 10px;
+}
+
+.ipListTableUnblockButton {
+    color: inherit;
+    border: none;
+    background: none;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 0;
+}
+
+.disableCheckButton {
+    background-image: -o-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -moz-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#80c0ff), to(#017ffe));
+    background-image: -webkit-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -ms-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    color: white;
+    font-size: 15px;
+    text-align: center;
+    border-radius: 15px;
+    padding: 10px;
+    width: 50%;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 10px auto 25px;
+}
+
+code {
+    padding: 3px;
+    color: white;
+    border-radius: 4px;
+}
+
+#broadcast {
+    transition: opacity;
+    transition-duration: 500ms;
+    z-index: 5;
+    color: white;
+    position: fixed;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 10px;
+    padding-bottom: 25px;
+}
+
+#broadcast > .broadcast-title {
+    background: #409ffe;
+    background-image: -o-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -moz-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#80c0ff), to(#017ffe));
+    background-image: -webkit-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: -ms-linear-gradient(top, #80c0ff 0, #017ffe 100%);
+    background-image: linear-gradient(top, #80c0ff 0, #017ffe 100%);
+
+    font-size: 50px;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+#broadcast > .broadcast-msg {
+    max-width: 80vw;
+    overflow-wrap: break-word;
+    font-size: 35px;
+}

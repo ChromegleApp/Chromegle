@@ -1,0 +1,318 @@
+/**************************\
+  Basic Modal Styles
+\**************************/
+
+.modal {
+    font-family: -apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,ubuntu,roboto,noto,segoe ui,arial,sans-serif;
+}
+
+.modal__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal__container {
+    padding: 30px;
+    max-width: 700px;
+    min-width: 700px;
+    max-height: 100vh;
+    border-radius: 4px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal__title {
+    display: block;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 600;
+    font-size: 1.25rem;
+    line-height: 1.25;
+    cursor: unset;
+    box-sizing: border-box;
+}
+
+.modal__close {
+    background: transparent;
+    border: 0;
+    font-size: 20px;
+    cursor: pointer;
+    transition-duration: 150ms;
+}
+
+
+.modal__close:hover {
+    transition-duration: 150ms;
+}
+
+.modal__header .modal__close:before { content: "\2715"; }
+
+.modal__content {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+
+.modal__btn {
+    font-size: .875rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    border-radius: .25rem;
+    border-style: none;
+    border-width: 0;
+    cursor: pointer;
+    -webkit-appearance: button;
+    text-transform: none;
+    overflow: visible;
+    line-height: 1.15;
+    margin: 0;
+    will-change: transform;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    transition: -webkit-transform .25s ease-out;
+    transition: transform .25s ease-out,-webkit-transform .25s ease-out;
+}
+
+.modal__btn:focus, .modal__btn:hover {
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+}
+
+
+
+@keyframes mmfadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes mmfadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes mmslideIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+@keyframes mmslideOut {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10%); }
+}
+
+.micromodal-slide {
+    display: none;
+}
+
+.micromodal-slide.is-open {
+    display: block;
+}
+
+.micromodal-slide[aria-hidden="false"] .modal__overlay {
+    animation: mmfadeIn .3s cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+.micromodal-slide[aria-hidden="false"] .modal__container {
+    animation: mmslideIn .3s cubic-bezier(0, 0, .2, 1);
+}
+
+.micromodal-slide[aria-hidden="true"] .modal__overlay {
+    animation: mmfadeOut .3s cubic-bezier(0.0, 0.0, 0.2, 1);
+}
+
+.micromodal-slide[aria-hidden="true"] .modal__container {
+    animation: mmslideOut .3s cubic-bezier(0, 0, .2, 1);
+}
+
+.micromodal-slide .modal__container,
+.micromodal-slide .modal__overlay {
+    will-change: transform;
+}
+
+.modalLogo {
+    margin: 5% 10% 0;
+    background-size: 180px 48px;
+    width: 180px; height: 48px;
+    background-image: url("chrome-extension://__MSG_@@extension_id__/public/images/chromegleLogo.png");
+    cursor: pointer;
+}
+
+.settingsModalWrapper {
+    display:block ; /* Hidden by default */
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 1; /* Sit on top */
+    width: 50%;
+    height: 100%;
+    min-width: 600px;
+}
+
+.settingsModal {
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    width: 80%; /* Could be more or less, depending on screen size */
+    border-radius: .5em;
+    -moz-border-radius: .5em;
+    -webkit-border-radius: .5em;
+
+}
+
+.settingsModalCloseButton {
+    margin-right: 10%;
+    float: right;
+    display: inline;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.settingsCollapseContainer {
+    width: 80%;
+    margin: 0 auto 7%;
+}
+
+.settingsCollapsable {
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: center;
+    font-size: 20px;
+    outline: none;
+    display: block;
+    border-radius: 25px;
+    transition: opacity 300ms;
+
+}
+
+.active, .settingsCollapsable:hover {
+    transition: opacity 300ms;
+}
+
+.settingsCollapsableWrapper {
+    margin: 30px auto 0;
+    transition: opacity 300ms;
+
+}
+
+.settingsCollapsableItem {
+    margin: 0 auto;
+    padding: 0 18px;
+    display: none;
+    overflow: visible;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+.settingsTable {
+    width: 100%;
+    text-align: left;
+    margin: 0 10px 0;
+    padding-top: 15px;
+    padding-bottom: 5px;
+}
+
+.tableItemLabel {
+    font-size: 16px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: normal;
+}
+
+.tableItemSubLabel {
+    font-size: 12px;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: normal;
+}
+
+.editFieldButton {
+    text-align: center;
+    font-size: 15px;
+    line-height: 17px;
+    font-weight: 450;
+    vertical-align: center;
+    border-radius: 5px;
+    border: none;
+    overflow: hidden;
+    padding: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    float: right;
+    width: 100px;
+}
+
+.centerVertAndHorizontally {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    font-size: 13px;
+    visibility: hidden;
+    background-color: #212121;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1000;
+    bottom: 125%;
+    left: 25%;
+
+    width: 250px;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+    z-index: 1000;
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #212121 transparent transparent transparent;
+}
+
+.tooltiptext {
+    margin-bottom: 10px;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
