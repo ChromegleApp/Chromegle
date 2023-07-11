@@ -77,26 +77,13 @@ class MuteMicrophone {
     }
 
     toggleMuteVideo() {
-        let selfVideoStream = $("#selfvideo").get(0).captureStream()
-        let audioStreams = selfVideoStream.getAudioTracks();
+        console.log('TOGGLE CLICKED');
 
-        if (audioStreams.length < 1) {
-            Logger.ERROR(`Audio stream not found for chat UUID <${ChatRegistry.getUUID()}>`)
-            return;
-        }
-
-        let audioStream = audioStreams[0]
-
-        if (audioStream.enabled) {
-            audioStream.enabled = false;
-            this.#muteButton.get(0).src = MuteMicrophone.#disabledValue;
-        } else {
-            audioStream.enabled = true;
-            this.#muteButton.get(0).src = MuteMicrophone.#enabledValue;
-        }
 
     }
 }
+
+let ran = false;
 
 const MuteMicrophoneManager = {
 

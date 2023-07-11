@@ -1,5 +1,7 @@
-class IPGrabberManager extends Module { // todo remove extra references
+class IPGrabberManager extends Module {
 
+    ENABLE_TAG = "Show Chat-Info";
+    DISABLE_TAG = "Hide Chat-Info";
     GEO_MAPPINGS = {
         country: "Country",
         region: "Region",
@@ -7,15 +9,32 @@ class IPGrabberManager extends Module { // todo remove extra references
         organization: "Provider"
     }
 
-    ENABLE_TAG = "Show IP-Address";
-    DISABLE_TAG = "Hide IP-Address";
-    ipGrabberDiv = undefined;
-    request = undefined;
+    ipGrabberDiv = null;
+    updateClock = null;
     languages = null;
+
+    ipToggleButton = $("<button class='ipLookupButton' style='margin-bottom: 8px; margin-top: 6px;'></button>")
+        .on('click', () => {
+
+            let showQuery = {}
+            showQuery[config.ipGrabToggle.getName()] = config.ipGrabToggle.getDefault();
+            chrome.storage.sync.get(showQuery, (result) => {
+
+                const enabled = !(result[config.ipGrabToggle.getName()] === "true");
+                this.ipGrabberDiv.style.display = enabled ? "" : "none";
+
+                if (enabled) this.ipToggleButton.html(this.DISABLE_TAG);
+                else this.ipToggleButton.html(this.ENABLE_TAG);
+                config.ipGrabToggle.update();
+
+            });
+
+        });
+
 
     constructor() {
         super();
-        this.addEventListener("createAddressContainer", this.onDisplayScrapeData, undefined, window);
+        this.addEventListener("displayScrapeData", this.onDisplayScrapeData, undefined, window);
         this.loadLanguageList();
         this.injectScrapeScript();
     }
@@ -32,11 +51,11 @@ class IPGrabberManager extends Module { // todo remove extra references
 
 
     loadLanguageList() {
-        $.getJSON(getResourceURL("public/languages.json"),  (json) => this.languages = json);
+        $.getJSON(getResourceURL("public/languages.json"), (json) => this.languages = json);
     }
 
     getFlagEmoji(countryCode) {
-        String.fromCodePoint(...[...countryCode.toUpperCase()].map(x => 0x1f1a5 + x.charCodeAt(undefined)));
+        return String.fromCodePoint(...[...countryCode.toUpperCase()].map(x => 0x1f1a5 + x.charCodeAt(undefined)));
     }
 
     onDisplayScrapeData(event) {
@@ -50,17 +69,18 @@ class IPGrabberManager extends Module { // todo remove extra references
         let scrapeQuery = {[config.ipGrabToggle.getName()]: config.ipGrabToggle.getDefault()};
 
         // Check if show data is enabled, hash the address, run through block manager
-        chrome.storage.sync.get(scrapeQuery, (result) => {
+        chrome.storage.sync.get(scrapeQuery, async (result) => {
             let showData = result[config.ipGrabToggle.getName()] === "true";
-            sha1(unhashedAddress).then((hashedAddress) => {
-                Logger.DEBUG("Scraped IP Address from video chat | Hashed: <%s> Raw: <%s>", hashedAddress, unhashedAddress);
-                IPBlockingManager._receivedAddress(unhashedAddress, hashedAddress, (skippedChat) => {
-                        if (skippedChat) return;
-                        this.onIPBlockedCallback(showData, unhashedAddress, hashedAddress);
-                    })
-                }
-            );
-        })
+            let hashedAddress = await sha1(unhashedAddress);
+
+            Logger.DEBUG("Scraped IP Address from video chat | Hashed: <%s> Raw: <%s>", hashedAddress, unhashedAddress);
+            if (await IPBlockingManager.handleBlockedAddress(unhashedAddress)) {
+                return;
+            }
+
+            await this.geolocateAndDisplay(showData, unhashedAddress, hashedAddress);
+
+        });
 
     }
 
@@ -78,27 +98,35 @@ class IPGrabberManager extends Module { // todo remove extra references
 
     }
 
-    onIPBlockedCallback(showData, unhashedAddress, hashedAddress) {
+    async geolocateAndDisplay(showData, unhashedAddress, hashedAddress) {
         let previousQuery = {"PREVIOUS_HASHED_ADDRESS_LIST": {}};
-        chrome.storage.local.get(previousQuery, (result) => {
-            const previouslyHashed = result["PREVIOUS_HASHED_ADDRESS_LIST"];
-            const seenTimes = previouslyHashed[hashedAddress] || 0;
-            this.sendChatSeenEvent(seenTimes, unhashedAddress);
-            this.createAddressContainer(unhashedAddress, hashedAddress, previouslyHashed, showData, seenTimes);
 
-            // Update times seen
-            previouslyHashed[hashedAddress] = seenTimes + 1;
-            chrome.storage.local.set({"PREVIOUS_HASHED_ADDRESS_LIST": previouslyHashed}).then();
+        let result = await chrome.storage.local.get(previousQuery);
 
-            // Geolocation request
-            fetchWithTimeout(
+        const previouslyHashed = result["PREVIOUS_HASHED_ADDRESS_LIST"];
+        const seenTimes = previouslyHashed[hashedAddress] || 0;
+        this.sendChatSeenEvent(seenTimes, unhashedAddress);
+        this.createAddressContainer(unhashedAddress, hashedAddress, previouslyHashed, showData, seenTimes);
+
+        // Update times seen
+        previouslyHashed[hashedAddress] = seenTimes + 1;
+        await chrome.storage.local.set({"PREVIOUS_HASHED_ADDRESS_LIST": previouslyHashed});
+
+        // Geolocation request
+        let fetchJson;
+        try {
+            let fetchResult = await fetchWithTimeout(
                 `${ConstantValues.apiURL}geolocate?chromegler=true&address=${unhashedAddress}`,
                 {timeout: 5000}
-            )
-                .then((res) => res.json())
-                .then((json) => this.onGeolocationRequestCompleted(unhashedAddress, json))
-                .catch(() => this.onGeolocationRequestError(unhashedAddress));
-        });
+            );
+            fetchJson = await fetchResult.json();
+        } catch (ex) {
+            this.onGeolocationRequestError(unhashedAddress);
+            return;
+        }
+
+        this.onGeolocationRequestCompleted(unhashedAddress, fetchJson)
+
     }
 
     createAddressContainer(unhashedAddress, hashedAddress, previousHashedAddresses, showData, seenTimes) {
@@ -114,13 +142,13 @@ class IPGrabberManager extends Module { // todo remove extra references
         logItemDiv.classList.add("logitem");
         seenBeforeDiv.classList.add("logitem");
 
-        const plural = seenTimes > 1 ? "s" : "";
+        const plural = (seenTimes > 1 || seenTimes === 0) ? "s" : "";
         seenBeforeDiv.appendChild(
             $(`<span class='statuslog'>You've seen this person ${seenTimes} time${plural} before.</span>`).get(0)
         );
 
-        Buttons.ipToggleButton.html(showData ? this.DISABLE_TAG : this.ENABLE_TAG);
-        innerLogBox.appendChild(Buttons.ipToggleButton.get(0));
+        this.ipToggleButton.html(showData ? this.DISABLE_TAG : this.ENABLE_TAG);
+        innerLogBox.appendChild(this.ipToggleButton.get(0));
         innerLogBox.appendChild(this.ipGrabberDiv);
         innerLogBox.append(seenBeforeDiv);
 
@@ -128,7 +156,7 @@ class IPGrabberManager extends Module { // todo remove extra references
 
     insertUnhashedAddress(unhashedAddress) {
         let ipMessage = this.createLogBoxMessage(
-            "IP Address: ", unhashedAddress
+            "address_data", "IP Address: ", new Spoiler(unhashedAddress).get()
         );
         ipMessage.appendChild(Buttons.ipBlockButton(unhashedAddress));
         this.ipGrabberDiv.appendChild(ipMessage); // Add the IP first
@@ -139,163 +167,186 @@ class IPGrabberManager extends Module { // todo remove extra references
         ChatManager.sendErrorMessage("Geolocation failed, try again later or contact us through our discord on the home page!");
     }
 
-    handleBlockedCountries(countrySkipEnabled) {
-        const countrySkipInfo = config.countrySkipInfo.getLocalValue().toUpperCase().includes()
+    skipBlockedCountries(countrySkipEnabled, geoJSON) {
+        const code = geoJSON["country_code"] || geoJSON["country_code3"];
 
-        if (!countrySkipEnabled) {
+        // Pre-conditions
+        if (!countrySkipEnabled || !code) {
+            return false;
+        }
+
+        // If blocked
+        const countryBlocked = config.countrySkipInfo.getLocalValue().toUpperCase().includes(code);
+        if (!countryBlocked) {
             return;
         }
 
+        // Skip
+        setTimeout(() => AutoSkipManager.skipIfPossible(), Math.floor(Math.random() * 1000) + 50);
 
+        // Log message
+        Logger.INFO("Detected user from blocked country in chat with UUID <%s>, skipped.", ChatRegistry.getUUID());
+        ChatManager.sendErrorMessage(`Detected user from blocked country ${geoJSON["country"]} (${code}), skipped chat.`);
 
-        let code = geoData["country_code"] || geoData["country_code3"];
-        if (config.countrySkipInfo.getLocalValue().toUpperCase().includes(code)) {
-            setTimeout(() => {
-                AutoSkipManager.skipIfPossible();
-            }, Math.floor(Math.random() * 1000) + 50)
-            Logger.INFO("Detected user from blocked country in chat with UUID <%s>, skipped.", ChatRegistry.getUUID());
-            ChatManager.sendErrorMessage(
-                `Detected user from blocked country ${geoData["country"]} (${code}), skipped chat.`
-            );
-        }
+        return true;
     }
+
+    containsValidKeys(obj, ...keys) {
+        let keyList = Object.keys(obj);
+
+        for (let key of keys) {
+            if (!keyList.includes(key) || !obj[key] || obj[key] === '') {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    /**
+     *
+     * @param unhashedAddress 192.168.0.1 formatted IP
+     * @param geoJSON.ip 192.168.0.1 formatted IP
+     * @param geoJSON JSON payload from API
+     * @param geoJSON.owner true|false Whether owner is there
+     * @param geoJSON.chromegler true|false Whether user is Chromegler
+     * @param geoJSON.longitude Longitude
+     * @param geoJSON.latitude Latitude
+     * @param geoJSON.country Country
+     * @param geoJSON.country_code CA formatted country code
+     * @param geoJSON.accuracy Kilometre accuracy of geolocation
+     * @param geoJSON.timezone Request timezone
+     */
     onGeolocationRequestCompleted(unhashedAddress, geoJSON) {
         this.insertUnhashedAddress(geoJSON?.ip || unhashedAddress);
 
         const countrySkipEnabled = config.countrySkipToggle.getLocalValue() === "true";
-        const mappingKeys = Object.keys(this.GEO_MAPPINGS);
-        const geoDataKeys = Object.keys(geoJSON);
 
         // Handle blocked countries
-        if (this.handleBlockedCountries(countrySkipEnabled)) {
+        if (this.skipBlockedCountries(countrySkipEnabled, geoJSON)) {
             return;
         }
-
-        // Skip blocked countries
-        if (config.countrySkipToggle.getLocalValue() === "true" && (geoDataKeys.includes("country_code") || geoDataKeys.includes("country_code3"))) {
-
-
-        }
-
-        // Handle case where owner found
-        if (geoData?.["owner"]) IPGrabberManager.insertOwnerMessage();
 
         // Log information
         Logger.DEBUG(
             "Received IP Scraping data for chat UUID <%s> from the Chromegle web-server as the following JSON payload: \n\n%s",
             ChatRegistry.getUUID(),
-            JSON.stringify(geoData, null, 2)
+            JSON.stringify(geoJSON, null, 2)
         );
 
-        // Hardcoded -> If there is longitude and latitude included, add that too
-        if (geoDataKeys.includes("longitude") && geoDataKeys.includes("latitude")) {
-
-            IPGrabberManager.ipGrabberDiv.appendChild(
-                IPGrabberManager.createLogBoxMessage(
-                    "Coordinates: ",
-
-                    `
-<span>${geoData["longitude"]}/${geoData["latitude"]}</span>
-<a href='https://maps.google.com/maps?q=${geoData["latitude"]},${geoData["longitude"]}' target="_blank">(Google Maps)</a>
-`
-                    ,
-                    "long_lat_data"
-                )
-            );
-        }
-
-        // Iterate through the JSON data received from the API, map the strings
-        geoDataKeys.forEach(function (key) {
-            const entry = geoData[key];
-            if (mappingKeys.includes(key) && !((entry == null) || entry === ''))
-                IPGrabberManager.ipGrabberDiv.appendChild(
-                    IPGrabberManager.createLogBoxMessage(IPGrabberManager.GEO_MAPPINGS[key] + ": ", entry, key + "_data")
-                );
-        });
-
-        // Hardcoded -> If there is accuracy data, add that too
-        if (geoDataKeys.includes("accuracy")) {
-            IPGrabberManager.ipGrabberDiv.appendChild(
-                IPGrabberManager.createLogBoxMessage(
-                    "Accuracy: ",
-                    `${geoData["accuracy"]} km radius`
-                    , "accuracy_data")
-            );
-        }
-
-        // Hardcoded -> If there is a country code && country name, add that
-        if (geoDataKeys.includes("country_code") && geoDataKeys.includes("country")) {
-            const countrySpan = $(
-                `<span>  <span class='flagText nceFont'>${IPGrabberManager.getFlagEmoji(geoData["country_code"])}</span></span>`
-            ).get(0)
-            $("#country_data").get(0).appendChild(countrySpan);
-        }
-
-        // Hardcoded -> If there is a language, add that
-        if (IPGrabberManager.languages != null && geoDataKeys.includes("country_code")) {
-            let languages = IPGrabberManager.languages?.[geoData?.["country_code"]]?.join(", ") || null;
-            if (languages != null) {
-                IPGrabberManager.ipGrabberDiv.appendChild(
-                    IPGrabberManager.createLogBoxMessage(
-                        "Language(s): ", languages, "language_data")
-                );
-            }
-        }
-
-
-        // Hardcoded -> Local time
-        if (geoDataKeys.includes("timezone")) {
-            const element_id = "local_time_data"
-
-            IPGrabberManager.ipGrabberDiv.appendChild(
-                IPGrabberManager.createLogBoxMessage(
-                    "Local Time: ",
-                    IPGrabberManager.getCurrentTime(geoData["timezone"]),
-                    element_id
-                )
-            );
-
-            setTimeout(() => {
-                IPGrabberManager.updateElementLoop(ChatRegistry.getUUID(), geoData["timezone"], `#${element_id}`,
-                    (timezone) => IPGrabberManager.getCurrentTime(timezone));
-            }, 5);
-
-        }
-
-        // Hardcoded -> Elapsed time since in call with peer
-        const element_id = "since_time_data"
-
-        IPGrabberManager.ipGrabberDiv.appendChild(
-            IPGrabberManager.createLogBoxMessage(
-                "Time in call: ",
-                "0:00",
-                element_id
-            )
-        );
-
-        setTimeout(() => {
-            var sinceDate = new Date();
-
-            IPGrabberManager.updateElementLoop(ChatRegistry.getUUID(), geoData["timezone"], `#${element_id}`,
-                (_) => IPGrabberManager.formatElapsedTime(sinceDate));
-        }, 5);
-
-        // Hardcoded -> Are they a Chromegler?
-        if (geoData?.["chromegler"]) {
-            const logItemDiv = document.createElement("div");
-            logItemDiv.classList.add("logitem");
-            logItemDiv.appendChild(
-                $(
-                    `<span class='statuslog' style="color: rgb(32, 143, 254);">This person is also using Chromegle right now!</span>`).get(0)
-            );
-            document.getElementsByClassName("logitem")[0].parentNode.appendChild(logItemDiv);
-        }
-
-
+        // Display geolocation-based fields
+        this.displayGeolocationFields(geoJSON);
 
     }
 
-    getCurrentTime(timezone) {
+    insertLogboxMessage(elementId, label, ...values) {
+        this.ipGrabberDiv.appendChild(
+            this.createLogBoxMessage(elementId, label, ...values)
+        )
+    }
+
+    displayGeolocationFields(geoJSON) {
+        this.updateClock = new ChatUpdateClock(ChatRegistry.getUUID(), 1000);
+
+        // Owner message
+        if (geoJSON?.owner) {
+            this.insertOwnerMessage();
+        }
+
+        // If there is longitude and latitude included, add that too
+        if (this.containsValidKeys(geoJSON, "longitude", "latitude")) {
+            this.insertLogboxMessage(
+                "long_lat_data", "Coordinates: ", `${geoJSON.longitude}/${geoJSON.latitude} `,
+                `<a href='https://maps.google.com/maps?q=${geoJSON.latitude},${geoJSON.longitude}' target="_blank">(Google Maps)</a>`
+            )
+        }
+
+        // Automatic geolocation keys
+        Object.keys(this.GEO_MAPPINGS).forEach((key) => {
+            const entry = geoJSON[key];
+            if (!this.containsValidKeys(geoJSON, key)) {
+                return;
+            }
+
+            this.insertLogboxMessage(
+                `${key}_data`, `${this.GEO_MAPPINGS[key]}: `, entry
+            );
+
+        });
+
+        // Accuracy Information
+        if (this.containsValidKeys(geoJSON, "accuracy")) {
+            this.insertLogboxMessage(
+                "accuracy_data", "Accuracy: ", `${geoJSON.accuracy} km radius`
+            )
+        }
+
+        // Country Flag & Languages
+        if (this.containsValidKeys(geoJSON, "country_code", "country")) {
+
+            // Country Flag
+            $("#country_data").get(0).appendChild(
+                $(`<span>
+                            <span class='flagText nceFont'>${this.getFlagEmoji(geoJSON.country_code)}</span>
+                          </span>
+                `).get(0)
+            );
+
+            // Languages
+            if (this.languages != null) {
+                let userLanguages = this.languages[geoJSON.country_code]?.join(", ") || null;
+                if (userLanguages != null) {
+                    this.insertLogboxMessage(
+                        "language_data", "Language(s): ", userLanguages
+                    )
+                }
+            }
+        }
+
+        // Local Time
+        if (this.containsValidKeys(geoJSON, "timezone")) {
+            this.insertLogboxMessage(
+                "local_time_data", "Local Time: ", this.getFormattedTime(geoJSON.timezone)
+            );
+
+            // Update time for duration of call
+            this.updateClock.addUpdate(
+                (date) => {
+                    $("#local_time_data").get(0).childNodes[1].innerHTML = this.getFormattedTime(geoJSON.timezone, date);
+                }
+            )
+
+        }
+
+        // Call Time
+        {
+            this.insertLogboxMessage(
+                "call_time_data", "Time In Call: ", "00:00"
+            )
+
+            this.updateClock.addUpdate(
+                (date, startTime) => {
+                    $("#call_time_data").get(0).childNodes[1].innerHTML = this.formatElapsedTime(date, startTime);
+                }
+            )
+
+        }
+
+        // Chromegle User
+        if (this.containsValidKeys("chromegler") && geoJSON.chromegler) {
+            let chromegleLogItem = $(`
+                <div class="logitem">
+                    <span class='statuslog' style="color: rgb(32, 143, 254);">This person is also using Chromegle right now!</span>
+                </div>
+            `).get(0);
+
+            document.getElementsByClassName("logitem")[0].parentNode.appendChild(chromegleLogItem);
+        }
+
+    }
+
+    getFormattedTime(timezone, date = new Date()) {
         const options = {
             timeZone: timezone,
             year: 'numeric',
@@ -306,7 +357,7 @@ class IPGrabberManager extends Module { // todo remove extra references
             second: 'numeric'
         }
 
-        return (new Date()).toLocaleString("en-US", options);
+        return date.toLocaleString("en-US", options);
     }
 
     insertOwnerMessage() {
@@ -324,24 +375,17 @@ class IPGrabberManager extends Module { // todo remove extra references
         document.getElementsByClassName("logitem")[0].parentNode.appendChild(ownerMessageDiv.get(0));
     }
 
-
-    updateElementLoop(cachedUUID, timezone, elementSelector, textFunc, interval = 1000) {	
-        if (cachedUUID !== ChatRegistry.getUUID()) return;	
-        $(elementSelector).get(0).childNodes[1].innerHTML = textFunc(timezone);	
-        setTimeout(() => IPGrabberManager.updateElementLoop(cachedUUID, timezone, elementSelector, textFunc), interval);	
-    },
-
-    formatElapsedTime(sinceDate) {
-        const diff = new Date(new Date() - new Date(sinceDate));
+    formatElapsedTime(currentTime, startTime) {
+        const diff = new Date(currentTime - startTime);
 
         const hours = diff.getUTCHours();
         const minutes = diff.getUTCMinutes().toString().padStart(2, "0");
         const seconds = diff.getUTCSeconds().toString().padStart(2, "0");
 
         return `${hours > 0 ? hours + ":" : ""}${minutes}:${seconds}`;
-    },
+    }
 
-    createLogBoxMessage: (label, value, elementId) => {
+    createLogBoxMessage(elementId, label, ...values) {
 
         // Create a new container for the entry
         let youMsgClass = document.createElement("p");
@@ -354,8 +398,14 @@ class IPGrabberManager extends Module { // todo remove extra references
         field.innerText = label + "";
 
         // Set the result (answer part)
-        let entry = document.createElement("span")
-        entry.innerHTML = value;
+        let entry = document.createElement("span");
+        for (let value of values) {
+            if (typeof value === 'string') {
+                entry.innerHTML += value;
+            } else {
+                entry.appendChild(value);
+            }
+        }
 
         // Add the status field & entry to the main entry
         youMsgClass.appendChild(field);
@@ -366,7 +416,6 @@ class IPGrabberManager extends Module { // todo remove extra references
     }
 }
 
-
 const IPBlockingManager = {
 
     LOCAL_STORAGE_ID: "IP_BLOCK_CONFIG",
@@ -376,23 +425,28 @@ const IPBlockingManager = {
         IPBlockingMenu.initialize()
     },
 
-    _receivedAddress(unhashedAddress, hashedAddress, callback) {
+    async handleBlockedAddress(unhashedAddress) {
 
-        IPBlockingManager.getStoredChromeConfig((result) => {
-            result = result[IPBlockingManager.LOCAL_STORAGE_ID];
-            const skipChat = result.includes(unhashedAddress)
+        let result = await IPBlockingManager.getStoredChromeConfigAsync();
 
-            if (skipChat) {
-                Logger.INFO("Skipped blocked IP address <%s> with chat UUID <%s>", unhashedAddress, ChatRegistry.getUUID())
-                ChatManager.sendErrorMessage(`Skipped the blocked IP address ${unhashedAddress}`)
-                    .appendChild(Buttons.ipUnblockButton(unhashedAddress))
-                AutoSkipManager.skipIfPossible();
-            }
+        result = result[IPBlockingManager.LOCAL_STORAGE_ID];
+        const skipChat = result.includes(unhashedAddress)
 
-            callback(skipChat);
+        if (skipChat) {
+            Logger.INFO("Skipped blocked IP address <%s> with chat UUID <%s>", unhashedAddress, ChatRegistry.getUUID())
+            ChatManager.sendErrorMessage(`Skipped the blocked IP address ${unhashedAddress}`)
+                .appendChild(Buttons.ipUnblockButton(unhashedAddress))
+            AutoSkipManager.skipIfPossible();
+        }
 
-        });
+        return skipChat;
 
+    },
+
+    async getStoredChromeConfigAsync() {
+        let blockQuery = {}
+        blockQuery[IPBlockingManager.LOCAL_STORAGE_ID] = IPBlockingManager.DEFAULT_STORAGE_VALUE;
+        return await chrome.storage.local.get(blockQuery);
     },
 
     getStoredChromeConfig(callback) {

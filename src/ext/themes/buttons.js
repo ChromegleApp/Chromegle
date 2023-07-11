@@ -11,25 +11,6 @@ const Buttons = {
 
         }),
 
-    ipToggleButton: $("<button class='ipLookupButton' style='margin-bottom: 8px; margin-top: 6px;'></button>")
-        .on('click', () => {
-
-            let showQuery = {}
-            showQuery[config.ipGrabToggle.getName()] = config.ipGrabToggle.getDefault();
-            chrome.storage.sync.get(showQuery, (result) => {
-
-                const enabled = !(result[config.ipGrabToggle.getName()] === "true");
-                IPGrabberManager.ipGrabberDiv.style.display = enabled ? "" : "none";
-
-                if (enabled) Buttons.ipToggleButton.html(IPGrabberManager.DISABLE_TAG);
-                else Buttons.ipToggleButton.html(IPGrabberManager.ENABLE_TAG);
-                config.ipGrabToggle.update();
-
-            });
-
-        }),
-
-
     autoSkipCancelButton: $(`<span class="statuslog" style="cursor: pointer; color: rgba(49,166,231,255)">cancel skipping</span>`)
         .on("click", () => AutoSkipManager._cancelSkip()),
 

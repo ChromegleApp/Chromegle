@@ -10,7 +10,6 @@
     "48": "public/images/IconLogo.png",
     "128": "public/images/IconLogo.png"
   },
-
   "content_scripts": [
     {
       "css": [
@@ -18,10 +17,11 @@
         "public/css/settings.css"
       ],
       "js": [
-        "src/libs/jquery-2.1.1.min.js",
-        "src/libs/js-cookie-2.2.1.min.js",
-        "src/libs/micromodal.min.js",
+        "src/ext/libs/jquery-2.1.1.min.js",
+        "src/ext/libs/js-cookie-2.2.1.min.js",
+        "src/ext/libs/micromodal.min.js",
         "src/core/module.js",
+        "src/core/elements.js",
         "src/mods/chat-registry.js",
         "src/mods/chat-manager.js",
         "src/mods/auto-message.js",
@@ -71,7 +71,8 @@
   ],
   "incognito": "split",
   "permissions": [
-    "storage", "tabs"
+    "storage",
+    "tabs"
   ],
   "externally_connectable": {
     "matches": [

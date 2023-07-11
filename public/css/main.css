@@ -387,3 +387,15 @@ code {
     overflow-wrap: break-word;
     font-size: 35px;
 }
+
+.chromegle-spoiler {
+    filter: blur(3px);
+    cursor: pointer;
+    transition-duration: 50ms;
+}
+
+.chromegle-spoiler.show {
+    filter: blur(0px);
+    color: inherit;
+    cursor: inherit;
+}
