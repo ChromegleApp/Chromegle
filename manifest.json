@@ -36,7 +36,6 @@
         "src/mods/chat-tools/fullscreen-video.js",
         "src/mods/chat-tools/video-screenshot.js",
         "src/mods/chat-tools/video-blocking.js",
-        "src/mods/chat-tools/mute-microphone.js",
         "src/mods/clear-interests.js",
         "src/mods/broadcast.js",
         "src/mods/voice-commands/speech-engine.js",

@@ -27,7 +27,6 @@ let Settings = null;
         UnmoderatedChatManager,
         VideoBlockerManager,
         VideoScreenshotManager,
-        MuteMicrophoneManager,
         IPBlockingManager,
         SpeechEngineManager,
         FullScreenVideoManager,

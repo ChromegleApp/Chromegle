@@ -1,3 +1,31 @@
+class FilterManager2 extends Module {
+
+    filters = {profanity: [], sexual: [], allFilers: []};
+    filteredWords = [];
+
+    constructor() {
+        super();
+        this.addEventListener("chatStarted", this.onChatStarted);
+        this.addEventListener("storageSettin")
+    }
+
+    onChatStarted() {
+        FilterManager.statusObserver.disconnect();
+        FilterManager.statusObserver.observe(
+            document.getElementsByClassName("logbox")[0], {attributes: true, subtree: true, childList: true}
+        )
+
+        $(".chatmsg").off().on("input", (event) => {
+            $(event.target).val(FilterManager.filterString($(event.target).val(), FilterManager.filteredWords));
+        });
+    }
+
+    onStorageUpdate() {
+
+    }
+
+}
+
 const FilterManager = {
     filters: {profanity: [], sexual: [], allFilters: []},
     filteredWords: [],
@@ -8,19 +36,6 @@ const FilterManager = {
         FilterManager._chatStarted();
     },
 
-    _chatStarted() {
-        document.addEventListener("chatStarted", () => {
-            FilterManager.statusObserver.disconnect();
-            FilterManager.statusObserver.observe(
-                document.getElementsByClassName("logbox")[0], {attributes: true, subtree: true, childList: true}
-            );
-
-            $(".chatmsg").off().on("input", (event) => {
-                $(event.target).val(FilterManager.filterString($(event.target).val(), FilterManager.filteredWords));
-            });
-
-        });
-    },
 
     _storageUpdate() {
         document.addEventListener("storageSettingsUpdate", (detail) => {
