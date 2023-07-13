@@ -9,7 +9,6 @@ class Broadcast extends Module {
         super();
         this.recentChatIds = [];
         this.broadcasts = [];
-        this.addEventListener("chatStarted", this.onChatStarted);
         this.registerIntervals();
     }
 

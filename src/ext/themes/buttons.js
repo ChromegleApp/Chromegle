@@ -11,9 +11,6 @@ const Buttons = {
 
         }),
 
-    autoSkipCancelButton: $(`<span class="statuslog" style="cursor: pointer; color: rgba(49,166,231,255)">cancel skipping</span>`)
-        .on("click", () => AutoSkipManager._cancelSkip()),
-
     ipBlockButton: (unhashedAddress) => {
         return $(`<button value="${unhashedAddress}" class="ipBlockButton">(Block IP Address)</button>`)
             .on("click", () => IPBlockingManager.blockAddress(unhashedAddress))
@@ -26,10 +23,5 @@ const Buttons = {
             .get(0);
     },
 
-    clearInterestsButton: () => {
-        return $(`<button class="clearInterestsButton">(Clear Interests)</button>`)
-            .on("click", () => ClearInterestsManager.onClearInterests())
-            .get(0);
-    }
 }
 

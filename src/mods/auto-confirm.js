@@ -1,21 +1,17 @@
-const ConfirmManager = {
+class ConfirmManager extends Module {
 
-    initialize() {
-        ConfirmManager._registerEvents();
-    },
+    constructor() {
+        super();
 
-    _registerEvents() {
-        ["#textbtn", "#videobtn", "#videobtnunmoderated"].forEach((button) => {
-            $(button).on('click', () => ConfirmManager.autoConfirm());
-        });
-    },
+        // Listen for click
+        this.addMultiElementListener(
+            "click", this.onButtonClick, "#textbtn", "#videobtn", "#videobtnunmoderated"
+        );
+    }
 
-    autoConfirm() {
-        // Click the checkboxes
-        $("input[type=checkbox]:not(:checked)").trigger("click");
-
-        // Confirm join
-        $("input[type=button][value='Confirm & continue']").trigger("click");
+    onButtonClick() {
+        $("input[type=checkbox]:not(:checked)").trigger("click"); // Checkboxes
+        $("input[type=button][value='Confirm & continue']").trigger("click"); // Confirmation
     }
 }
 

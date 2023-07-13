@@ -96,3 +96,14 @@ async function fetchWithTimeout(resource, options = {}) {
     return response;
 }
 
+
+function sendErrorLogboxMessage(message) {
+    const innerLogBox = document.getElementsByClassName("logitem")[0].parentNode;
+    const seenBeforeDiv = document.createElement("div")
+    seenBeforeDiv.classList.add("logitem");
+    seenBeforeDiv.appendChild($(`<span style="color: red;" class='statuslog'>${message}</span>`).get(0));
+    innerLogBox.append(seenBeforeDiv);
+    return seenBeforeDiv;
+}
+
+

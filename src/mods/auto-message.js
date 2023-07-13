@@ -1,80 +1,98 @@
-const GreetingManager = {
+class AutoMessageManager extends Module {
 
-    initialize: () => GreetingManager._chatStarted(),
-    typingDelay: (text, wpm) => (60 / (wpm === null ? 0.1 : wpm)) * (text.length / 8) * 1000,
+    static writingMessage = false;
+    static messageInterval = undefined;
 
-    _chatStarted() {
-        document.addEventListener("chatStarted", (detail) => {
+    async onChatStarted() {
+        let greetingEnabled = await config.greetingToggle.retrieveValue();
 
-            let greetingQuery = {};
-            const uuid = detail["detail"]["uuid"];
-
-            greetingQuery[config.toggleGreeting.getName()] = config.toggleGreeting.getDefault();
-            greetingQuery[config.startTypingDelayField.getName()] = config.startTypingDelayField.getDefault();
-            greetingQuery[config.greetingMessageField.getName()] = config.greetingMessageField.getDefault();
-            greetingQuery[config.typingSpeedField.getName()] = config.typingSpeedField.getDefault();
-            greetingQuery[config.sendDelayField.getName()] = config.sendDelayField.getDefault();
-
-            chrome.storage.sync.get(greetingQuery, (result) => {
-
-                if (result[config.toggleGreeting.getName()] === "true") {
-                    const textOptions = result[config.greetingMessageField.getName()]
-
-                    Logger.DEBUG("Retrieved auto-message text options, picking one at random: %s", JSON.stringify(textOptions));
-
-                    const textContent = textOptions[[Math.floor(Math.random() * textOptions.length)]]
-                    const wpm = result[config.typingSpeedField.getName()]
-                    const startDelay = result[config.startTypingDelayField.getName()]
-                    const sendDelay = result[config.sendDelayField.getName()]
-
-                    setTimeout(() => {
-                        const totalTime = GreetingManager.typingDelay(textContent, wpm);
-                        const timePerMessage = totalTime / textContent.length;
-
-                        GreetingManager.writeMessage($(".chatmsg"), textContent, timePerMessage, sendDelay * 1000, uuid);
-                    }, startDelay * 1000);
-
-                }
-            })
-        });
-    },
-
-    writeMessage(writeBox, text, perLetterDelay, finalSendDelay, uuid) {
-
-        if (uuid !== ChatRegistry.getUUID()) {
+        if (greetingEnabled !== "true") {
             return;
         }
 
-        if (text.length === 0) {
-            setTimeout(() => {
-                $(".sendbtn").trigger("click");
-            }, finalSendDelay);
+        // Load config values
+        const startTypingDelay = await config.startTypingDelayField.retrieveValue();
+        const greetingMessages = await config.greetingMessageField.retrieveValue();
+        const typingSpeed = await config.typingSpeedField.retrieveValue();
+        const sendDelay = await config.sendDelayField.retrieveValue();
+        const messageContent = greetingMessages[Math.floor(Math.random() * greetingMessages.length)];
+        const totalTime = AutoMessageManager.getTypingDelay(messageContent, typingSpeed);
+        const timePerMessage = totalTime / messageContent.length;
+
+        Logger.DEBUG("Retrieved auto-message text options, picking one at random: %s", JSON.stringify(greetingMessages));
+
+        // Send the message after a certain delay
+        setTimeout(() => {
+            AutoMessageManager.writeMessage(
+                $(".chatmsg"),
+                messageContent,
+                timePerMessage,
+                sendDelay * 1000,
+                ChatRegistry.getUUID()
+            );
+        }, startTypingDelay * 1000)
+
+
+    }
+
+    onSettingsUpdate(event) {
+        let greetingEnabled = config.greetingToggle.fromSettingsUpdateEvent(event);
+
+        if (greetingEnabled === "false") {
+            AutoMessageManager.cancelMessage();
+        }
+
+    }
+
+    static getTypingDelay(text, wpm) {
+        let adjustFactor = 0.5;
+        let totalTypeDelay = (60 / (wpm === null ? 0.1 : wpm)) * (text.length / 8) * 1000;
+        return totalTypeDelay * adjustFactor;
+    }
+
+    static cancelMessage() {
+
+        if (!this.messageInterval) {
             return;
         }
 
-        setTimeout(function () {
+        clearInterval(this.messageInterval);
+        this.messageInterval = null;
+        this.writingMessage = false;
+    }
 
-            if (uuid !== ChatRegistry.getUUID()) {
-                return;
+    static writeMessage(target, message, letterDelay, sendDelay, chatUUID) {
+
+        this.writingMessage = true;
+
+        this.messageInterval = setInterval(() => {
+
+            // Chat ended
+            if (chatUUID !== ChatRegistry.getUUID() || $(target)?.get(0)?.classList?.contains("disabled")) {
+                return this.cancelMessage();
             }
 
-            if ($(writeBox).get(0).classList.contains("disabled")) {
-                return;
+            // If message finished
+            if (message.length === 0) {
+                setTimeout(() => $(".sendbtn")?.get(0)?.click(), sendDelay);
+                return this.cancelMessage();
             }
 
             let keydown = document.createEvent('KeyboardEvent');
             let keyup = document.createEvent('KeyboardEvent');
 
-            keydown.initKeyboardEvent("keydown", true, true, undefined, false, false, false, false, text[0], text[0]);
-            keyup.initKeyboardEvent("keyup", true, true, undefined, false, false, false, false, text[0], text[0]);
+            keydown.initKeyboardEvent("keydown", true, true, undefined, false, false, false, false, message[0], message[0]);
+            keyup.initKeyboardEvent("keyup", true, true, undefined, false, false, false, false, message[0], message[0]);
 
-            writeBox.get(0).dispatchEvent(keydown);
-            writeBox.get(0).dispatchEvent(keyup);
-            writeBox.val(writeBox.val() + text[0]);
+            target.get(0).dispatchEvent(keydown);
+            target.get(0).dispatchEvent(keyup);
+            target.val(target.val() + message[0]);
 
-            GreetingManager.writeMessage(writeBox, text.substring(1, text.length), perLetterDelay, finalSendDelay, uuid);
+            // Take one away
+            message = message.substring(1, message.length);
 
-        }, perLetterDelay);
+        }, letterDelay);
+
 
     }
 

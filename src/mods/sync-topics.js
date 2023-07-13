@@ -4,7 +4,6 @@ class TopicSyncManager extends Module {
         super();
         this.loadFromSync();
         this.addEventListener("beforeunload", this.beforeUnload, undefined, window);
-        this.addEventListener("pageStarted", this.pageStarted, undefined, document);
     }
 
     /**
@@ -45,7 +44,7 @@ class TopicSyncManager extends Module {
     /**
      * Sync stored topic with cookies on chat start
      */
-    pageStarted() {
+    onPageStarted() {
         const cookies = Cookies.get("topiclist", {domain: ".omegle.com"}) || null;
         chrome.storage.sync.set({"STORED_TOPIC_LIST": JSON.parse(cookies)}).then();
         Logger.INFO("Updated sync-storage cached topics on <%s> event: %s", event.type, cookies);

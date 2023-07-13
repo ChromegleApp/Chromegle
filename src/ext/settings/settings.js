@@ -54,15 +54,19 @@ class MutableField {
         this.#default = config["default"] || null;
         this.#type = config["type"];
         this.#warning = config["warning"];
-
     }
 
     getLocalValue() {
         return MutableField?.localValues?.[this.#storageName];
     }
 
-    setLocalValue(value) {
-        MutableField.localValues[this.#storageName] = value;
+    fromSettingsUpdateEvent(event) {
+        return event.detail[this.getName()];
+    }
+
+    async retrieveValue(storageArea = "sync", useDefault = true) {
+        let query = {[this.getName()]: useDefault ? this.getDefault() : null};
+        return (await chrome.storage[storageArea].get(query))[this.getName()];
     }
 
     updateValue(config) {

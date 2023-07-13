@@ -395,7 +395,30 @@ code {
 }
 
 .chromegle-spoiler.show {
-    filter: blur(0px);
+    filter: unset;
     color: inherit;
     cursor: inherit;
+}
+
+button.chromegle-spoiler {
+    padding: 0;
+    background: none;
+    font-family: inherit;
+    border: none;
+    font-size: inherit;
+    color: inherit;
+}
+
+button.chromegle-spoiler:active {
+    filter: unset;
+    color: inherit;
+}
+
+span.chromegle-cancel-skip {
+    cursor: pointer;
+    color: rgba(49,166,231,255);
+}
+
+.conversationgreat {
+    cursor: pointer;
 }

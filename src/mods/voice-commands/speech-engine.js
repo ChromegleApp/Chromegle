@@ -1,21 +1,26 @@
-class ChromegleSpeechEngine {
+class SpeechEngine {
 
     #engineSupported;
     #engine;
     #wakeWords;
     #engineActive;
     #commandEventName;
+    #intents;
 
-    constructor(wakeWords, commandEventName) {
+    constructor(wakeWords, commandEventName, intents) {
         this.#wakeWords = wakeWords;
         this.#commandEventName = commandEventName;
         this.#engineSupported = this.#buildEngine();
+        this.#intents = intents;
     }
 
     #buildEngine() {
         try {
-            // noinspection JSUnresolvedVariable
-            this.#engine = new (window.webkitSpeechRecognition || window.speechRecognition || window.SpeechRecognition);
+            this.#engine = new (
+                window["webkitSpeechRecognition"] ||
+                window["speechRecognition"] ||
+                window["SpeechRecognition"]
+            );
         } catch (ex) {
 
         }
@@ -24,15 +29,15 @@ class ChromegleSpeechEngine {
             return false;
         }
 
-
         this.#engine.continuous = true;
         this.#engine.interimResults = false;
         this.#engine.lang = "en-US";
-        this.#engine.onstart = () => ChromegleSpeechEngine.#onStart(this);
-        this.#engine.onend = () => ChromegleSpeechEngine.#onEnd(this);
-        this.#engine.onresult = (event) => ChromegleSpeechEngine.#onResult(this, event);
+        this.#engine.onstart = this.#onStart.bind(this);
+        this.#engine.onend = this.#onEnd.bind(this);
+        this.#engine.onresult = this.#onResult.bind(this);
 
         return true;
+
     }
 
     start() {
@@ -69,33 +74,20 @@ class ChromegleSpeechEngine {
         return this.#engineActive;
     }
 
-    addWakeWord(word) {
-        this.#wakeWords.push(word);
-    }
-
-    removeWakeWord(word) {
-        const index = this.#wakeWords.indexOf(word);
-        if (index >= 0) this.#wakeWords.splice(index, 1);
-    }
-
     getWakeWords() {
         return this.#wakeWords;
     }
 
-    getCommandEventName() {
-        return this.#commandEventName;
+    #onStart() {
     }
 
-    static #onStart(self) {
-    }
-
-    static #onEnd(self) {
-        if (self.isActive()) {
-            self.start();
+    #onEnd() {
+        if (this.isActive()) {
+            this.start();
         }
     }
 
-    static #onResult(self, event, result = "", request = null) {
+    #onResult(event, result = "", request = null) {
 
         // If not a result
         if (event.type !== "result") return;
@@ -109,10 +101,10 @@ class ChromegleSpeechEngine {
         result = result.toLowerCase();
 
         // Parse message for command using wake word
-        for (let testCase of self.getWakeWords()) {
+        for (let testCase of this.getWakeWords()) {
             let indexOf = result.indexOf(testCase)
             if ((indexOf >= 0)) {
-                request = result.substr(indexOf + testCase.length, result.length).trim();
+                request = result.substring(indexOf + testCase.length, result.length).trim();
                 break;
             }
         }
@@ -123,38 +115,14 @@ class ChromegleSpeechEngine {
         }
 
         // Dispatch command
-        SpeechEngineManager.handleCommand(request);
+        this.commandHandler(request);
 
     }
 
-}
 
+    commandHandler(utterance) {
 
-const SpeechEngineManager = {
-
-    engine: null,
-    wakeWords: ["omegle", "amigo", "omigo"],
-    commandEventName: "speechEngineCommand",
-    intents: [],
-
-    initialize() {
-        this.engine = new ChromegleSpeechEngine(this.wakeWords, this.commandEventName);
-        document.addEventListener("pageStarted", () => this._pageStarted());
-        document.addEventListener("storageSettingsUpdate", (event) => this._storageUpdate(event));
-        SpeechMenu.initialize();
-
-        this.intents.push(
-            new SkipIntentHandler(),
-            new StopIntentHandler(),
-            new StartIntentHandler(),
-            new MessageIntentHandler()
-        );
-
-    },
-
-    handleCommand(utterance) {
-
-        for (let intent of this.intents) {
+        for (let intent of this.#intents) {
             if (intent.canHandle(utterance)) {
                 Logger.INFO(`Executed the <%s> voice command intent handler`, intent.getName());
                 intent.handle(utterance);
@@ -164,57 +132,6 @@ const SpeechEngineManager = {
 
         Logger.DEBUG("Received a voice command that did not map to an intent <%s>", utterance);
 
-    },
-
-    _storageUpdate(detail) {
-        const keys = Object.keys(detail["detail"]);
-
-        if (keys.includes(config.voiceCommandToggle.getName())) {
-            if (detail["detail"][config.voiceCommandToggle.getName()] === "true") {
-                if (ChatRegistry.pageStarted()) {
-                    SpeechEngineManager.engine.start();
-                }
-            } else {
-                SpeechEngineManager.engine.stop();
-            }
-        }
-
-    },
-
-    _pageStarted() {
-
-        if (config.voiceCommandToggle.getLocalValue() === "true") {
-            SpeechEngineManager.engine.start();
-        }
-
     }
-
-
 }
 
-const SpeechMenu = {
-
-    settingsModal: undefined,
-    settingsModalElementId: "modal-4",
-
-    initialize() {
-        SpeechMenu.settingsModal = document.createElement("div");
-        $(SpeechMenu.settingsModal).load(getResourceURL("public/html/voicecmds.html"));
-        $("html").append(SpeechMenu.settingsModal);
-    },
-
-    loadMenu(noChange) {
-        if (noChange) return;
-        Settings.disable();
-        SpeechMenu.enable();
-    },
-
-    enable() {
-        MicroModal.show(SpeechMenu.settingsModalElementId)
-    },
-
-    disable() {
-        MicroModal.hide(SpeechMenu.settingsModalElementId)
-    }
-
-}

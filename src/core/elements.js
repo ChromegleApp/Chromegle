@@ -1,3 +1,12 @@
+function ReSpoiler(string) {
+    let element = document.createElement("button");
+    element.innerText = string;
+    element.classList.add("chromegle-spoiler");
+    element.classList.add("clickable");
+    return element;
+}
+
+// Probably leaks memory
 class Spoiler {
 
     element = undefined;
@@ -11,7 +20,7 @@ class Spoiler {
         this.element = document.createElement("span");
         this.element.innerText = this.string;
         this.element.classList.add("chromegle-spoiler");
-        this.element.addEventListener("click", this.onClick.bind(this))
+        this.element.addEventListener("click", this.onClick.bind(this));
     }
 
     onClick() {
@@ -21,6 +30,10 @@ class Spoiler {
 
     get() {
         return this.element;
+    }
+
+    getHTML() {
+        return this.element.outerHTML;
     }
 }
 

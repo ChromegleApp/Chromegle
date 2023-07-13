@@ -1,4 +1,5 @@
-let Settings = null;
+let Settings;
+let ChatRegistry;
 
 (function () {
 
@@ -15,12 +16,12 @@ let Settings = null;
     loadModules(
         ConfigManager,
         TopicSyncManager,
-        ChatRegistry,
+        ChatRegistryManager,
         PasteMenu,
         ChatManager,
         FilterManager,
         ConfirmManager,
-        GreetingManager,
+        AutoMessageManager,
         ReconnectManager,
         AutoSkipManager,
         IPGrabberManager,
@@ -33,7 +34,7 @@ let Settings = null;
         SplashImageHandler,
         ClearInterestsManager,
         ThemeManager,
-        SettingsManager
+        SettingsManager,
     )
 
 })();

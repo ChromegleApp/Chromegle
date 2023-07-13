@@ -27,15 +27,6 @@ class AbstractIntentHandler {
         return utterance;
     }
 
-    removeUtterance(utterance) {
-        const index = this.#utterances.indexOf(utterance);
-        if (index >= 0) this.#utterances.splice(index, 1);
-    }
-
-    getUtterances() {
-        return this.#utterances;
-    }
-
     canHandle(utterance) {
         return containsWord(this.#utterances, utterance)
     }
@@ -105,17 +96,33 @@ class MessageIntentHandler extends AbstractIntentHandler {
     }
 
     handle(utterance) {
-        let textContent = this.getArguments(utterance);
-        const totalTime = GreetingManager.typingDelay(textContent, config.typingSpeedField.getLocalValue());
-        const timePerMessage = totalTime / textContent.length;
 
-        GreetingManager.writeMessage(
-            $(".chatmsg"),
-            textContent,
-            timePerMessage,
-            config.sendDelayField.getLocalValue() * 1000,
-            ChatRegistry.getUUID()
-        );
+        // Already writing
+        if (AutoMessageManager.writingMessage) {
+            sendErrorLogboxMessage("ERROR: Failed to send voice message, an auto-message is currently in progress.");
+            return;
+        }
+
+        const typingSpeed = config.typingSpeedField.retrieveValue();
+        const sendDelay = config.sendDelayField.retrieveValue();
+        const chatUUID = ChatRegistry.getUUID();
+        const textContent = this.getArguments(utterance);
+
+        typingSpeed.then(async (withSpeed) => {
+            const withDelay = await sendDelay;
+            const totalTime = AutoMessageManager.getTypingDelay(textContent, withSpeed);
+            const timePerMessage = totalTime / textContent.length;
+
+            // Send Message
+            AutoMessageManager.writeMessage(
+                $(".chatmsg"),
+                textContent,
+                timePerMessage,
+                withDelay * 1000,
+                chatUUID
+            );
+
+        });
 
     }
 }

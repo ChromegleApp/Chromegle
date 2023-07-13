@@ -1,106 +1,114 @@
-const AutoSkipManager = {
+class AutoSkipManager extends Module {
 
-    skipMenu: null,
-    doSkip: true,
+    #doSkip = true;
 
-    initialize() {
-        AutoSkipManager._chatStarted();
-        AutoSkipManager._chatSeenTimes();
-    },
+    constructor() {
+        super();
+        this.addEventListener("chatSeenTimes", this.onChatSeenTimes);
+    }
 
-    _skipLabelString(secondsLeft) {
-        return `Auto-skip is enabled. Skipping in ${secondsLeft} second${secondsLeft > 1 ? 's' : ''} from now unless you `;
-    },
+    createSkipLogItem(secondsLeft, chatUUID) {
 
-    _cancelSkip() {
-        if (!ChatRegistry.isChatting()) return;
-        AutoSkipManager.doSkip = false;
-        $(`#${ChatRegistry.getUUID()}-logitem`).get(0).innerHTML = "<p class=statuslog>Canceled auto-skip until your next conversation, enjoy the rest of your chat.</p>";
-    },
+        let logItem = $(`<div id="${chatUUID}-skip-logitem" class="logitem">`).get(0);
+        let skipLabel = $(`<span id="${chatUUID}-skip-statuslog" class='statuslog'>${this.#skipMessage(secondsLeft)}</span>`).get(0);
+        let afterLabel  = $(`<span class="statuslog"> for this chat.</span>"`).get(0);
 
-    /**
-     * Auto-Skip (Time-Based)
-     */
-    _chatStarted() {
-        document.addEventListener("chatStarted", () => {
-            AutoSkipManager.doSkip = true;
+        logItem.appendChild(skipLabel);
+        logItem.append(this.createCancelSkipButton());
+        logItem.append(afterLabel);
 
-            if (config.autoSkipToggle.getLocalValue() === "true") {
+        return logItem;
 
-                const uuid = ChatRegistry.getUUID(),
-                    skipSeconds = config.autoSkipDelayField.getLocalValue(),
-                    innerLogBox = document.getElementsByClassName("logitem")[0].parentNode,
-                    logItem = $(`<div id="${uuid}-logitem" class="logitem">`).get(0),
-                    afterText = $(`<span class="statuslog"> for this chat.</span>"`);
+    }
 
-                AutoSkipManager.skipMenu = $(`<span class='statuslog'>${AutoSkipManager._skipLabelString(skipSeconds)}</span>`).get(0);
+    createCancelSkipButton() {
+        return (
+            $(`<span class="statuslog chromegle-cancel-skip">cancel skipping</span>`)
+                .on("click", this.onCancelSkipButtonClick.bind(this))
+                .get(0)
+        );
+    }
 
-                logItem.appendChild(AutoSkipManager.skipMenu);
-                logItem.append(Buttons.autoSkipCancelButton.get(0));
-                logItem.append(afterText.get(0));
-                innerLogBox.appendChild(logItem);
+    #skipMessage(secondsLeft) {
+        return (
+            `Auto-skip is enabled. Skipping in ${secondsLeft} `
+             + `second${secondsLeft > 1 || secondsLeft === 0 ? 's' : ''} from now unless you `
+        );
+    }
 
-                setTimeout(() => AutoSkipManager._skipLoop(skipSeconds, uuid), 0);
-
-            }
-
-        });
-    },
-
-    /**
-     * Count down second-by-second until the skip
-     * @param secondsLeft Seconds left until skip
-     * @param uuid the uuid of the chat (cached)
-     * @private N/A
-     */
-    _skipLoop(secondsLeft, uuid) {
-        if (uuid !== ChatRegistry.getUUID() || !AutoSkipManager.doSkip) return;
-
-        if (secondsLeft <= 0) {
-            AutoSkipManager.skipIfPossible();
-            $(AutoSkipManager.skipMenu).get(0).parentNode.remove();
+    onCancelSkipButtonClick() {
+        if (!ChatRegistry.isChatting) {
             return;
         }
 
-        AutoSkipManager.skipMenu.innerHTML = AutoSkipManager._skipLabelString(secondsLeft);
-        secondsLeft -= 1;
-        setTimeout(() => AutoSkipManager._skipLoop(secondsLeft, uuid), 1000);
-    },
+        // Cancel the skip
+        this.#doSkip = false;
+        $(`#${ChatRegistry.getUUID()}-skip-logitem`).get(0).innerHTML = (
+            "<p class=statuslog>Canceled auto-skip until your next conversation, enjoy the rest of your chat.</p>"
+        );
 
-    /**
-     * Skip Repeats
-     */
-    _chatSeenTimes() {
-        document.addEventListener("chatSeenTimes", (event) => {
+    }
 
-            let seenBeforeQuery = {};
-            seenBeforeQuery[config.skipRepeatsToggle.getName()] = config.skipRepeatsToggle.getDefault();
+    async onChatStarted() {
+        this.#doSkip = true;
 
-            chrome.storage.sync.get(seenBeforeQuery, (result) => {
+        if (!(await config.autoSkipToggle.retrieveValue() === "true")) {
+            return;
+        }
 
-                if (result[config.skipRepeatsToggle.getName()] === "true") {
+        // Add skip text
+        let skipSeconds = await config.autoSkipDelayField.retrieveValue();
+        let chatUUID = ChatRegistry.getUUID();
+        let innerLogBox = document.getElementsByClassName("logitem")[0].parentNode;
+        innerLogBox.appendChild(this.createSkipLogItem(skipSeconds, chatUUID));
 
-                    const seenTimes = event["detail"]["seenTimes"];
-                    if (seenTimes > 0) {
-                        Logger.INFO(
-                            "Skipped chat with UUID <%s> on event <%s> because the user has been seen <%s> time(s) before and <%s> is enabled.",
-                            event["detail"]["uuid"], "chatSeenTimes", seenTimes, config.skipRepeatsToggle.getName()
-                        );
-                        ChatManager.sendErrorMessage(`Skipped user with IP ${event["detail"]["ipAddress"]} as you have seen them before.`);
-                        AutoSkipManager.skipIfPossible();
-                    }
+        let interval = setInterval(() => {
 
-                }
+            // Chat ended
+            if (chatUUID !== ChatRegistry.getUUID() || !this.#doSkip) {
+                clearInterval(interval);
+                return;
+            }
 
-            });
+            if (skipSeconds <= 0) {
+                AutoSkipManager.skipIfPossible();
+                clearInterval(interval);
+                return;
+            }
 
-        });
-    },
+            // Update text
+            skipSeconds--;
+            $(`#${chatUUID}-skip-statuslog`).get(0).innerHTML = this.#skipMessage(skipSeconds);
 
-    /**
-     * Skip Function, recursively called until skips up to 3 times
-     */
-    skipIfPossible(tries) {
+        }, 1000);
+    }
+
+    onChatEnded(event) {
+        $(`#${event.detail.uuid}-skip-logitem`).remove();
+    }
+
+    async onChatSeenTimes(event) {
+        let seenBeforeTimes = await config.skipRepeatsToggle.retrieveValue();
+
+        if (seenBeforeTimes !== "true") {
+            return;
+        }
+
+        const seenTimes = event["detail"]["seenTimes"];
+
+        if (seenTimes > 0) {
+            Logger.INFO(
+                "Skipped chat with UUID <%s> on event <%s> because the user has been seen <%s> time(s) before and <%s> is enabled.",
+                event["detail"]["uuid"], "chatSeenTimes", seenTimes, config.skipRepeatsToggle.getName()
+            );
+            sendErrorLogboxMessage(`Skipped user with IP ${event["detail"]["ipAddress"]} as you have seen them before.`);
+            AutoSkipManager.skipIfPossible();
+        }
+
+    }
+
+
+    static skipIfPossible(tries) {
         if (!($(".chatmsg").get(0).classList.contains("disabled"))) {
             $(".disconnectbtn")
                 .trigger("click")
@@ -113,9 +121,9 @@ const AutoSkipManager = {
                 }, 10);
             }
         }
-    },
+    }
 
-    startIfPossible(tries) {
+    static startIfPossible(tries) {
         if (($(".chatmsg").get(0).classList.contains("disabled"))) {
             $(".disconnectbtn")
                 .trigger("click")

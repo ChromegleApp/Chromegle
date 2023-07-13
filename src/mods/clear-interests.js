@@ -1,27 +1,31 @@
-const ClearInterestsManager = {
+class ClearInterestsManager extends Module {
 
-    initialize() {
+    constructor() {
+        super();
         this.insertButton();
-    },
+    }
 
     insertButton() {
-
         $(".shoulduselikescheckbox")
             ?.parent()
             ?.parent()
             ?.css("display", "flex")
             .css("align-items", "center")
             .get(0)
-            .appendChild(Buttons.clearInterestsButton());
+            .appendChild(this.createElement());
+    }
 
-    },
+    createElement() {
+        return $(`<button class="clearInterestsButton">(Clear Interests)</button>`)
+            .on("click", this.onButtonClick.bind(this))
+            .get(0);
+    }
 
-    onClearInterests() {
-
+    onButtonClick() {
         for (let topicTag of $(".topictagwrapper > .topictag").toArray()) {
+            console.log('click')
             $(topicTag).children(".topictagdelete").get(0).click();
         }
-
-
     }
+
 }

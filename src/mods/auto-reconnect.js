@@ -1,37 +1,40 @@
-const ReconnectTypes = {
-    TEXT_CHAT: "1",
-    VIDEO_CHAT: "2",
-    BOTH: "3"
-}
 
-const ReconnectManager = {
-    initialize: () => ReconnectManager._chatEnded(),
-    _chatEnded() {
-        document.addEventListener("chatEnded", () => {
+class ReconnectManager extends Module {
 
-            let reconnectQuery = {};
-            reconnectQuery[config.autoReconnectToggle.getName()] = config.autoReconnectToggle.getDefault();
-            reconnectQuery[config.autoReconnectType.getName()] = config.autoReconnectType.getDefault();
-
-            chrome.storage.sync.get(reconnectQuery, (result) => {
-
-                // Must be enabled
-                if (!(result[config.autoReconnectToggle.getName()] === "true")) {
-                    return;
-                }
-
-                // Match Chat Type
-                if (
-                    (result[config.autoReconnectType.getName()] === ReconnectTypes.BOTH) || // Both Enabled
-                    ((!ChatRegistry.isVideoChat()) && (result[config.autoReconnectType.getName()] === ReconnectTypes.TEXT_CHAT)) || // Text Enabled
-                    (ChatRegistry.isVideoChat() && (result[config.autoReconnectType.getName()] === ReconnectTypes.VIDEO_CHAT)) // Video Enabled
-                )
-                    setTimeout(() => {
-                        $(".disconnectbtn").trigger("click");
-                    }, 25);
-
-            });
-
-        });
+    RECONNECT_TYPES = {
+        TEXT_CHAT: "1",
+        VIDEO_CHAT: "2",
+        BOTH: "3"
     }
+
+    async onChatEnded() {
+
+        if (!await this.shouldReconnect()) {
+            return;
+        }
+
+        AutoSkipManager.startIfPossible();
+    }
+
+    async shouldReconnect() {
+        let autoReconnectEnabled = await config.autoReconnectToggle.retrieveValue();
+        let autoReconnectType = await config.autoReconnectType.retrieveValue();
+
+        // Has to be enabled
+        if (!(autoReconnectEnabled === "true")) {
+            return false;
+        }
+
+        // Cases to reconnect
+        let reconnectCases = [
+            autoReconnectType === this.RECONNECT_TYPES.BOTH,
+            (ChatRegistry.isTextChat() && autoReconnectType === this.RECONNECT_TYPES.TEXT_CHAT),
+            (ChatRegistry.isVideoChat() && autoReconnectType === this.RECONNECT_TYPES.VIDEO_CHAT)
+        ]
+
+        // If ANY are true
+        return reconnectCases.some(i => i);
+
+    }
+
 }

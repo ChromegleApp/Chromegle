@@ -56,8 +56,8 @@ const config = {
 
         }
     }),
-    "toggleGreeting": new ToggleEdit({
-        "elementName": "toggleGreeting",
+    "greetingToggle": new ToggleEdit({
+        "elementName": "greetingToggle",
         "storageName": "GREETING_TOGGLE",
         "default": "false",
         "warning": {
@@ -289,7 +289,7 @@ const config = {
         "default": "false"
     }),
     "voiceCommandInfo": new ExternalField({
-        "external": SpeechMenu.loadMenu
+        "external": SpeechEngineManager?.Menu?.reloadMenu || alert("Menu failed to load!")
     }),
     "autoReconnectType": new FieldEdit({
         "storageName": "AUTO_RECONNECT_TYPE_FIELD",
@@ -324,7 +324,6 @@ const config = {
         "prompt": "Enter a new splash background image URL:",
         "default": "https://i.imgur.com/qa5Hkl9.jpeg",
         "check": (response) => {
-
             return {
                 "confirm": isValidHttpsUrl(response) ? "true" : "false",
                 "value": response

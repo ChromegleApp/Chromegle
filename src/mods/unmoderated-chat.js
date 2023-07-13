@@ -16,8 +16,13 @@ class UnmoderatedChatManager extends Module {
         this.cleanPage();
         this.observer = this.createMutationObserver();
         this.observer.observe(document, {attributes: true, childList: true, subtree:true});
-        this.addEventListener("chatEnded", this.cleanChat);
-        this.addEventListener("chatFailedConnect", this.cleanChat);
+
+        this.addMultiEventListener(
+            this.cleanChat,
+            undefined,
+            "chatEnded", "chatFailedConnect"
+        )
+
     }
 
     /**

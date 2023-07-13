@@ -1,129 +1,116 @@
-class FilterManager2 extends Module {
+class TextFilter {
 
-    filters = {profanity: [], sexual: [], allFilers: []};
-    filteredWords = [];
+    filterLoaded = false;
+    filters = {profanity: null, sexual: null};
+    enabled = {profanity: false, sexual: false};
+
+    constructor() {
+        this.setup().then(() => {
+            Logger.DEBUG("Loaded filters");
+            this.filterLoaded = true;
+        });
+    }
+
+    async setup() {
+        // Load Filters
+        this.filters.profanity = await this.loadFilter('/public/txt/profanity.txt');
+        this.filters.sexual = await this.loadFilter('/public/txt/sexual.txt');
+    }
+
+    setStatus(filter, status) {
+        if (this.enabled[filter] == null || status == null) {
+            return;
+        }
+
+        this.enabled[filter] = status;
+    }
+
+    async loadFilter(file) {
+        let response = await fetch(chrome.runtime.getURL(file));
+        let text = await response.text();
+        return text.replaceAll("\r", "").split("\n");
+    }
+
+    filterHTML(text) {
+
+        let placeholders = {}
+
+        // Find matches & replace with placeholders
+        for (const [filter, status] of Object.entries(this.enabled)) {
+            if (!status) continue;
+            for (let word of this.filters[filter]) {
+                let placeholder = shortUuid();
+                placeholders[placeholder] = word;
+                text = text.replaceAll(word, placeholder);
+            }
+        }
+
+        // Replace matches
+        for (const [placeholder, original] of Object.entries(placeholders)) {
+            text = text.replaceAll(placeholder, ReSpoiler(original).outerHTML);
+        }
+
+        return text;
+
+    }
+}
+
+
+
+class FilterManager extends Module {
+
+    filter = new TextFilter();
+    observer = new MutationObserver(this.onMutationObserved.bind(this));
 
     constructor() {
         super();
-        this.addEventListener("chatStarted", this.onChatStarted);
-        this.addEventListener("storageSettin")
     }
 
-    onChatStarted() {
-        FilterManager.statusObserver.disconnect();
-        FilterManager.statusObserver.observe(
-            document.getElementsByClassName("logbox")[0], {attributes: true, subtree: true, childList: true}
-        )
-
-        $(".chatmsg").off().on("input", (event) => {
-            $(event.target).val(FilterManager.filterString($(event.target).val(), FilterManager.filteredWords));
-        });
+    async onPageStarted() {
+        this.observer.observe(document.body, {childList: true, subtree: true});
+        await this.setupFilter();
     }
 
-    onStorageUpdate() {
+    async setupFilter() {
+        let profanityToggle = await config.profanityFilterToggle.retrieveValue();
+        let sexualToggle = await config.sexualFilterToggle.retrieveValue();
 
+        if (profanityToggle) this.filter.setStatus("profanity", profanityToggle === "true");
+        if (sexualToggle) this.filter.setStatus("sexual", sexualToggle === "true");
     }
 
-}
-
-const FilterManager = {
-    filters: {profanity: [], sexual: [], allFilters: []},
-    filteredWords: [],
-
-    initialize: () => {
-        FilterManager._pageStarted();
-        FilterManager._storageUpdate();
-        FilterManager._chatStarted();
-    },
-
-
-    _storageUpdate() {
-        document.addEventListener("storageSettingsUpdate", (detail) => {
-            const keys = Object.keys(detail["detail"]);
-
-            if (keys.includes(config.profanityFilterToggle.getName()) || keys.includes(config.sexualFilterToggle.getName())) {
-                FilterManager.updateFilteredWords();
+    onMutationObserved(mutation) {
+        for (let mutationRecord of mutation) {
+            for (let node of mutationRecord.addedNodes) {
+                if (node?.classList?.contains("logitem")) {
+                    this.filterLogItem(node);
+                }
             }
 
-        });
-    },
-
-    _pageStarted() {
-        document.addEventListener(
-            "pageStarted",
-            () => {
-                FilterManager.loadFilterFromFile('/public/txt/profanity.txt', "profanity")
-                    .then(() => {
-                        FilterManager.loadFilterFromFile('/public/txt/sexual.txt', "sexual")
-                            .then(() => {
-                                FilterManager.updateFilteredWords();
-                            });
-                    });
-
-            }
-        );
-    },
-
-    loadFilterFromFile(path, key) {
-        return fetch(chrome.runtime.getURL(path))
-            .then(response => response.text()).then(response => response.replaceAll("\r", ""))
-            .then(response => response.split("\n"))
-            .then(data => {
-                FilterManager.filters[key] = data;
-                FilterManager.filters["allFilters"] = FilterManager.filters["allFilters"].concat(data);
-            });
-    },
-
-    updateFilteredWords() {
-        let filterQuery = {};
-        filterQuery[config.profanityFilterToggle.getName()] = config.profanityFilterToggle.getDefault();
-        filterQuery[config.sexualFilterToggle.getName()] = config.sexualFilterToggle.getDefault();
-
-        chrome.storage.sync.get(filterQuery, (result) => {
-
-            // Get filter config
-            const sexualFilter = result[config.sexualFilterToggle.getName()] === "true";
-            const profanityFilter = result[config.profanityFilterToggle.getName()] === "true";
-
-            // Apply filter config
-            if (sexualFilter && profanityFilter) FilterManager.filteredWords = FilterManager.filters["allFilters"]
-            else if (sexualFilter) FilterManager.filteredWords = FilterManager.filters["sexual"]
-            else if (profanityFilter) FilterManager.filteredWords = FilterManager.filters["profanity"]
-            else FilterManager.filteredWords = [];
-
-        });
-    },
-
-    statusObserver: new MutationObserver((mutationRecord) => {
-
-        // Do filtering
-        mutationRecord.forEach((mutation) => {
-
-            let maybeLog = $(mutation.addedNodes.item(0)).get(0);
-            if (maybeLog == null) return;
-            if (maybeLog.nodeName !== "DIV" || !maybeLog.classList.contains("logitem")) return;
-
-            for (let span of maybeLog.getElementsByTagName("span")) {
-                span.textContent = FilterManager.filterString(span.textContent, FilterManager.filteredWords);
-            }
-
-        })
-
-    }),
-
-    filterString(message, filteredWords) {
-
-        for (let word of filteredWords) {
-            message = message.replaceAll(word, "*".repeat(word.length))
         }
+    }
 
-        return message;
+    filterLogItem(node) {
+        for (let childNode of node.childNodes) {
+            for (let innerChildNode of childNode.childNodes) {
+                if (innerChildNode.nodeName === "SPAN") {
+                    innerChildNode.innerHTML = this.filter.filterHTML(innerChildNode.innerText);
+                }
+            }
+        }
+    }
+
+    onSettingsUpdate(event) {
+        let profanityToggle = config.profanityFilterToggle.fromSettingsUpdateEvent(event);
+        let sexualToggle = config.sexualFilterToggle.fromSettingsUpdateEvent(event);
+
+        // If updated
+        if (profanityToggle) this.filter.setStatus("profanity", profanityToggle === "true");
+        if (sexualToggle) this.filter.setStatus("sexual", sexualToggle === "true");
 
     }
 
 }
-
-
 
 
 

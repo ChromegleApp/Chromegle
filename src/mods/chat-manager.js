@@ -1,18 +1,20 @@
-const ChatManager = {
-    initialize() {
-        document.addEventListener("chatStarted", (event) => ChatManager._chatStarted(event));
-        document.addEventListener("chatFailedConnect", (event) => ChatManager._chatFailedConnect(event));
-        document.addEventListener("chatEnded", () => ChatManager.cleanEndChat());
-        document.addEventListener("click", () => ChatManager._onclick());
-        document.addEventListener("keyup", (event) => {
-            if (event.key === "Escape") ChatManager._onclick()
-        })
+class ChatManager extends Module {
+
+    constructor() {
+        super();
+
+        this.addElementListener(document, "click", this.onClick);
+        this.addElementListener(document, "keyup", this.onKeyUp);
 
         loadHelpfulTips();
 
-    },
+    }
 
-    _chatStarted(event) {
+    onKeyUp(event) {
+        if (event.key === "Escape") this.onClick()
+    }
+
+    onChatStarted(event) {
 
         let logItems = document.getElementsByClassName("statuslog");
 
@@ -29,23 +31,22 @@ const ChatManager = {
                 $(self).css("z-index", "");
             }
 
-
         }
-    },
+    }
 
-    _onclick() {
+    onClick() {
 
         // Only when not chatting, but in the chat menu (between chats)
         if (ChatRegistry.isChatting() || $(".chatmsg").get(0) == null) {
             return;
         }
 
-        ChatManager.cleanMidChat();
-    },
+        this.cleanMidChat();
+    }
 
-    _chatFailedConnect(event) {
-        ChatManager.cleanEndChat();
-        ChatManager.cleanMidChat();
+    onChatFailedConnect(event) {
+        this.onChatEnded();
+        this.cleanMidChat();
 
         event["detail"].innerHTML = (`
             <p class="statuslog">
@@ -53,9 +54,9 @@ const ChatManager = {
                 due to a VPN or proxy, try a different one to continue.
             </p>
         `);
-    },
+    }
 
-    cleanEndChat() {
+    onChatEnded() {
         const autoReconnect = $("label:contains('Auto-reroll')");
 
         if (autoReconnect.get(0) != null) autoReconnect.css("color", "");
@@ -69,49 +70,36 @@ const ChatManager = {
                 .val("Click to Disable")
                 .get(0).classList.add("conversationgreat");
         }
-    },
+    }
 
     cleanMidChat() {
-        /**
-         * Get rid of auto re-roll styling
-         */
-        {
-            const autoReconnect = $("label:contains('Auto-reroll')");
 
-            if (autoReconnect.get(0) != null) {
-                autoReconnect.css("color", "");
-            }
+        // Remove auto-reroll styling
+        $("label:contains('Auto-reroll')")
+            .css("color", "");
+
+        // Override the college button on home-page
+        this.overrideCollegeButton();
+    }
+
+    overrideCollegeButton() {
+        const collegeStudent = $("strong:contains('College student')");
+
+        if (collegeStudent.get(0) == null) {
+            return;
         }
 
-        /**
-         * Override college button styling in-chat message
-         */
-        {
-            const collegeStudent = $("strong:contains('College student')");
+        const collegeParent = $(collegeStudent.get(0).parentNode)
+            .removeAttr("style")
+            .addClass("conversationgreat")
+            .get(0);
 
-            if (collegeStudent.get(0) != null) {
+        collegeParent.childNodes.item(0).remove();
+        collegeParent.innerHTML = "<strong>College Student Chat</strong>";
 
-                const collegeParent = $(collegeStudent.get(0).parentNode)
-                    .removeAttr("style")
-                    .addClass("conversationgreat")
-                    .get(0);
+        $(collegeParent.parentNode).css("margin-top", "10px");
 
-                collegeParent.childNodes.item(0).remove();
-                collegeParent.innerHTML = "<strong>College Student Chat</strong>";
 
-                $(collegeParent.parentNode).css("margin-top", "10px")
-
-            }
-        }
-    },
-
-    sendErrorMessage(message) {
-        const innerLogBox = document.getElementsByClassName("logitem")[0].parentNode;
-        const seenBeforeDiv = document.createElement("div")
-        seenBeforeDiv.classList.add("logitem");
-        seenBeforeDiv.appendChild($(`<span style="color: red;" class='statuslog'>${message}</span>`).get(0));
-        innerLogBox.append(seenBeforeDiv);
-        return seenBeforeDiv;
     }
 
 }
