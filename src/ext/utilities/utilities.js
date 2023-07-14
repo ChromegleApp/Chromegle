@@ -37,21 +37,6 @@ function containsWord(array, word) {
     return array.some((element) => word.includes(element));
 }
 
-function checkImage(url, success, failure) {
-    let request = new XMLHttpRequest();
-    request.open("GET", url, true);
-    request.send();
-    request.onload = function () {
-        status = request.status;
-        if (request.status === 200) //if(statusText == OK)
-        {
-            success();
-        } else {
-            failure();
-        }
-    }
-}
-
 function isValidHttpsUrl(string) {
     let url;
     try {
@@ -102,6 +87,16 @@ function sendErrorLogboxMessage(message) {
     const seenBeforeDiv = document.createElement("div")
     seenBeforeDiv.classList.add("logitem");
     seenBeforeDiv.appendChild($(`<span style="color: red;" class='statuslog'>${message}</span>`).get(0));
+    innerLogBox.append(seenBeforeDiv);
+    return seenBeforeDiv;
+}
+
+
+function sendInfoLogboxMessage(message) {
+    const innerLogBox = document.getElementsByClassName("logitem")[0].parentNode;
+    const seenBeforeDiv = document.createElement("div")
+    seenBeforeDiv.classList.add("logitem");
+    seenBeforeDiv.appendChild($(`<span class='statuslog'>${message}</span>`).get(0));
     innerLogBox.append(seenBeforeDiv);
     return seenBeforeDiv;
 }

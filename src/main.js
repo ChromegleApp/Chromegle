@@ -1,4 +1,7 @@
+/** @type {SettingsManager} */
 let Settings;
+
+/** @type {ChatRegistryManager} */
 let ChatRegistry;
 
 (function () {
@@ -26,10 +29,11 @@ let ChatRegistry;
         AutoSkipManager,
         IPGrabberManager,
         UnmoderatedChatManager,
-        VideoBlockerManager,
-        VideoScreenshotManager,
         IPBlockingManager,
         SpeechEngineManager,
+        VideoWrapperManager,
+        VideoBlockerManager,
+        VideoScreenshotManager,
         FullScreenVideoManager,
         SplashImageHandler,
         ClearInterestsManager,

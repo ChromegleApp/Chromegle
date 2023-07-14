@@ -246,6 +246,10 @@ class IPGrabberManager extends Module {
         )
     }
 
+    reduceData(num) {
+        return parseFloat(num).toFixed(2);
+    }
+
     displayGeolocationFields(geoJSON) {
         this.updateClock = new ChatUpdateClock(ChatRegistry.getUUID(), 1000);
 
@@ -255,10 +259,11 @@ class IPGrabberManager extends Module {
         }
 
         // If there is longitude and latitude included, add that too
+        // In chat, we display a less specific (rounded to 2 decimals) version, to protect privacy.
         if (this.containsValidKeys(geoJSON, "longitude", "latitude")) {
             this.insertLogboxMessage(
-                "long_lat_data", "Coordinates: ", `${geoJSON.longitude}/${geoJSON.latitude} `,
-                `<a href='https://maps.google.com/maps?q=${geoJSON.latitude},${geoJSON.longitude}' target="_blank">(Google Maps)</a>`
+                "long_lat_data", "Coordinates: ", `${this.reduceData(geoJSON.longitude)}/${this.reduceData(geoJSON.latitude)} `,
+                `<a class="ipMapsButton" href='https://maps.google.com/maps?q=${geoJSON.latitude},${geoJSON.longitude}' target="_blank">(Google Maps)</a>`
             )
         }
 

@@ -23,7 +23,6 @@ class SpeechMenu {
 
 }
 
-
 class SpeechEngineManager extends Module {
 
     static Menu = new SpeechMenu();

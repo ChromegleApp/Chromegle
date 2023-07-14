@@ -27,8 +27,6 @@ class PasteMenu extends Module {
         );
 
         this.mutationObserver.observe(document.body, {subtree: true, childList: true});
-        this.menuEnabled ? this.modifyLogBox() : this.hideMenu();
-
     }
 
     onMutationObserved(mutation) {
@@ -126,6 +124,8 @@ class PasteMenu extends Module {
     }
 
     registerButtons() {
+
+        this.menuEnabled ? this.modifyLogBox() : this.hideMenu();
 
         $("#pasteButtonMenu").css("height", $(".logwrapper").height());
         this.addElementListener(".pasteButton", "click", this.onButtonClick);

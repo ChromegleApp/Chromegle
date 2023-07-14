@@ -41,7 +41,6 @@ class AutoMessageManager extends Module {
         if (greetingEnabled === "false") {
             AutoMessageManager.cancelMessage();
         }
-
     }
 
     static getTypingDelay(text, wpm) {

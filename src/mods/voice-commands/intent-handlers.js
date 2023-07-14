@@ -99,6 +99,7 @@ class MessageIntentHandler extends AbstractIntentHandler {
 
         // Already writing
         if (AutoMessageManager.writingMessage) {
+            Logger.ERROR("Failed to send voice message, an auto-message is currently in progress.");
             sendErrorLogboxMessage("ERROR: Failed to send voice message, an auto-message is currently in progress.");
             return;
         }

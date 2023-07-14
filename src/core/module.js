@@ -45,12 +45,16 @@ class Module extends BaseModule {
         "chatEnded": "onChatEnded",
         "pageStarted": "onPageStarted",
         "storageSettingsUpdate": "onSettingsUpdate",
-        "chatFailedConnect": "onChatFailedConnect"
+        "chatFailedConnect": "onChatFailedConnect",
+        "videoChatLoaded": "onVideoLoaded",
+        "wrappedVideos": "onWrappedVideos"
     }
 
     constructor() {
         super();
+
         this.registerListeners();
+
     }
 
     static initialize() {
