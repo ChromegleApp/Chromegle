@@ -101,7 +101,7 @@ body, #header, html {
 /*
 Secondary Colour BACKGROUND
  */
-#intro, code, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton, #selfvideo, #othervideo, .pasteButton {
+#intro, code, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton, #selfvideo, #othervideo, #otherVideoWrapper, .pasteButton {
     background: rgb(29, 29, 31);
 }
 

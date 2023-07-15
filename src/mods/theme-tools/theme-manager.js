@@ -1,73 +1,57 @@
 class ThemeManager extends Module {
 
-    #currentResourcePath = undefined;
-    #stylesheet = undefined;
+    #stylesheet;
 
-    getCurrentResourcePath = () => this.#currentResourcePath;
-    setCurrentResourcePath = (newPath) => this.#currentResourcePath = newPath;
     OverrideManager = new OverrideManager();
 
     constructor() {
         super();
+        config.semiLightModeOption.retrieveValue().then(this.setupTheme.bind(this));
+    }
 
-        let themeQuery = {}
-        themeQuery[config.semiLightModeOption.getName()] = config.semiLightModeOption.getDefault();
+    async setupTheme(themeMode) {
 
-        chrome.storage.sync.get(themeQuery, (result) => {
-            let resourcePath = config[result[config.semiLightModeOption.getName()]].getValue();
-
-            this.setCurrentResourcePath(resourcePath);
-            let pageLinks = document.getElementsByTagName("link");
-
-            for (let link of pageLinks) {
-                if (link.href.includes("/static/style.css")) {
-                    this.#stylesheet = link;
-                }
-            }
-
-            this.loadCurrentTheme();
-            document.getElementsByTagName("html")[0].style.visibility = "visible";
-
-        });
-
+        // Set up MicroModal
         MicroModal.init();
-        this.addEventListener("storageSettingsUpdate", this.changeTheme)
+
+        // Set the theme mode
+        this.#stylesheet = document.querySelector('[href*="/static/style.css"]');
+
+        // Initialize overrides
+        this.OverrideManager.initialize();
+        this.setThemeMode(config[themeMode].getValue());
+
+        // Header settings
+        let headerEnabled = await config.headerButtonsToggle.retrieveValue();
+        this.toggleHeaderButton(headerEnabled === "true")
+
+        // Make page visible
+        document.getElementsByTagName("html")[0].style.visibility = "visible";
+
     }
 
-    changeTheme(event) {
-        const keys = Object.keys(event["detail"]);
-
-        // Theme Update
-        if (keys.includes(config.semiLightModeOption.getName())) {
-            const newThemeName = event["detail"][config.semiLightModeOption.getName()]
-            const themeOption = config[newThemeName].getValue();
-
-            this.setCurrentResourcePath(themeOption);
-            this.loadCurrentTheme(false);
-        }
-
-        // Header Button Update
-        if (keys.includes(config.headerButtonsToggle.getName())) {
-            ThemeManager.toggleHeaderButton(event["detail"][config.headerButtonsToggle.getName()] === "true")
-        }
+    setThemeMode(resourcePath) {
+        this.#stylesheet.href = chrome.runtime.getURL(resourcePath);
+        this.#stylesheet.id = "customStylesheet";
     }
 
-    loadCurrentTheme(initialize = true) {
+    onSettingsUpdate(event) {
+        let headerEnabled = config.headerButtonsToggle.fromSettingsUpdateEvent(event);
 
-        try {
-            if (initialize) {
-                this.OverrideManager.initialize();
-            }
-
-            this.#stylesheet.href = chrome.runtime.getURL(this.#currentResourcePath)
-            this.#stylesheet.id = "customStylesheet";
-        } catch (ex) {
-            Logger.ERROR("The theme manager has failed, stack-trace below:");
-            console.log(ex);
+        if (headerEnabled != null) {
+            this.toggleHeaderButton(headerEnabled === "true");
+            return;
         }
+
+        let modeChanged = config.semiLightModeOption.fromSettingsUpdateEvent(event);
+
+        if (modeChanged != null) {
+            this.setThemeMode(config[modeChanged].getValue());
+        }
+
     }
 
-    static toggleHeaderButton = (headerEnabled) => {
+    toggleHeaderButton = (headerEnabled) => {
 
         if (headerEnabled) {
             $("#sharebuttons").css("display", "");
@@ -95,7 +79,6 @@ class OverrideManager {
             this.#overrideTopicEditor,
             this.#overrideCollegeAndUnModeratedButtons,
             this.#overrideLinks,
-            this.#overrideHeader,
             this.#overrideStudentChatEmoji,
             this.#resizeCommonInterestsLabel
         ].forEach((fn) => {
@@ -117,19 +100,6 @@ class OverrideManager {
         $("span:contains('▶')").remove()
     }
 
-    #overrideHeader = () => {
-        let headerQuery = {}
-        headerQuery[config.headerButtonsToggle.getName()] = config.headerButtonsToggle.getDefault();
-
-        chrome.storage.sync.get(headerQuery, (result) => {
-            let showHeaderButtons = result[config.headerButtonsToggle.getName()] === "true";
-            if (showHeaderButtons) return;
-
-            ThemeManager.toggleHeaderButton(showHeaderButtons);
-
-        });
-    }
-
     #overrideBody = () => {
         $("body").css("min-height", "").css("top", "")
     }
@@ -143,7 +113,7 @@ class OverrideManager {
         $("#logo").attr("id", "omegleLogo");
 
 
-        $("#omegleLogo > img").replaceWith(Buttons.homeButton)
+        $("#omegleLogo > img").replaceWith(ButtonFactory.homeButton)
     };
 
 
@@ -151,11 +121,8 @@ class OverrideManager {
         let div = document.createElement("div");
         div.id = "menucontainer";
         div.classList.add("settingsButtonContainer");
-        div.append(Buttons.menuButton.get(0))
+        div.append(ButtonFactory.menuButton.get(0))
         $("#tagline").replaceWith(div);
-
-        // Initialize the user count manager
-        UserCountManager.initialize();
     };
 
     #overrideHongKongPoster = () => {

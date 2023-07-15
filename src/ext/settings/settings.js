@@ -21,7 +21,7 @@ class SettingsManager extends Module {
         Settings = this;
 
         // Assign button function
-        $(Buttons.menuButton).on("click", () => {
+        $(ButtonFactory.menuButton).on("click", () => {
             this.#menu.enable();
         })
 

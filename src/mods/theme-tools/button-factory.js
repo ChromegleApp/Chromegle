@@ -1,4 +1,4 @@
-const Buttons = {
+const ButtonFactory = {
 
     homeButton: $("<button class='homeButton'></button>")
         .on('click', function () {

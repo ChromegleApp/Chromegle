@@ -12,7 +12,7 @@ class VideoScreenshotManager extends Module {
     async onWrappedVideos() {
 
         // Create button
-        let button = Buttons.screenshotButton(this.#buttonId)
+        let button = ButtonFactory.screenshotButton(this.#buttonId)
             .on("click", this.onScreenshotButtonClick.bind(this))
             .get(0);
 

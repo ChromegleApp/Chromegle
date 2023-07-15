@@ -42,8 +42,22 @@ class ChatRegistryManager extends Module {
         }
     }
 
-    onMutationObserved(mutation) {
-        for (let mutationRecord of mutation) {
+    onMutationObserved(mutations) {
+
+        // Should be LAST b.c. it matters if the chat has ended
+        mutations.sort((a, b) => {
+            if (a.target.id === "othervideospinner") {
+                return 1;
+            }
+            else if (b.target.id === "othervideospinmner") {
+                return -1;
+            }
+
+            return -1;
+
+        });
+
+        for (let mutationRecord of mutations) {
            this.onMutationRecord(mutationRecord);
         }
     }
@@ -53,7 +67,8 @@ class ChatRegistryManager extends Module {
         // Chat Loaded
         if (mutationRecord.target.id === "othervideospinner") {
             let spinner = $(mutationRecord.target);
-            if (spinner.get(0).style.display === "none" && this.isChatting()) {
+
+            if (spinner.get(0).style.display === "none" && this.isChatting() && !this.#videoChatLoaded) {
                 document.dispatchEvent(new CustomEvent("videoChatLoaded"));
                 this.#videoChatLoaded = true;
             }

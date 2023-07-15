@@ -46,7 +46,7 @@
         "src/mods/voice-commands/intent-handlers.js",
         "src/ext/utilities/logger.js",
         "src/mods/theme-tools/theme-manager.js",
-        "src/mods/theme-tools/buttons.js",
+        "src/mods/theme-tools/button-factory.js",
         "src/mods/theme-tools/splash-image.js",
         "src/mods/theme-tools/user-count.js",
         "src/ext/settings/menu.js",

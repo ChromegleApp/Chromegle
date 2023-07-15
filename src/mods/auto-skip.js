@@ -50,6 +50,7 @@ class AutoSkipManager extends Module {
     }
 
     async onChatStarted() {
+
         this.#doSkip = true;
 
         if (!(await config.autoSkipToggle.retrieveValue() === "true")) {

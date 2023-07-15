@@ -9,7 +9,7 @@ class FullScreenVideoManager extends Module {
     async onWrappedVideos() {
 
         // Create Button
-        let button = Buttons.fullscreenButton(this.#buttonElementId)
+        let button = ButtonFactory.fullscreenButton(this.#buttonElementId)
             .on("click", this.onFullscreenButtonClicked.bind(this)).get(0);
 
         // Add Button
@@ -83,6 +83,11 @@ class FullScreenVideoManager extends Module {
     }
 
     onChatEnded() {
+
+        if (!ChatRegistry.isVideoChat()) {
+            return;
+        }
+
         this.#skipTool.updateSrc();
 
         if (!this.inFullscreen()) {
@@ -186,7 +191,7 @@ class FullscreenSkip {
     }
 
     getSrc() {
-        return ChatRegistry.isChatting() ? Buttons.endChatSrc : Buttons.startChatSrc;
+        return ChatRegistry.isChatting() ? ButtonFactory.endChatSrc : ButtonFactory.startChatSrc;
     }
 
     updateSrc() {

@@ -57,6 +57,7 @@ class ChatManager extends Module {
     }
 
     onChatEnded() {
+
         const autoReconnect = $("label:contains('Auto-reroll')");
 
         if (autoReconnect.get(0) != null) autoReconnect.css("color", "");

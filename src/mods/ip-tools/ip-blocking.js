@@ -17,7 +17,7 @@ const IPBlockingManager = {
         if (skipChat) {
             Logger.INFO("Skipped blocked IP address <%s> with chat UUID <%s>", unhashedAddress, ChatRegistry.getUUID())
             sendErrorLogboxMessage(`Skipped the blocked IP address ${unhashedAddress}`)
-                .appendChild(Buttons.ipUnblockButton(unhashedAddress))
+                .appendChild(ButtonFactory.ipUnblockButton(unhashedAddress))
             AutoSkipManager.skipIfPossible();
         }
 
@@ -87,7 +87,7 @@ const IPBlockingManager = {
                 Logger.INFO("Blocked IP address <%s> in video chat", unhashedAddress)
                 sendErrorLogboxMessage(
                     `Blocked the IP address ${unhashedAddress}${ChatRegistry.isChatting() ? " and skipped the current chat" : ""}`
-                ).appendChild(Buttons.ipUnblockButton(unhashedAddress));
+                ).appendChild(ButtonFactory.ipUnblockButton(unhashedAddress));
                 if (ChatRegistry.isChatting()) {
                     AutoSkipManager.skipIfPossible();
                 }

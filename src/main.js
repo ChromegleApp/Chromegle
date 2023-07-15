@@ -39,6 +39,7 @@ let ChatRegistry;
         ClearInterestsManager,
         ThemeManager,
         SettingsManager,
+        UserCountManager
     )
 
 })();

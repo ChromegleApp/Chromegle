@@ -1,57 +1,84 @@
-const UserCountManager = {
-    initialized: false,
+class UserCountManager extends Module {
 
-    genUserCount(users = 0) {
+    #button;
+    #interval;
+    #intervalInt = 60 * 3 * 1000;
+    #lastCount = 0;
 
-        let element = $(
-            `<div id="chromegleUserCount" class="noselect">
-                    <span class="userCountNum">${users}+</span>
+    constructor() {
+        super();
+        this.setupCount();
+    }
+
+    setupCount() {
+        this.#button = this.createUserCountButton().get(0);
+
+        this.getUserCount().then(count => {
+            $("#menucontainer").get(0).appendChild(this.#button);
+            this.setUserCount(count);
+        });
+
+        // Update every
+        this.#interval = setInterval(() => {
+            this.getUserCount().then(count => {
+                this.setUserCount(count);
+            })
+        }, this.#intervalInt);
+
+    }
+
+    setUserCount(count) {
+
+        count = count || 0;
+        let counter = document.getElementById("userCountNum");
+        this.animateCounter(counter, this.#lastCount, count);
+        this.#lastCount = count;
+    }
+
+    animateCounter(counter, oldCount, newCount) {
+        let dataValue = oldCount;
+
+        // If switching to/from zero, skip the old count
+        if (oldCount === 0 || newCount === 0) {
+            dataValue = newCount;
+        }
+
+        // Subtracting or adding?
+        let operation = newCount > oldCount ? 1 : -1;
+        counter.innerText = dataValue; // Stop flashing
+
+        // Run animation
+        let interval = setInterval(() => {
+            counter.innerText = dataValue;
+
+            if (dataValue === newCount) {
+                clearInterval(interval);
+            }
+
+            dataValue += (1 * operation);
+        }, 100);
+
+    }
+
+    createUserCountButton() {
+
+        return $(`
+                <div id="chromegleUserCount" class="noselect">
+                    <span id="userCountNum" class="userCountNum"></span>
                     <span class="userCountDesc">Online Chromeglers</span>
-                  </div>
-                `
-        )
+                </div>
+        `);
 
-        if (users === -1 || users == null) {
-            element.css("display", "none");
-        }
+    }
 
-        return element.get(0);
-    },
-
-    initialize() {
-        $("#menucontainer").get(0).appendChild(UserCountManager.genUserCount(-1));
-        if (!UserCountManager.initialized) {
-            UserCountManager.initialized = true;
-            UserCountManager.update();
-            setInterval(() => {
-                UserCountManager.update();
-            }, 1000 * 300);
-        }
-    },
-
-    update() {
-        let request = new XMLHttpRequest();
-        request.timeout = 5000;
-        request.open("GET", `${ConstantValues.apiURL}users`, true);
-        request.onreadystatechange = () => UserCountManager.displayUserCount(request);
-        request.send();
-    },
-
-    displayUserCount(request) {
-
-        // Request not done yet
-        if (!(request.readyState === 4)) {
-            return;
-        }
-
-        let response = null;
+    async getUserCount() {
         try {
-            response = JSON.parse(request.responseText);
+            let result = await fetch(ConstantValues.apiURL + "users");
+            let json = await result.json();
+            return json['count'];
         } catch (ex) {
-            return;
+            return null;
         }
-
-        $("#chromegleUserCount").get(0).replaceWith(UserCountManager.genUserCount(response?.count));
     }
 
 }

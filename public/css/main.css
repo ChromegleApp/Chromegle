@@ -99,11 +99,10 @@ html {
     color: white;
 }
 
-.userCountNum {
+#userCountNum {
     text-align: center;
     font-size: 30px;
     margin-bottom: -5px;
-    margin-left: 8px;
     margin-top: -9px;
 }
 
@@ -487,10 +486,11 @@ span.chromegle-cancel-skip {
     align-items: center;
 }
 
-#othervideospinner {
+#spinnerWrapper > #othervideospinner {
     top: unset !important;
     left: unset !important;
 }
+
 
 #sharebuttons, #onlinecount {
     margin-right: 20px !important;
@@ -529,4 +529,13 @@ span.chromegle-cancel-skip {
 #intro {
     margin: 1.5em .5em .5em;
     font-size: 15.5px;
+}
+
+#videoCoverSubtext {
+    display: block;
+    font-size: 25px;
+}
+
+.modal__overlay {
+    z-index: 100;
 }

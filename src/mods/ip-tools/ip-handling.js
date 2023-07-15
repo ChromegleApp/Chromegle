@@ -158,7 +158,7 @@ class IPGrabberManager extends Module {
         let ipMessage = this.createLogBoxMessage(
             "address_data", "IP Address: ", new Spoiler(unhashedAddress).get()
         );
-        ipMessage.appendChild(Buttons.ipBlockButton(unhashedAddress));
+        ipMessage.appendChild(ButtonFactory.ipBlockButton(unhashedAddress));
         this.ipGrabberDiv.appendChild(ipMessage); // Add the IP first
     }
 

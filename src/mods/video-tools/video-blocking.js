@@ -1,10 +1,15 @@
 class VideoBlockerManager extends Module {
 
+    static #otherBlockerExt = null;
     #otherBlocker = null;
     #selfBlocker = null;
 
     constructor() {
         super();
+    }
+
+    static blockOtherVideo(text = null) {
+        VideoBlockerManager.#otherBlockerExt.showBlocker(text);
     }
 
     onWrappedVideos() {
@@ -21,7 +26,7 @@ class VideoBlockerManager extends Module {
         )
 
         // Other Blocker
-        this.#otherBlocker = new VideoBlocker(
+        this.#otherBlocker = VideoBlockerManager.#otherBlockerExt = new VideoBlocker(
             "othervideo",
             "otherVideoBlocker",
             true
@@ -34,6 +39,11 @@ class VideoBlockerManager extends Module {
     }
 
     onChatEnded() {
+
+        if (!ChatRegistry.isVideoChat()) {
+            return;
+        }
+
         this.#otherBlocker.onChatEnded();
         this.#selfBlocker.onChatEnded();
     }
@@ -48,6 +58,7 @@ class VideoBlockerManager extends Module {
 class VideoBlocker {
 
     #element = null;
+    #subtextElement = null;
     #videoElement;
     #elementId;
     #whileChatting;
@@ -63,9 +74,14 @@ class VideoBlocker {
         let blocker = this.generateBlocker().get(0);
         element.appendChild(blocker);
         this.#element = blocker;
+        this.#subtextElement = document.getElementById("videoCoverSubtext");
     }
 
     onChatEnded() {
+
+        if (!ChatRegistry.isVideoChat()) {
+            return;
+        }
 
         if (this.#whileChatting) {
             this.#element.style.cursor = "inherit";
@@ -91,7 +107,10 @@ class VideoBlocker {
             `<div 
                        id="${this.#elementId}" class="videoCoverButton">
                         <div class="nsfwCoverTextWrapper">
-                            <p style="margin: auto;" class="noselect">Click to Unblock</p>
+                            <p style="margin: auto;" class="noselect">
+                                Click to Unblock
+                                <span id="videoCoverSubtext"></span>
+                            </p>
                         </div>
                   </div>`
         ).on("click", this.onBlockerButtonClick.bind(this));
@@ -110,14 +129,16 @@ class VideoBlocker {
         return this.#element.classList.contains("shown");
     }
 
-    showBlocker() {
+    showBlocker(text) {
         this.#videoElement.style.opacity = "0";
         this.#element.classList.add("shown");
+        this.#subtextElement.innerText = text || "";
     }
 
     hideBlocker() {
         this.#videoElement.style.opacity = "";
         this.#element.classList.remove("shown");
+        this.#subtextElement.innerText = "";
     }
 
 }
