@@ -13,12 +13,13 @@ class Broadcast extends Module {
     }
 
     onChatStarted() {
-        this.recentChatIds.unshift(this.registry.chatUUID);
+        this.recentChatIds.unshift(ChatRegistry.getUUID());
         this.recentChatIds = this.recentChatIds.slice(0, this.MAX_CHATS);
 
         $(".logwrapper").append(`
-            <div id="broadcast-id">Chat ID: ${this.registry.chatUUID.toUpperCase()}</div>
+            <div id="broadcast-id">Chat ID: ${ChatRegistry.getUUID().toUpperCase()}</div>
         `);
+
     }
 
     registerIntervals() {

@@ -18,6 +18,7 @@ let ChatRegistry;
 
     loadModules(
         ConfigManager,
+        IPBlockingManager,
         TopicSyncManager,
         ChatRegistryManager,
         PasteMenu,
@@ -29,7 +30,6 @@ let ChatRegistry;
         AutoSkipManager,
         IPGrabberManager,
         UnmoderatedChatManager,
-        IPBlockingManager,
         SpeechEngineManager,
         VideoWrapperManager,
         VideoBlockerManager,
@@ -39,7 +39,8 @@ let ChatRegistry;
         ClearInterestsManager,
         ThemeManager,
         SettingsManager,
-        UserCountManager
+        UserCountManager,
+        Broadcast
     )
 
 })();
