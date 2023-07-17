@@ -1,7 +1,7 @@
 
 html {
     visibility: hidden;
-    background-size: cover;
+    background-size: cover !important;
 }
 
 .homeButton {
