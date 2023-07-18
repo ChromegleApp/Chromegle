@@ -88,7 +88,7 @@ class AgeSkipManager extends Module {
         this.#checkedCount++;
 
         if (this.outOfRange(message)) {
-            sendErrorLogboxMessage(`Skipped user who was out of age range \"${this.createAgeRange()}\".`);
+            sendErrorLogboxMessage(`Skipped user who was out of the age range \"${this.createAgeRange()}\" you selected.`);
             AutoSkipManager.skipIfPossible();
         }
 

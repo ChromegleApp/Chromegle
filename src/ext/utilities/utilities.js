@@ -49,7 +49,7 @@ function isValidHttpsUrl(string) {
 
 function loadHelpfulTips() {
 
-    fetch(`${ConstantValues.apiURL}tips`).then(res => res.json()).then(res => {
+    fetch(ConstantValues.apiURL + "tips").then(res => res.json()).then(res => {
         ConstantValues._helpfulTips = res;
     });
 

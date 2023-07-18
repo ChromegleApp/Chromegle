@@ -334,6 +334,8 @@ code {
 }
 
 #broadcast {
+    pointer-events: none;
+    animation: mmfadeIn 500ms cubic-bezier(0.0, 0.0, 0.2, 1);
     transition: opacity;
     transition-duration: 500ms;
     z-index: 5;
@@ -371,6 +373,7 @@ code {
     max-width: 80vw;
     overflow-wrap: break-word;
     font-size: 35px;
+    text-align: center;
 }
 
 .chromegle-spoiler {
@@ -539,4 +542,16 @@ span.chromegle-cancel-skip {
 
 .modal__overlay {
     z-index: 100;
+}
+
+#broadcast-id {
+    padding-right: 8px;
+    float: right;
+    padding-top: 5px;
+    font-size: 12px;
+}
+
+p.tip-message {
+    width: fit-content;
+    padding-right: 5px;
 }

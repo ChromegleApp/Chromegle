@@ -20,6 +20,7 @@ class ChatManager extends Module {
 
         for (let log of logItems) {
             if (log.innerText.includes("AGAINST THE CCP")) {
+                log.classList.add("tip-message");
                 log.innerHTML = `Thanks for using Chromegle! ${ConstantValues.getHelpfulTip()}`;
             }
 

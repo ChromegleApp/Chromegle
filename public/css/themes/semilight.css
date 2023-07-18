@@ -103,7 +103,7 @@ body, #header, html {
 /*
 Secondary Colour BACKGROUND
  */
-#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .pasteButton {
+#intro, .tip-message, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .pasteButton {
     background: #ffffff;
 }
 
@@ -1022,4 +1022,8 @@ p + #topterms {
     #headerappstore {
         visibility: hidden !important
     }
+}
+
+#broadcast-id {
+    color: #ababab;
 }

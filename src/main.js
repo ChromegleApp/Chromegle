@@ -41,7 +41,8 @@ let ChatRegistry;
         SettingsManager,
         UserCountManager,
         MessageSkipManager,
-        AgeSkipManager
+        AgeSkipManager,
+        BroadcastManager
     )
 
 })();

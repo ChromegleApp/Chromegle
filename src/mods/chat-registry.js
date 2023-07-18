@@ -22,10 +22,6 @@ class ChatRegistryManager extends Module {
     /** @type ChatMessage[] */
     #messages = [];
 
-    getMessage(index) {
-        return this.#messages[index] || null;
-    }
-
     userMessages() {
         return this.#messages.filter(msg => msg.isUser)
     }
