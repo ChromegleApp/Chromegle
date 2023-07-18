@@ -42,11 +42,7 @@ class ToggleButton {
     }
 
     disable() {
-        try {
-            this.#element.innerHTML = "Enable"
-        } catch (ex) {
-            console.log(this.#element.id, ex)
-        }
+        this.#element.innerHTML = "Enable"
         this.#element.classList.remove("editToggleEnabled")
 
     }

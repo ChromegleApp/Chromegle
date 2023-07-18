@@ -23,7 +23,6 @@ class ClearInterestsManager extends Module {
 
     onButtonClick() {
         for (let topicTag of $(".topictagwrapper > .topictag").toArray()) {
-            console.log('click')
             $(topicTag).children(".topictagdelete").get(0).click();
         }
     }

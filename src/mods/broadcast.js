@@ -14,7 +14,6 @@ class BroadcastManager extends Module {
     checkInterval;
     execInterval;
 
-    #previousBroadcasts;
     #broadcasts = [];
 
     onChatStarted() {
@@ -53,10 +52,9 @@ class BroadcastManager extends Module {
                 let alreadyPulled = await this.getPreviousBroadcasts();
                 let newlyPulled = [];
 
-                console.log('gotem', alreadyPulled);
                 for (let broadcast of res['broadcasts']) {
                     if (this.matchesTarget(broadcast) && !alreadyPulled.includes(broadcast.id)) {
-                        this.#broadcasts.push(broadcast);
+                        this.#broadcasts.unshift(broadcast);
                         newlyPulled.push(broadcast.id);
                         Logger.DEBUG("Received new broadcast:\n\n%s", JSON.stringify(broadcast));
                     }
@@ -71,6 +69,12 @@ class BroadcastManager extends Module {
     }
 
     async addPreviousBroadcast(previousBroadcasts, newBroadcasts) {
+
+        // Hard-reset after 100
+        if (previousBroadcasts.length > 100) {
+            previousBroadcasts = [];
+        }
+
         let previous = [...previousBroadcasts, ...newBroadcasts];
         let query = {[this.STORAGE_ID]: JSON.stringify(previous)};
         await chrome.storage.local.set(query);
