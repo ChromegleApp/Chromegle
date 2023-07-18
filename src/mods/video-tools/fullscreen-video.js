@@ -17,7 +17,7 @@ class FullScreenVideoManager extends Module {
         this.#fullscreenButton = button;
 
         // Set Status
-        let value = await config.videoToolsButtonToggle.retrieveValue();
+        let value = await config.fullscreenToolButtonToggle.retrieveValue();
         this.#showButton = value === "true";
 
         // Add Listeners
@@ -96,7 +96,7 @@ class FullScreenVideoManager extends Module {
     }
 
     onSettingsUpdate(event) {
-        let toolsEnabled = config.videoToolsButtonToggle.fromSettingsUpdateEvent(event);
+        let toolsEnabled = config.fullscreenToolButtonToggle.fromSettingsUpdateEvent(event);
 
         if (toolsEnabled == null) {
             return;

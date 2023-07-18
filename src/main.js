@@ -40,7 +40,8 @@ let ChatRegistry;
         ThemeManager,
         SettingsManager,
         UserCountManager,
-        Broadcast
+        MessageSkipManager,
+        AgeSkipManager
     )
 
 })();

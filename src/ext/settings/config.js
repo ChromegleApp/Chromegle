@@ -159,13 +159,7 @@ const config = {
     "autoSkipToggle": new ToggleEdit({
         "elementName": "autoSkipToggle",
         "storageName": "AUTO_SKIP_TOGGLE",
-        "default": "false",
-        "warning": {
-            "message": "Chromegle is not a spam-bot. Abusing auto-skip in combination with the auto-message feature to send recurring, frequent messages will " +
-                "eventually result in an Omegle ban. Use this feature responsibly with a VPN if you plan to combine the two. We are not responsible for " +
-                "any stupid things you do, nor will we cater to spam of Omegle's platform.",
-            "state": "true"
-        }
+        "default": "false"
     }),
     "countrySkipToggle": new ToggleEdit({
         "elementName": "countrySkipToggle",
@@ -221,11 +215,6 @@ const config = {
         "storageName": "AUTO_RECONNECT_TOGGLE",
         "default": "false"
     }),
-    "ipGrabToggle": new ToggleEdit({
-        "elementName": "ipGrabToggle",
-        "storageName": "IP_GRAB_TOGGLE",
-        "default": "false"
-    }),
     "sexualFilterToggle": new ToggleEdit({
         "elementName": "sexualFilterToggle",
         "storageName": "SEXUAL_FILTER_TOGGLE",
@@ -262,10 +251,15 @@ const config = {
         "storageName": "HEADER_BUTTONS_TOGGLE",
         "default": "false"
     }),
-    "videoToolsButtonToggle": new ToggleEdit({
-        "elementName": "videoToolsButtonToggle",
-        "storageName": "VIDEO_TOOLS_BUTTON_TOGGLE",
-        "default": "false"
+    "fullscreenToolButtonToggle": new ToggleEdit({
+        "elementName": "fullscreenToolButtonToggle",
+        "storageName": "FULLSCREEN_TOOL_BUTTON_TOGGLE",
+        "default": "true"
+    }),
+    "screenshotToolButtonToggle": new ToggleEdit({
+        "elementName": "screenshotToolButtonToggle",
+        "storageName": "SCREENSHOT_TOOL_BUTTON_TOGGLE",
+        "default": "true"
     }),
     "skipRepeatsToggle": new ToggleEdit({
         "elementName": "skipRepeatsToggle",
@@ -328,6 +322,104 @@ const config = {
                 "confirm": isValidHttpsUrl(response) ? "true" : "false",
                 "value": response
             }
+        }
+    }),
+    "autoSkipWordsToggle": new ToggleEdit({
+        "elementName": "autoSkipWordsToggle",
+        "storageName": "AUTO_SKIP_WORDS_TOGGLE",
+        "default": "false"
+    }),
+    "autoSkipAgeToggle": new ToggleEdit({
+        "elementName": "autoSkipAgeToggle",
+        "storageName": "AUTO_SKIP_AGE_TOGGLE",
+        "default": "false"
+    }),
+    "autoSkipAgeField": new FieldEdit({
+        "storageName": "AUTO_SKIP_AGE_FIELD",
+        "prompt": "Enter the ACCEPTABLE age-range when people send their age in the chat (e.g. 18-22, 18+). " +
+            "People OUTSIDE of this acceptable range will be automatically skipped.\n\n" +
+            "Only the first 5 stranger messages will be checked.",
+        "default": "18+",
+        "check": (response) => {
+
+            // Early exit
+            if (response == null) {
+                return {
+                    "confirm": "false",
+                    "value": response
+                };
+            }
+
+            response = response.replaceAll(" ", "");
+            let min, max;
+
+            // TYPE 1: Range is N-Z
+            let split = response.split("-");
+            if (isNumeric(split[0])) {
+                min = parseInt(split[0]);
+            }
+            if (isNumeric(split[1])) {
+                max = parseInt(split[1]);
+            }
+            if (min && max) {
+                return {
+                    "confirm": "true",
+                    "value": `${Math.max(18, min)}-${max}`
+                };
+            }
+
+            // TYPE 2: Range is N+
+            let test = response.replace("+", "");
+            if (isNumeric(test)) {
+                min = parseInt(test)
+            }
+            if (min) {
+                return {
+                    "confirm": "true",
+                    "value": `${Math.max(18, min)}+`
+                }
+            }
+
+            // TYPE 3: Invalid
+            return {
+                "confirm": "false",
+                "value": response
+            };
+
+        }
+    }),
+    "autoSkipWordsField": new FieldEdit({
+        "storageName": "AUTO_SKIP_WORDS_FIELD",
+        "prompt": "Enter words that should automatically result in a skipped chat, comma-separated " +
+            "(e.g. \"sex,anal,porn\").\n\n" +
+            "Only the first 5 stranger messages will be checked.",
+        "default": "sex,anal,porn",
+        "check": (response) => {
+
+            // Early exit
+            if (response == null) {
+                return {
+                    "confirm": "false",
+                    "value": response
+                };
+            }
+
+            // Sanitize
+            let values = response.split(",");
+            let sanitized = [];
+
+            for (let value of values) {
+                let sanitizedValue = value.trim().toLowerCase();
+
+                if (sanitizedValue.length > 0 && !sanitized.includes(sanitizedValue)) {
+                    sanitized.push(sanitizedValue);
+                }
+            }
+
+            return {
+                "confirm": "true",
+                "value": sanitized.join(",")
+            };
         }
     }),
 }

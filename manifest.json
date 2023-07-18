@@ -30,6 +30,8 @@
         "src/mods/auto-reconnect.js",
         "src/mods/ip-tools/ip-handling.js",
         "src/mods/ip-tools/ip-blocking.js",
+        "src/mods/message-skip.js",
+        "src/mods/age-skip.js",
         "src/mods/auto-confirm.js",
         "src/mods/unmoderated-chat.js",
         "src/mods/sync-topics.js",

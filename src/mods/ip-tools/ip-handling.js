@@ -1,7 +1,11 @@
 class IPGrabberManager extends Module {
 
+    IP_MENU_TOGGLE_ID = "IP_MENU_TOGGLE";
+    IP_MENU_TOGGLE_DEFAULT = "true";
+
     ENABLE_TAG = "Show Chat-Info";
     DISABLE_TAG = "Hide Chat-Info";
+
     GEO_MAPPINGS = {
         country: "Country",
         region: "Region",
@@ -17,15 +21,14 @@ class IPGrabberManager extends Module {
         .on('click', () => {
 
             let showQuery = {}
-            showQuery[config.ipGrabToggle.getName()] = config.ipGrabToggle.getDefault();
+            showQuery[this.IP_MENU_TOGGLE_ID] = this.IP_MENU_TOGGLE_DEFAULT;
             chrome.storage.sync.get(showQuery, (result) => {
 
-                const enabled = !(result[config.ipGrabToggle.getName()] === "true");
+                const enabled = !(result[this.IP_MENU_TOGGLE_ID] === "true");
                 this.ipGrabberDiv.style.display = enabled ? "" : "none";
 
                 if (enabled) this.ipToggleButton.html(this.DISABLE_TAG);
                 else this.ipToggleButton.html(this.ENABLE_TAG);
-                config.ipGrabToggle.update();
 
             });
 
@@ -66,11 +69,11 @@ class IPGrabberManager extends Module {
         }
 
         let unhashedAddress = event["detail"];
-        let scrapeQuery = {[config.ipGrabToggle.getName()]: config.ipGrabToggle.getDefault()};
+        let scrapeQuery = {[this.IP_MENU_TOGGLE_ID]: this.IP_MENU_TOGGLE_DEFAULT};
 
         // Check if show data is enabled, hash the address, run through block manager
         chrome.storage.sync.get(scrapeQuery, async (result) => {
-            let showData = result[config.ipGrabToggle.getName()] === "true";
+            let showData = result[this.IP_MENU_TOGGLE_ID] === "true";
             let hashedAddress = await sha1(unhashedAddress);
 
             Logger.DEBUG("Scraped IP Address from video chat | Hashed: <%s> Raw: <%s>", hashedAddress, unhashedAddress);

@@ -7,25 +7,16 @@
             </header>
             <main class="modal__content" id="modal-1-content">
 
-                <!-- Collapsable Items -->
                 <div class="settingsCollapseContainer">
 
-                    <!-- Greeting Settings -->
                     <div class="settingsCollapsableWrapper">
                         <button type="button" id="greetingsSettings" class="settingsCollapsable">Chat Tools</button>
                         <div class="settingsCollapsableItem">
-                            <!-- Options
-
-                            A) Enable Greeting
-                            B) Set WPM
-                            C) Set Send Delay
-
-                            -->
                             <table class="settingsTable">
                                 <tr>
                                     <th class="tableItemLabel">
                                         <div class="tooltip">Greeting
-                                            <span class="tooltiptext">Send automatic messages at the start of each chat to greet each new stranger!</span>
+                                            <span class="tooltiptext">Send an automatic message at the start of each chat to greet each stranger!</span>
                                         </div>
                                     </th>
                                     <th>
@@ -38,7 +29,7 @@
                                 <tr>
                                     <th class="tableItemLabel">
                                         <div class="tooltip">Greeting Delays
-                                            <span class="tooltiptext">Choose how much time to wait before starting to type your greeting in chat.</span>
+                                            <span class="tooltiptext">Choose how much time to wait before starting/sending your greeting.</span>
                                         </div>
                                     </th>
                                     <th>
@@ -49,11 +40,31 @@
                                 <tr>
                                     <th class="tableItemLabel">
                                         <div class="tooltip">Paste Hotbar
-                                            <span class="tooltiptext">Toggle the message hotbar for a list of custom values to paste in your chatbox.</span>
+                                            <span class="tooltiptext">Toggle the paste hotbar for a list of custom values to paste in your chatbox.</span>
                                         </div>
                                     </th>
                                     <th>
                                         <button class="editFieldButton editToggleDisabled" id="pasteMenuToggle">Enable</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Sexual Filter
+                                            <span class="tooltiptext">Filter messages of a sexual nature sent by you or your partner <strong>in the text chat.</strong></span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="sexualFilterToggle">Enable</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Profanity Filter
+                                            <span class="tooltiptext">Filter messages with profane words sent by you or your partner <strong>in the text chat.</strong></span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="profanityFilterToggle">Enable</button>
                                     </th>
                                 </tr>
                             </table>
@@ -61,19 +72,14 @@
                         </div>
                     </div>
 
-
-                    <!-- Automation Settings -->
                     <div class="settingsCollapsableWrapper">
                         <button type="button" id="automationSettings" class="settingsCollapsable">Video Tools</button>
                         <div class="settingsCollapsableItem">
-                            <!-- Options
-
-                            -->
                             <table class="settingsTable">
                                 <tr>
                                     <th class="tableItemLabel">
                                         <div class="tooltip">Blocked IP List
-                                            <span class="tooltiptext">List the IP addresses you have perma-blocked when <strong>in the video chat.</strong></span>
+                                            <span class="tooltiptext">List the IP addresses you have blocked when <strong>in the video chat.</strong></span>
                                         </div>
                                     </th>
                                     <th>
@@ -84,7 +90,7 @@
                                 <tr>
                                     <th class="tableItemLabel">
                                         <div class="tooltip">Blocked Countries
-                                            <span class="tooltiptext">Skip to the next chat if a user belongs to a given country code <strong>when in video chat</strong></span>
+                                            <span class="tooltiptext">Skip to the chat if a user belongs to a given country code <strong>when in video chat</strong></span>
                                         </div>
                                     </th>
                                     <th>
@@ -105,21 +111,21 @@
                                 <tr>
                                     <th class="tableItemLabel">
                                         <div class="tooltip">Fullscreen Tool
-                                            <span class="tooltiptext">Get a microphone, pop-out video, and screenshot button <strong>when in video chat.</strong></span>
+                                            <span class="tooltiptext">Get a fullscreen overlay button <strong>when in the video chat.</strong></span>
                                         </div>
                                     </th>
                                     <th>
-                                        <button class="editFieldButton editToggleDisabled" id="videoToolsButtonToggle">Enable</button>
+                                        <button class="editFieldButton editToggleDisabled" id="fullscreenToolButtonToggle">Enable</button>
                                     </th>
                                 </tr>
                                 <tr>
                                     <th class="tableItemLabel">
                                         <div class="tooltip">Screenshot Tool
-                                            <span class="tooltiptext">Get a microphone, pop-out video, and screenshot button <strong>when in video chat.</strong></span>
+                                            <span class="tooltiptext">Get a screenshot overlay button <strong>when in the video chat.</strong></span>
                                         </div>
                                     </th>
                                     <th>
-                                        <button class="editFieldButton editToggleDisabled" id="videoToolsButtonToggle">Enable</button>
+                                        <button class="editFieldButton editToggleDisabled" id="screenshotToolButtonToggle">Enable</button>
                                     </th>
                                 </tr>
                             </table>
@@ -127,16 +133,9 @@
                         </div>
                     </div>
 
-                    <!-- Security Settings -->
                     <div class="settingsCollapsableWrapper">
                         <button type="button" id="filterSettings" class="settingsCollapsable">Other Tools</button>
                         <div class="settingsCollapsableItem">
-                            <!-- Options
-
-                            A) Set auto-skip
-                            B) Toggle auto-reconnect
-
-                            -->
                             <table class="settingsTable">
                                 <tr>
                                     <th class="tableItemLabel">
@@ -151,32 +150,46 @@
                                 </tr>
                                 <tr>
                                     <th class="tableItemLabel">
-                                        <div class="tooltip">Sexual Text-Filter
-                                            <span class="tooltiptext">Filter messages of a sexual nature sent by you or your partner <strong>in the text chat.</strong></span>
+                                        <div class="tooltip">Auto-Reconnect
+                                            <span class="tooltiptext">Automatically start the next chat after your current one ends <strong>when in text mode.</strong></span>
                                         </div>
                                     </th>
                                     <th>
-                                        <button class="editFieldButton editToggleDisabled" id="sexualFilterToggle">Enable</button>
+                                        <button class="editFieldButton editFieldButtonGray" id="autoReconnectType">Edit Type</button>
+                                        <button class="editFieldButton editToggleDisabled" id="autoReconnectToggle">Enable</button>
                                     </th>
                                 </tr>
                                 <tr>
                                     <th class="tableItemLabel">
-                                        <div class="tooltip">Profanity Text-Filter
-                                            <span class="tooltiptext">Filter messages with profane words sent by you or your partner <strong>in the text chat.</strong></span>
+                                        <div class="tooltip">Auto-Skip Words
+                                            <span class="tooltiptext">Skip when someone sends a specific word in the first 5 messages <strong>in text chat.</strong></span>
                                         </div>
                                     </th>
                                     <th>
-                                        <button class="editFieldButton editToggleDisabled" id="profanityFilterToggle">Enable</button>
+                                        <button class="editFieldButton editFieldButtonGray" id="autoSkipWordsField">Edit Field</button>
+                                        <button class="editFieldButton editToggleDisabled" id="autoSkipWordsToggle">Enable</button>
                                     </th>
                                 </tr>
                                 <tr>
                                     <th class="tableItemLabel">
-                                        <div class="tooltip">Auto-Skip Text-Filter
-                                            <span class="tooltiptext">Filter messages with profane words sent by you or your partner <strong>in the text chat.</strong></span>
+                                        <div class="tooltip">Auto-Skip Age-Range
+                                            <span class="tooltiptext">Skip when someone sends an age outside the configured range <strong>in text chat.</strong></span>
                                         </div>
                                     </th>
                                     <th>
-                                        <button class="editFieldButton editToggleDisabled" id="profanityFilterToggle">Enable</button>
+                                        <button class="editFieldButton editFieldButtonGray" id="autoSkipAgeField">Edit Field</button>
+                                        <button class="editFieldButton editToggleDisabled" id="autoSkipAgeToggle">Enable</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Auto-Skip Timer
+                                            <span class="tooltiptext">Skip to the next chat after a configurable number of seconds has passed.</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editFieldButtonGray" id="autoSkipDelayField">Edit Delay</button>
+                                        <button class="editFieldButton editToggleDisabled" id="autoSkipToggle">Enable</button>
                                     </th>
                                 </tr>
                             </table>
@@ -184,12 +197,9 @@
                         </div>
                     </div>
 
-                    <!-- Theme Settings -->
                     <div class="settingsCollapsableWrapper">
                         <button type="button" id="themeSettings" class="settingsCollapsable">Theme Settings</button>
                         <div class="settingsCollapsableItem">
-                            <!-- Options
-                            -->
                             <table class="settingsTable">
                                 <tr>
                                     <th class="tableItemLabel">
@@ -206,7 +216,7 @@
                                 <tr>
                                     <th class="tableItemLabel">
                                         <div class="tooltip">Splash Image
-                                            <span class="tooltiptext">Have your very own custom splash image on the Omegle site</span>
+                                            <span class="tooltiptext">Have your very own custom splash image on the Omegle site.</span>
                                         </div>
                                     </th>
                                     <th>

@@ -21,7 +21,7 @@ class VideoScreenshotManager extends Module {
         this.#button = button;
 
         // Should it be shown
-        this.#showButton = await config.videoToolsButtonToggle.retrieveValue() === "true";
+        this.#showButton = await config.screenshotToolButtonToggle.retrieveValue() === "true";
     }
 
     static snapshotVideo(videoElement) {
@@ -39,7 +39,7 @@ class VideoScreenshotManager extends Module {
     }
 
     onSettingsUpdate(event) {
-        let toolsEnabled = config.videoToolsButtonToggle.fromSettingsUpdateEvent(event);
+        let toolsEnabled = config.screenshotToolButtonToggle.fromSettingsUpdateEvent(event);
 
         if (toolsEnabled === "true") {
             this.#showButton = true;

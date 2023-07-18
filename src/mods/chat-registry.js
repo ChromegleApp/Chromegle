@@ -4,7 +4,6 @@ class ChatRegistryManager extends Module {
         super();
 
         ChatRegistry = this;
-
         this.#observer.observe(document, {subtree: true, childList: true, attributes: true});
         this.addEventListener("click", this.onButtonClick, undefined, document);
 
@@ -19,6 +18,21 @@ class ChatRegistryManager extends Module {
     #pageStarted = false;
     #chatUUID = null;
     #videoChatLoaded = false;
+
+    /** @type ChatMessage[] */
+    #messages = [];
+
+    getMessage(index) {
+        return this.#messages[index] || null;
+    }
+
+    userMessages() {
+        return this.#messages.filter(msg => msg.isUser)
+    }
+
+    strangerMessages() {
+        return this.#messages.filter(msg => msg.isStranger());
+    }
 
     isChatting = () => this.#isChatting;
     isVideoChat = () => this.#isVideoChat;
@@ -64,6 +78,10 @@ class ChatRegistryManager extends Module {
 
     onMutationRecord(mutationRecord) {
 
+        if (!this.#pageStarted) {
+            return;
+        }
+
         // Chat Loaded
         if (mutationRecord.target.id === "othervideospinner") {
             let spinner = $(mutationRecord.target);
@@ -91,6 +109,26 @@ class ChatRegistryManager extends Module {
             this.onChatMutationRecord(mutationRecord);
         }
 
+        // Chat Log
+        if (mutationRecord?.addedNodes?.[0]?.classList?.contains("logitem")) {
+            this.onLogItemAdded(mutationRecord.addedNodes[0])
+        }
+
+    }
+
+    onLogItemAdded(logItemNode) {
+        let innerNode = logItemNode?.childNodes?.[0];
+
+        // Determine if user message
+        if (innerNode?.classList?.contains("youmsg") || innerNode?.classList?.contains("strangermsg")) {
+            let isUser = innerNode.classList.contains("youmsg");
+            let idx = this.#messages.length;
+            let message = new ChatMessage(isUser, innerNode?.childNodes?.[2].textContent, innerNode, idx);
+
+            this.#messages.push(message);
+            document.dispatchEvent(new CustomEvent('chatMessage', {detail: message}))
+        }
+
     }
 
     onChatMutationRecord(mutationRecord) {
@@ -108,6 +146,7 @@ class ChatRegistryManager extends Module {
             this.#isChatting = false;
             let uuid = this.getUUID() + '';
             this.#clearUUID();
+            this.#messages = [];
             document.dispatchEvent(
                 new CustomEvent('chatEnded',
                         {
@@ -132,6 +171,29 @@ class ChatRegistryManager extends Module {
             );
         }
 
+    }
+
+}
+
+class ChatMessage {
+
+    constructor(isUser, content, element, index) {
+
+        /** @type boolean */
+        this.isUser = isUser;
+
+        /** @type string */
+        this.content = content;
+
+        /** @type Node */
+        this.element = element;
+
+        /** @type Number */
+        this.messageNumber = index + 1;
+    }
+
+    isStranger() {
+        return !this.isUser;
     }
 
 }

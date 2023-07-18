@@ -1,3 +1,5 @@
+// noinspection All
+
 /**
  * No host available for the NSFW api. Until such a date, there will be no filter :(
  */
@@ -64,7 +66,6 @@ class VideoFilterManager extends Module {
             return;
         }
 
-        console.log('EXTENDED');
         this.extendVideoHide();
         this.checkNSFW().then(this.withNSFWChecked.bind(this)).catch(this.withNSFWCheckError.bind(this))
 

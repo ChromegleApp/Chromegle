@@ -377,6 +377,7 @@ code {
     filter: blur(3px);
     cursor: pointer;
     transition-duration: 50ms;
+    font-weight: inherit;
 }
 
 .chromegle-spoiler.show {

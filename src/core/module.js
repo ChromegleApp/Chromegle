@@ -47,7 +47,8 @@ class Module extends BaseModule {
         "storageSettingsUpdate": "onSettingsUpdate",
         "chatFailedConnect": "onChatFailedConnect",
         "videoChatLoaded": "onVideoLoaded",
-        "wrappedVideos": "onWrappedVideos"
+        "wrappedVideos": "onWrappedVideos",
+        "chatMessage": "onChatMessage"
     }
 
     constructor() {

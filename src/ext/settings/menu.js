@@ -86,6 +86,11 @@ class SettingsMenu {
     manageToggleButtons = () => {
         document.addEventListener("ToggleModify", (response) => {
             const element = document.getElementById(response.detail["element"]);
+
+            if (element == null) {
+                Logger.ERROR("Missing a settings element for a toggle:", response)
+            }
+
             const toggle = new ToggleButton(element)
 
             if (response.detail.value === "true") {
