@@ -27,6 +27,7 @@
         "src/ext/utilities/utilities.js",
         "src/core/module.js",
         "src/core/elements.js",
+        "src/core/data-loaders.js",
         "src/mods/chat-registry.js",
         "src/mods/chat-manager.js",
         "src/mods/auto-message.js",
@@ -68,6 +69,7 @@
   "web_accessible_resources": [
     {
       "resources": [
+        "/manifest.json",
         "/public/themes/types/*",
         "/public/*",
         "/src/ext/scrape-ips.js"
@@ -79,8 +81,7 @@
   ],
   "incognito": "split",
   "permissions": [
-    "storage",
-    "tabs"
+    "storage"
   ],
   "externally_connectable": {
     "matches": [

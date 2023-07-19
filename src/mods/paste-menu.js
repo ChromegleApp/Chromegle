@@ -10,7 +10,6 @@ class PasteMenu extends Module {
     menuEnabled = false;
     waitingForButtonSelection = false;
     mutationObserver = new MutationObserver(this.onMutationObserved.bind(this));
-    #lastKey;
 
     KEYMAP = {
         "1": "PB1",
@@ -24,41 +23,24 @@ class PasteMenu extends Module {
         this.pasteMenuConfig = await this.retrieveChromeValue(this.STORAGE_ID, this.STORAGE_DEFAULT, "local");
         this.menuEnabled = (await config.pasteMenuToggle.retrieveValue()) === "true";
         this.addEventListener("resize", this.onResize, undefined, window);
-        this.addEventListener("keyup", this.onKeyUp);
+        this.addEventListener("keydown", this.onKeyUp);
         this.setupPasteMenu();
     }
 
     onKeyUp(event) {
 
-        let lastWasAlt = this.#lastKey?.toUpperCase() === "ALT";
-        let lastWasKeyMap = this.KEYMAP[this.#lastKey] != null;
-        let lastKey = this.#lastKey + "";
-        this.#lastKey = event.isTrusted ? event.key : this.#lastKey;
-
-        // Alt first
-        if (!lastWasAlt && !lastWasKeyMap) {
+        if (!this.menuEnabled) {
             return;
         }
 
-        // Then our trigger key
-        let elementId = lastWasAlt ? this.KEYMAP[event.key] : this.KEYMAP[lastKey];
-        if (!elementId) {
+        if(!(this.KEYMAP[event.key] && event.altKey)) {
             return;
         }
 
         // Paste
-        let button = document.getElementById(elementId);
+        let button = document.getElementById(this.KEYMAP[event.key]);
         button.click();
-        this.#lastKey = null;
 
-    }
-
-    onChatStarted() {
-        this.#lastKey = null;
-    }
-
-    onChatEnded() {
-        this.#lastKey = null;
     }
 
     setupPasteMenu() {

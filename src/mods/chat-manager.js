@@ -6,8 +6,6 @@ class ChatManager extends Module {
         this.addElementListener(document, "click", this.onClick);
         this.addElementListener(document, "keyup", this.onKeyUp);
 
-        loadHelpfulTips();
-
     }
 
     onKeyUp(event) {

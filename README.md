@@ -15,7 +15,7 @@ Join the support discord and DM ``isaack#6343`` for inquiries, help and suggesti
 # Installation
 
 Manual installation is fairly easy thanks to Chrome's great developer support:
-```sh
+```
 1. Navigate to chrome://extensions/ web-page
 2. Enable "Developer Tools" on top-right of page
 3. Clone Repository on GitHub to Computer & Unzip

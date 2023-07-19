@@ -4,6 +4,10 @@ let Settings;
 /** @type {ChatRegistryManager} */
 let ChatRegistry;
 
+/** @type {Object} */
+let Manifest;
+
+
 (function () {
 
     if (window.location.href.includes('banredir.html') || window.location.href.includes('ban.html')) {
@@ -16,9 +20,15 @@ let ChatRegistry;
         return;
     }
 
+    runDataLoaders(
+        ManifestLoader,
+        TipsLoader
+    )
+
     loadModules(
         ConfigManager,
         IPBlockingManager,
+        ThemeManager,
         TopicSyncManager,
         ChatRegistryManager,
         PasteMenu,
@@ -37,13 +47,12 @@ let ChatRegistry;
         FullScreenVideoManager,
         SplashImageHandler,
         ClearInterestsManager,
-        ThemeManager,
         SettingsManager,
-        UserCountManager,
         MessageSkipManager,
         AgeSkipManager,
+        UserCountManager,
         BroadcastManager
-    )
+    );
 
 })();
 

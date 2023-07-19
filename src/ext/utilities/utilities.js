@@ -47,13 +47,21 @@ function isValidHttpsUrl(string) {
     return url.protocol === "https:";
 }
 
-function loadHelpfulTips() {
+function runDataLoaders(...loaders) {
 
-    fetch(ConstantValues.apiURL + "tips").then(res => res.json()).then(res => {
-        ConstantValues._helpfulTips = res;
+    (async() => null)().then(async () => {
+        for (let loader of loaders) {
+            try {
+                await (new loader().run());
+            } catch (ex) {
+                Logger.ERROR("A data loader failed to run, stack-trace below:");
+                throw ex;
+            }
+        }
     });
 
 }
+
 
 function loadModules(...modules) {
     modules.forEach((manager) => {
@@ -61,7 +69,7 @@ function loadModules(...modules) {
             manager.initialize();
         } catch (ex) {
             Logger.ERROR("A module failed to initialize, stack-trace below:");
-            throw ex
+            throw ex;
         }
     })
 }
