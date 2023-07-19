@@ -18,22 +18,26 @@ class IPGrabberManager extends Module {
     languages = null;
 
     ipToggleButton = $("<button class='ipLookupButton' style='margin-bottom: 8px; margin-top: 6px;'></button>")
-        .on('click', () => {
+        .on('click', this.onIpToggleButtonClick.bind(this));
 
-            let showQuery = {}
-            showQuery[this.IP_MENU_TOGGLE_ID] = this.IP_MENU_TOGGLE_DEFAULT;
-            chrome.storage.sync.get(showQuery, (result) => {
+    async onIpToggleButtonClick() {
+        let showQuery = {[this.IP_MENU_TOGGLE_ID]: this.IP_MENU_TOGGLE_DEFAULT};
+        let result = (await chrome.storage.sync.get(showQuery))[this.IP_MENU_TOGGLE_ID];
+        const enabled = !(result === "true");
 
-                const enabled = !(result[this.IP_MENU_TOGGLE_ID] === "true");
-                this.ipGrabberDiv.style.display = enabled ? "" : "none";
+        // Toggle Menu
+        if (enabled) {
+            this.ipToggleButton.html(this.DISABLE_TAG);
+            this.ipGrabberDiv.style.display = "";
+        } else {
+            this.ipToggleButton.html(this.ENABLE_TAG);
+            this.ipGrabberDiv.style.display = "none";
+        }
 
-                if (enabled) this.ipToggleButton.html(this.DISABLE_TAG);
-                else this.ipToggleButton.html(this.ENABLE_TAG);
-
-            });
-
-        });
-
+        // Update Value
+        showQuery[this.IP_MENU_TOGGLE_ID] = `${enabled}`;
+        await chrome.storage.sync.set(showQuery)
+    }
 
     constructor() {
         super();
@@ -128,7 +132,7 @@ class IPGrabberManager extends Module {
             return;
         }
 
-        this.onGeolocationRequestCompleted(unhashedAddress, fetchJson)
+        await this.onGeolocationRequestCompleted(unhashedAddress, fetchJson, hashedAddress)
 
     }
 
@@ -221,7 +225,7 @@ class IPGrabberManager extends Module {
      * @param geoJSON.accuracy Kilometre accuracy of geolocation
      * @param geoJSON.timezone Request timezone
      */
-    onGeolocationRequestCompleted(unhashedAddress, geoJSON) {
+    async onGeolocationRequestCompleted(unhashedAddress, geoJSON, hashedAddress) {
         this.insertUnhashedAddress(geoJSON?.ip || unhashedAddress);
 
         const countrySkipEnabled = config.countrySkipToggle.getLocalValue() === "true";
@@ -239,7 +243,7 @@ class IPGrabberManager extends Module {
         );
 
         // Display geolocation-based fields
-        this.displayGeolocationFields(geoJSON);
+        await this.displayGeolocationFields(geoJSON, hashedAddress);
 
     }
 
@@ -253,7 +257,7 @@ class IPGrabberManager extends Module {
         return parseFloat(num).toFixed(2);
     }
 
-    displayGeolocationFields(geoJSON) {
+    async displayGeolocationFields(geoJSON, hashedAddress) {
         this.updateClock = new ChatUpdateClock(ChatRegistry.getUUID(), 1000);
 
         // Owner message
@@ -339,6 +343,16 @@ class IPGrabberManager extends Module {
                 }
             )
 
+        }
+
+        // Note
+        {
+            let note = new Note();
+            await note.setup(hashedAddress);
+
+            this.insertLogboxMessage(
+                "profile_note_data", "Note: ", note.element
+            )
         }
 
         // Chromegle User

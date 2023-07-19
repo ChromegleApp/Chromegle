@@ -6,6 +6,81 @@ function ReSpoiler(string) {
     return element;
 }
 
+class Note {
+
+    NOTE_STORAGE_ID = "NOTE_STORAGE_JSON";
+    NOTE_STORAGE_DEFAULT = "{}";
+
+    element = undefined;
+
+    emptyText = "Click to add a profile note";
+    emptyClass = "empty";
+    baseClass = "chromegle-note";
+
+    formatNote(noteText) {
+        return `"${noteText}"`
+    }
+
+    async setup(hashedAddress) {
+
+        this.element = document.createElement("span");
+        this.element.classList.add(this.baseClass);
+        this.element.setAttribute("ip-address", hashedAddress);
+
+        // Get text
+        let storedText = await this.getNote(hashedAddress);
+
+        if (storedText && storedText.length > 0) {
+            this.element.innerText = this.formatNote(storedText);
+            this.element.classList.remove(this.emptyClass);
+        } else {
+            this.element.innerText = this.emptyText;
+        }
+
+        this.element.addEventListener("click", this.onNoteClick.bind(this));
+
+    }
+
+    async getStorageData() {
+        let storageQuery = {[this.NOTE_STORAGE_ID]: this.NOTE_STORAGE_DEFAULT};
+        let storedData = (await chrome.storage.local.get(storageQuery))[this.NOTE_STORAGE_ID];
+        return JSON.parse(storedData || this.NOTE_STORAGE_DEFAULT);
+    }
+
+    async getNote(hashedAddress) {
+        let storedData = await this.getStorageData();
+        return storedData[hashedAddress] || null;
+    }
+
+    async setNote(hashedAddress, newValue) {
+        let storedData = await this.getStorageData();
+        storedData[hashedAddress] = newValue;
+        let storageQuery = {[this.NOTE_STORAGE_ID]: JSON.stringify(storedData)};
+        await chrome.storage.local.set(storageQuery);
+
+        Logger.DEBUG(`Set note for ${hashedAddress} to: <%s>`, newValue);
+    }
+
+    async onNoteClick() {
+
+        let newValue = prompt("Set a new value for the note:");
+        if (newValue == null) {
+            return;
+        }
+
+        // Set new value
+        let hashedAddress = this.element.getAttribute("ip-address");
+        await this.setNote(hashedAddress, newValue);
+
+        // Update element
+        this.element.innerText = this.formatNote(newValue);
+
+    }
+
+
+}
+
+
 // Probably leaks memory
 class Spoiler {
 

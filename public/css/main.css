@@ -120,6 +120,10 @@ html {
     border: none;
 }
 
+.ipMapsButton {
+    font-size: 16px;
+}
+
 .clearInterestsButton {
     cursor: pointer;
     border-radius: .5em;
@@ -555,3 +559,10 @@ p.tip-message {
     width: fit-content;
     padding-right: 5px;
 }
+
+.chromegle-note {
+    cursor: pointer;
+}
+
+
+
