@@ -2,7 +2,7 @@ let ConstantValues = {
     websiteURL: "https://chromegle.net",
     discordURL: "https://chromegle.net/discord",
     githubURL: "https://chromegle.net/github",
-    apiURL: "https://geo.eulerstream.com/",
+    apiURL: "http://localhost:3000/",
     _helpfulTips: ["We hope you enjoy our extension as much as we enjoyed making it!"],
     getHelpfulTip: () => {
         return ConstantValues._helpfulTips[[Math.floor(Math.random() * ConstantValues._helpfulTips.length)]]

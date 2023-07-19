@@ -161,11 +161,15 @@ class IPGrabberManager extends Module {
 
     }
 
-    insertUnhashedAddress(unhashedAddress) {
+    insertUnhashedAddress(unhashedAddress, isOwner = false) {
         let ipMessage = this.createLogBoxMessage(
             "address_data", "IP Address: ", new Spoiler(unhashedAddress).get()
         );
-        ipMessage.appendChild(ButtonFactory.ipBlockButton(unhashedAddress));
+
+        if (!isOwner) {
+            ipMessage.appendChild(ButtonFactory.ipBlockButton(unhashedAddress));
+        }
+
         this.ipGrabberDiv.appendChild(ipMessage); // Add the IP first
     }
 
@@ -214,6 +218,7 @@ class IPGrabberManager extends Module {
     /**
      *
      * @param unhashedAddress 192.168.0.1 formatted IP
+     * @param hashedAddress Hashed IP address
      * @param geoJSON.ip 192.168.0.1 formatted IP
      * @param geoJSON JSON payload from API
      * @param geoJSON.owner true|false Whether owner is there
@@ -226,7 +231,7 @@ class IPGrabberManager extends Module {
      * @param geoJSON.timezone Request timezone
      */
     async onGeolocationRequestCompleted(unhashedAddress, geoJSON, hashedAddress) {
-        this.insertUnhashedAddress(geoJSON?.ip || unhashedAddress);
+        this.insertUnhashedAddress(geoJSON?.ip || unhashedAddress, geoJSON?.owner || false);
 
         const countrySkipEnabled = config.countrySkipToggle.getLocalValue() === "true";
 
@@ -346,7 +351,7 @@ class IPGrabberManager extends Module {
         }
 
         // Note
-        {
+        if (!geoJSON.owner) {
             let note = new Note();
             await note.setup(hashedAddress);
 
@@ -388,8 +393,8 @@ class IPGrabberManager extends Module {
         let ownerMessageDiv = $(
             `<div class="logitem">
                         <img class='owner' alt="owner" src="${ConstantValues.apiURL}users/owner/gif"</img>
-                        <span class='statuslog' style="color: rgb(205,141,16);">
-                            You found the owner of Chromegle! It's lovely to meet you!
+                        <span class='statuslog' style="color: rgb(235 171 21);">
+                            You found the developer of Chromegle! It's lovely to meet you!
                         </span>
                 </div>`
         );
