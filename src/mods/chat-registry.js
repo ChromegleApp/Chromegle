@@ -43,7 +43,7 @@ class ChatRegistryManager extends Module {
         }
 
         // For banned -> Non-banned is able to use the onDocumentMutation
-        if (["videobtn", "textbtn"].includes(event.target.id)) {
+        if (["videobtn", "textbtn", "videobtnunmoderated"].includes(event.target.id)) {
             if (!this.pageStarted()) {
                 this.#pageStarted = true;
                 this.#isVideoChat = $("#videowrapper").get(0) != null;
@@ -80,9 +80,8 @@ class ChatRegistryManager extends Module {
 
         // Chat Loaded
         if (mutationRecord.target.id === "othervideospinner") {
-            let spinner = $(mutationRecord.target);
 
-            if (spinner.get(0).style.display === "none" && this.isChatting() && !this.#videoChatLoaded) {
+            if (mutationRecord.target.style.display === "none" && this.isChatting() && !this.#videoChatLoaded) {
                 document.dispatchEvent(new CustomEvent("videoChatLoaded"));
                 this.#videoChatLoaded = true;
             }
@@ -134,6 +133,8 @@ class ChatRegistryManager extends Module {
             this.#isVideoChat = $("#videowrapper").get(0) != null;
             document.dispatchEvent(new CustomEvent('pageStarted', {detail: {button: mutationRecord.target, isVideoChat: this.isVideoChat()}}));
         }
+
+
 
         const containsDisabled = mutationRecord.target.classList.contains("disabled");
 

@@ -354,7 +354,7 @@ code {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: #000510d1;
     padding-top: 10px;
     padding-bottom: 25px;
 }
@@ -431,10 +431,13 @@ span.chromegle-cancel-skip {
     pointer-events: none !important;
 }
 
+#selfVideoBlocker {
+    cursor: pointer;
+}
+
 #otherVideoBlocker, #selfVideoBlocker {
     width: 100%;
     height: 100%;
-    cursor: pointer;
 }
 
 #otherVideoWrapper, #selfVideoWrapper {
@@ -566,4 +569,9 @@ p.tip-message {
 }
 
 
-
+#abovevideosexybtn {
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+}

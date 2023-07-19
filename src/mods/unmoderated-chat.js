@@ -60,17 +60,20 @@ class UnmoderatedChatManager extends Module {
      * Replace porn button with discord button
      */
     #replacePornButton() {
+
         let pornButton = $("#abovevideosexybtn");
         pornButton.replaceWith(pornButton.clone()
             .css("background", "")
             .css("font-size", "20px")
-            .addClass("videoCoverButton")
             .html(`
                 <a href="${ConstantValues.discordURL}" target="_blank" style="text-decoration: none;">
                     <strong>Chromegle Discord (NO NSFW)</strong>
                 </a>
             `)
         );
+
+        $("#othervideo").css("border-top-left-radius", "0px")
+
     }
 
     /**

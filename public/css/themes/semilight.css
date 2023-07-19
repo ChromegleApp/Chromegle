@@ -2,7 +2,7 @@
 Modal Styling
  */
 .modal__overlay {
-    z-index: 10;
+    z-index: 100;
     background: rgba(0, 0, 0, 0.6);
 }
 
@@ -107,12 +107,12 @@ Secondary Colour BACKGROUND
     background: #ffffff;
 }
 
-.videoCoverButton {
-    background: #3b3b3b;
+.videoCoverButton, #abovevideosexybtn {
+    background: white;
 }
 
 #selfvideo, #othervideo, code, #otherVideoWrapper {
-    background: #3b3b3b;
+    background: #ffffff;
 }
 
 
@@ -159,10 +159,10 @@ Tertiary colour text
 Tertiary colour text
  */
 .nsfwCoverTextWrapper {
-    color: whitesmoke;
+    color: #0093ff;
 }
 
-.logwrapper, .chatmsgwrapper, .disconnectbtnwrapper, .sendbtnwrapper, #selfvideo, #othervideo, .pasteButton {
+.logwrapper, .chatmsgwrapper, .disconnectbtnwrapper, .sendbtnwrapper, #selfvideo, #othervideo, .pasteButton, #abovevideosexybtn {
     border: 1px solid #CCC;
 }
 
