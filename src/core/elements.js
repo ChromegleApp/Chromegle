@@ -53,8 +53,19 @@ class Note {
     }
 
     async setNote(hashedAddress, newValue) {
+
         let storedData = await this.getStorageData();
-        storedData[hashedAddress] = newValue;
+
+        if (newValue == null) {
+            try {
+                delete storedData[hashedAddress]
+            } catch (ex) {
+
+            }
+        } else {
+            storedData[hashedAddress] = newValue;
+        }
+
         let storageQuery = {[this.NOTE_STORAGE_ID]: JSON.stringify(storedData)};
         await chrome.storage.local.set(storageQuery);
 
@@ -68,12 +79,16 @@ class Note {
             return;
         }
 
+        if (newValue.length === 0) {
+            newValue = null;
+            this.element.innerText = this.emptyText;
+        } else {
+            this.element.innerText = this.formatNote(newValue);
+        }
+
         // Set new value
         let hashedAddress = this.element.getAttribute("ip-address");
         await this.setNote(hashedAddress, newValue);
-
-        // Update element
-        this.element.innerText = this.formatNote(newValue);
 
     }
 
