@@ -10,12 +10,55 @@ class PasteMenu extends Module {
     menuEnabled = false;
     waitingForButtonSelection = false;
     mutationObserver = new MutationObserver(this.onMutationObserved.bind(this));
+    #lastKey;
+
+    KEYMAP = {
+        "1": "PB1",
+        "2": "PB2",
+        "3": "PB3",
+        "4": "PB4",
+        "5": "PB5",
+    }
 
     async onPageStarted() {
         this.pasteMenuConfig = await this.retrieveChromeValue(this.STORAGE_ID, this.STORAGE_DEFAULT, "local");
         this.menuEnabled = (await config.pasteMenuToggle.retrieveValue()) === "true";
         this.addEventListener("resize", this.onResize, undefined, window);
+        this.addEventListener("keyup", this.onKeyUp);
         this.setupPasteMenu();
+    }
+
+    onKeyUp(event) {
+
+        let lastWasAlt = this.#lastKey?.toUpperCase() === "ALT";
+        let lastWasKeyMap = this.KEYMAP[this.#lastKey] != null;
+        let lastKey = this.#lastKey + "";
+        this.#lastKey = event.isTrusted ? event.key : this.#lastKey;
+
+        // Alt first
+        if (!lastWasAlt && !lastWasKeyMap) {
+            return;
+        }
+
+        // Then our trigger key
+        let elementId = lastWasAlt ? this.KEYMAP[event.key] : this.KEYMAP[lastKey];
+        if (!elementId) {
+            return;
+        }
+
+        // Paste
+        let button = document.getElementById(elementId);
+        button.click();
+        this.#lastKey = null;
+
+    }
+
+    onChatStarted() {
+        this.#lastKey = null;
+    }
+
+    onChatEnded() {
+        this.#lastKey = null;
     }
 
     setupPasteMenu() {
