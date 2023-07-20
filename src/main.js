@@ -22,7 +22,8 @@ let Manifest;
 
     runDataLoaders(
         ManifestLoader,
-        TipsLoader
+        TipsLoader,
+        VideoPopoutStyleLoader
     )
 
     loadModules(
@@ -51,7 +52,8 @@ let Manifest;
         MessageSkipManager,
         AgeSkipManager,
         UserCountManager,
-        BroadcastManager
+        BroadcastManager,
+        VideoPopoutManager
     );
 
 })();

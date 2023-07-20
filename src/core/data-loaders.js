@@ -1,5 +1,9 @@
 class DataLoader {
 
+    async fetchText(url) {
+        return (await fetch(url)).text();
+    }
+
     async fetchJSON(url) {
         return (await fetch(url)).json();
     }
@@ -23,4 +27,14 @@ class TipsLoader extends DataLoader {
     }
 
 }
+
+class VideoPopoutStyleLoader extends DataLoader {
+
+    async run() {
+        ConstantValues.videoPopoutStylesheet = await this.fetchText(getResourceURL("public/css/popout.css"))
+    }
+
+}
+
+
 

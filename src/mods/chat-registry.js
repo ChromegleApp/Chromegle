@@ -30,6 +30,7 @@ class ChatRegistryManager extends Module {
         return this.#messages.filter(msg => msg.isStranger());
     }
 
+    isVideoChatLoaded = () => this.#videoChatLoaded;
     isChatting = () => this.#isChatting;
     isVideoChat = () => this.#isVideoChat;
     isTextChat = () => !this.#isVideoChat;
@@ -82,8 +83,8 @@ class ChatRegistryManager extends Module {
         if (mutationRecord.target.id === "othervideospinner") {
 
             if (mutationRecord.target.style.display === "none" && this.isChatting() && !this.#videoChatLoaded) {
-                document.dispatchEvent(new CustomEvent("videoChatLoaded"));
                 this.#videoChatLoaded = true;
+                document.dispatchEvent(new CustomEvent("videoChatLoaded"));
             }
             return;
         }

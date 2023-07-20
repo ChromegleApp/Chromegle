@@ -391,7 +391,6 @@ code {
 .chromegle-spoiler.show {
     filter: unset;
     color: inherit;
-    cursor: inherit;
 }
 
 button.chromegle-spoiler {
@@ -463,12 +462,18 @@ span.chromegle-cancel-skip {
     right: 0;
 }
 
+#videoPopoutButton {
+    top: 0;
+    left: 0;
+    border-radius: 0 !important;
+}
+
 #fullscreenSkipButton {
     top: 0;
     left: 0;
 }
 
-#videoScreenshotButton, #videoFullscreenButton, #fullscreenSkipButton {
+#videoScreenshotButton, #videoFullscreenButton, #fullscreenSkipButton, #videoPopoutButton {
     width: 8%;
     max-width: 70px;
     height: unset;
@@ -477,12 +482,12 @@ span.chromegle-cancel-skip {
     margin: 2%;
 }
 
-#videoScreenshotButton:hover, #videoFullscreenButton:hover, #fullscreenSkipButton:hover {
-    opacity: 0.8;
+#videoScreenshotButton:hover, #videoFullscreenButton:hover, #fullscreenSkipButton:hover, #videoPopoutButton:hover {
+    filter: brightness(0.9);
 }
 
-#videoScreenshotButton:active, #videoFullscreenButton:active, #fullscreenSkipButton:active {
-    opacity: 0.7;
+#videoScreenshotButton:active, #videoFullscreenButton:active, #fullscreenSkipButton:active, #videoPopoutButton:hover {
+    filter: brightness(0.75);
 }
 
 #spinnerWrapper {
@@ -574,4 +579,13 @@ p.tip-message {
     border-top-right-radius: 0px !important;
     border-bottom-right-radius: 0px !important;
     border-bottom-left-radius: 0px !important;
+}
+
+
+.statuslog label {
+    color: inherit;
+}
+
+#omegleLogo > canvas {
+    display: none;
 }

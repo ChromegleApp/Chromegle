@@ -7,6 +7,17 @@ class ConfirmManager extends Module {
         this.addMultiElementListener(
             "click", this.onButtonClick, "#textbtn", "#videobtn", "#videobtnunmoderated"
         );
+
+        // Listen for page click
+        this.addEventListener("click", this.onLinkClick);
+    }
+
+    onLinkClick(event) {
+
+        if (event.target.innerText === "unmoderated section" && event) {
+            this.onButtonClick();
+        }
+
     }
 
     onButtonClick() {

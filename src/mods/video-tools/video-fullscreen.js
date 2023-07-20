@@ -4,7 +4,7 @@ class FullScreenVideoManager extends Module {
     #fullscreenButton;
     #showButton;
     #skipTool;
-    inFullscreen = () => document.fullscreenElement != null;
+    static inFullscreen = () => document.fullscreenElement != null;
 
     async onWrappedVideos() {
 
@@ -39,7 +39,7 @@ class FullScreenVideoManager extends Module {
         }
 
         // More specific
-        this.inFullscreen() ? this.onFullscreenEnter() : this.onFullscreenExit();
+        FullScreenVideoManager.inFullscreen() ? this.onFullscreenEnter() : this.onFullscreenExit();
 
     }
 
@@ -90,7 +90,7 @@ class FullScreenVideoManager extends Module {
 
         this.#skipTool.updateSrc();
 
-        if (!this.inFullscreen()) {
+        if (!FullScreenVideoManager.inFullscreen()) {
             this.setButtonVisible(false);
         }
     }
@@ -107,7 +107,7 @@ class FullScreenVideoManager extends Module {
 
     async onFullscreenButtonClicked() {
 
-        if (this.inFullscreen()) {
+        if (FullScreenVideoManager.inFullscreen()) {
             document.exitFullscreen().then();
         } else {
             await this.#tryFullscreen(document.getElementById(VideoWrapperManager.otherVideoWrapperId));

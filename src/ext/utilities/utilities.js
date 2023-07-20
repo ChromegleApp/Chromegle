@@ -100,13 +100,21 @@ function sendErrorLogboxMessage(message) {
 }
 
 
-function sendInfoLogboxMessage(message) {
+function sendInfoLogboxMessage(message, elementId) {
+
     const innerLogBox = document.getElementsByClassName("logitem")[0].parentNode;
-    const seenBeforeDiv = document.createElement("div")
+    const seenBeforeDiv = document.createElement("div");
     seenBeforeDiv.classList.add("logitem");
-    seenBeforeDiv.appendChild($(`<span class='statuslog'>${message}</span>`).get(0));
+
+    let idStr = elementId ? `id="${elementId}"` : "";
+    let statusLog = $(`<span ${idStr} class='statuslog'>${message}</span>`).get(0);
+
+    seenBeforeDiv.appendChild(statusLog);
     innerLogBox.append(seenBeforeDiv);
+
     return seenBeforeDiv;
+
 }
+
 
 

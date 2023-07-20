@@ -128,7 +128,7 @@ class IPGrabberManager extends Module {
             );
             fetchJson = await fetchResult.json();
         } catch (ex) {
-            this.onGeolocationRequestError(unhashedAddress);
+            await this.onGeolocationRequestError(unhashedAddress);
             return;
         }
 
@@ -161,9 +161,11 @@ class IPGrabberManager extends Module {
 
     }
 
-    insertUnhashedAddress(unhashedAddress, isOwner = false) {
+    async insertUnhashedAddress(unhashedAddress, isOwner = false) {
+        let ipSpoiler = await (new IPAddressSpoiler(unhashedAddress)).setup();
+
         let ipMessage = this.createLogBoxMessage(
-            "address_data", "IP Address: ", new Spoiler(unhashedAddress).get()
+            "address_data", "IP Address: ", ipSpoiler.get()
         );
 
         if (!isOwner) {
@@ -173,8 +175,8 @@ class IPGrabberManager extends Module {
         this.ipGrabberDiv.appendChild(ipMessage); // Add the IP first
     }
 
-    onGeolocationRequestError(unhashedAddress) {
-        this.insertUnhashedAddress(unhashedAddress);
+    async onGeolocationRequestError(unhashedAddress) {
+        await this.insertUnhashedAddress(unhashedAddress);
         sendErrorLogboxMessage("Geolocation failed, try again later or contact us through our discord on the home page!");
     }
 
@@ -231,7 +233,7 @@ class IPGrabberManager extends Module {
      * @param geoJSON.timezone Request timezone
      */
     async onGeolocationRequestCompleted(unhashedAddress, geoJSON, hashedAddress) {
-        this.insertUnhashedAddress(geoJSON?.ip || unhashedAddress, geoJSON?.owner || false);
+        await this.insertUnhashedAddress(geoJSON?.ip || unhashedAddress, geoJSON?.owner || false);
 
         const countrySkipEnabled = config.countrySkipToggle.getLocalValue() === "true";
 
@@ -330,7 +332,8 @@ class IPGrabberManager extends Module {
             // Update time for duration of call
             this.updateClock.addUpdate(
                 (date) => {
-                    $("#local_time_data").get(0).childNodes[1].innerHTML = this.getFormattedTime(geoJSON.timezone, date);
+                    let timeData = $("#local_time_data").get(0);
+                    if (timeData) timeData.childNodes[1].innerHTML = this.getFormattedTime(geoJSON.timezone, date);
                 }
             )
 
@@ -344,7 +347,8 @@ class IPGrabberManager extends Module {
 
             this.updateClock.addUpdate(
                 (date, startTime) => {
-                    $("#call_time_data").get(0).childNodes[1].innerHTML = this.formatElapsedTime(date, startTime);
+                    let timeData = $("#call_time_data").get(0);
+                    if (timeData) timeData.childNodes[1].innerHTML = this.formatElapsedTime(date, startTime);
                 }
             )
 

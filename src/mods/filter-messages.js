@@ -50,7 +50,8 @@ class TextFilter {
             text = text.replaceAll(placeholder, ReSpoiler(original).outerHTML);
         }
 
-        return text;
+        // Replace newlines with breaklines
+        return text.replaceAll("\n", "<br/>");
 
     }
 }

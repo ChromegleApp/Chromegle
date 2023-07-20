@@ -66,6 +66,26 @@ const config = {
             "state": "true"
         }
     }),
+    "autoReconnectDelayField": new FieldEdit({
+        "storageName": "AUTO_RECONNECT_DELAY",
+        "prompt": "Enter a new delay to wait before auto-reconnecting:",
+        "default": 10,
+        "check": (response) => {
+
+            if (!isNumeric(response)) {
+                return {
+                    "confirm": "false",
+                    "value": null
+                };
+            }
+
+            return {
+                "confirm": "true",
+                "value": Math.max(0, Math.min(30, parseInt(response)))
+            };
+
+        }
+    }),
     "startTypingDelayField": new FieldEdit({
         "storageName": "GREETING_STARTING_DELAY",
         "prompt": "Enter a new delay to wait before starting to type messages:",
@@ -250,6 +270,11 @@ const config = {
         "elementName": "headerButtonsToggle",
         "storageName": "HEADER_BUTTONS_TOGGLE",
         "default": "false"
+    }),
+    "popoutToolButtonToggle": new ToggleEdit({
+        "elementName": "popoutToolButtonToggle",
+        "storageName": "POPOUT_TOOL_BUTTON_TOGGLE",
+        "default": "true"
     }),
     "fullscreenToolButtonToggle": new ToggleEdit({
         "elementName": "fullscreenToolButtonToggle",

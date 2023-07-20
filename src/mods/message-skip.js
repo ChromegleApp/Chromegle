@@ -57,19 +57,27 @@ class MessageSkipManager extends Module {
         let message = event.detail;
 
         // Only strangers count
-        if (!message.isStranger()) {
+        if (message.isStranger()) {
             return;
         }
 
         this.#checkedCount++;
-        let lowerContent = message.content.toLowerCase();
+        let contentArray = message.content
+            .toLowerCase()
+            .replaceAll("\n", " ")
+            .replaceAll("\r", " ")
+            .split(" ");
 
         for (let badWord of this.#badWords) {
-            if (lowerContent.includes(badWord)) {
-                sendErrorLogboxMessage(`Skipped user who said auto-skip word \"${ReSpoiler(badWord).outerHTML}\".`);
-                AutoSkipManager.skipIfPossible();
-                break;
+
+            for (let testWord of contentArray) {
+                if (testWord === badWord) {
+                    sendErrorLogboxMessage(`Skipped user who said auto-skip word ${ReSpoiler(badWord).outerHTML}.`);
+                    AutoSkipManager.skipIfPossible();
+                    break;
+                }
             }
+
         }
     }
 

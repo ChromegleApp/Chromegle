@@ -95,36 +95,70 @@ class Note {
 
 }
 
-
-// Probably leaks memory
-class Spoiler {
+class IPAddressSpoiler {
 
     element = undefined;
+    STORAGE_ID = "IP_SPOILER_HIDDEN_TOGGLE";
+    STORAGE_DEFAULT = true;
 
     constructor(string) {
         this.string = string;
-        this.createElement();
     }
 
-    createElement() {
+    async isHidden() {
+        let hiddenQuery = {[this.STORAGE_ID]: this.STORAGE_DEFAULT};
+        return (await chrome.storage.sync.get(hiddenQuery))[this.STORAGE_ID];
+    }
+
+    async setIsHidden(hiddenValue)  {
+        let hiddenQuery = {[this.STORAGE_ID]: hiddenValue};
+        await chrome.storage.sync.set(hiddenQuery);
+    }
+
+    async setup() {
+
+        // Element setup
         this.element = document.createElement("span");
         this.element.innerText = this.string;
         this.element.classList.add("chromegle-spoiler");
         this.element.addEventListener("click", this.onClick.bind(this));
+        this.element.addEventListener("mousedown", this.onMouseDown.bind(this), false);
+
+        // Set hidden status
+        this.setElementHidden(await this.isHidden());
+
+        return this;
+
     }
 
-    onClick() {
-        this.element.classList.add("show");
-        document.removeEventListener("click", this.onClick);
+    async onClick() {
+
+        let isHidden = await this.isHidden();
+        await this.setIsHidden(!isHidden);
+        this.setElementHidden(!isHidden);
+
+    }
+
+    /**
+     * Prevents selecting
+     * https://stackoverflow.com/questions/880512/prevent-text-selection-after-double-click
+     */
+    onMouseDown(event) {
+        event.preventDefault();
+    }
+
+    setElementHidden(isHidden) {
+        if (isHidden) {
+            this.element.classList.remove("show");
+        } else {
+            this.element.classList.add("show");
+        }
     }
 
     get() {
         return this.element;
     }
 
-    getHTML() {
-        return this.element.outerHTML;
-    }
 }
 
 class ChatUpdateClock {

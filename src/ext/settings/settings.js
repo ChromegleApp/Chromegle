@@ -9,8 +9,8 @@ let ConstantValues = {
             .replaceAll("%discord%", ConstantValues.discordURL)
             .replaceAll("%website%", ConstantValues.websiteURL)
             .replaceAll("%github%", ConstantValues.githubURL);
-    }
-
+    },
+    videoPopoutStylesheet: ""
 }
 
 class SettingsManager extends Module {
@@ -51,7 +51,7 @@ class MutableField {
 
     constructor(config) {
         this.#storageName = config["storageName"]
-        this.#default = config["default"] || null;
+        this.#default = config["default"] != null ? config["default"] : null;
         this.#type = config["type"];
         this.#warning = config["warning"];
     }

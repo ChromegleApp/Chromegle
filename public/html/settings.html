@@ -128,6 +128,16 @@
                                         <button class="editFieldButton editToggleDisabled" id="screenshotToolButtonToggle">Enable</button>
                                     </th>
                                 </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Video-Popout Tool
+                                            <span class="tooltiptext">Get a popout overlay button <strong>when in the video chat.</strong></span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editToggleDisabled" id="popoutToolButtonToggle">Enable</button>
+                                    </th>
+                                </tr>
                             </table>
 
                         </div>
@@ -139,23 +149,13 @@
                             <table class="settingsTable">
                                 <tr>
                                     <th class="tableItemLabel">
-                                        <div class="tooltip">Voice Commands
-                                            <span class="tooltiptext">Do simple actions like send messages, skip and start chats with your voice!</span>
-                                        </div>
-                                    </th>
-                                    <th>
-                                        <button class="editFieldButton editFieldButtonGray" id="voiceCommandInfo">More Info</button>
-                                        <button class="editFieldButton editToggleDisabled" id="voiceCommandToggle">Enable</button>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th class="tableItemLabel">
                                         <div class="tooltip">Auto-Reconnect
                                             <span class="tooltiptext">Automatically start the next chat after your current one ends <strong>when in text mode.</strong></span>
                                         </div>
                                     </th>
                                     <th>
                                         <button class="editFieldButton editFieldButtonGray" id="autoReconnectType">Edit Type</button>
+                                        <button class="editFieldButton editFieldButtonGray" id="autoReconnectDelayField">Edit Delay</button>
                                         <button class="editFieldButton editToggleDisabled" id="autoReconnectToggle">Enable</button>
                                     </th>
                                 </tr>
@@ -172,7 +172,7 @@
                                 </tr>
                                 <tr>
                                     <th class="tableItemLabel">
-                                        <div class="tooltip">Auto-Skip Age-Range
+                                        <div class="tooltip">Auto-Skip Age
                                             <span class="tooltiptext">Skip when someone sends an age outside the configured range <strong>in text chat.</strong></span>
                                         </div>
                                     </th>
@@ -190,6 +190,17 @@
                                     <th>
                                         <button class="editFieldButton editFieldButtonGray" id="autoSkipDelayField">Edit Delay</button>
                                         <button class="editFieldButton editToggleDisabled" id="autoSkipToggle">Enable</button>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th class="tableItemLabel">
+                                        <div class="tooltip">Voice Commands
+                                            <span class="tooltiptext">Do simple actions like send messages, skip and start chats with your voice!</span>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <button class="editFieldButton editFieldButtonGray" id="voiceCommandInfo">More Info</button>
+                                        <button class="editFieldButton editToggleDisabled" id="voiceCommandToggle">Enable</button>
                                     </th>
                                 </tr>
                             </table>
