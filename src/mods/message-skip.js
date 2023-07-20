@@ -57,7 +57,7 @@ class MessageSkipManager extends Module {
         let message = event.detail;
 
         // Only strangers count
-        if (message.isStranger()) {
+        if (!message.isStranger()) {
             return;
         }
 
