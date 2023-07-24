@@ -53,7 +53,8 @@ let Manifest;
         AgeSkipManager,
         UserCountManager,
         BroadcastManager,
-        VideoPopoutManager
+        VideoPopoutManager,
+        LinkEmbedManager
     );
 
 })();

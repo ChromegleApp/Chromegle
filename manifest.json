@@ -40,6 +40,7 @@
         "src/mods/auto-confirm.js",
         "src/mods/unmoderated-chat.js",
         "src/mods/sync-topics.js",
+        "src/mods/link-embed.js",
         "src/mods/paste-menu.js",
         "src/mods/filter-messages.js",
         "src/mods/video-tools/video-wrapper.js",

@@ -197,3 +197,14 @@ class ChatUpdateClock {
     }
 
 }
+
+function EmbeddedLink(url) {
+
+    let element = document.createElement("a");
+    element.target = "_blank";
+    element.href = url;
+    element.innerHTML = url;
+    element.classList.add(LinkEmbedManager.linkClass);
+    return element;
+
+}

@@ -183,11 +183,28 @@ class ChatMessage {
         /** @type string */
         this.content = content;
 
-        /** @type Node */
+        /** @type HTMLElement */
         this.element = element;
 
         /** @type Number */
         this.messageNumber = index + 1;
+
+        /** @type HTMLSpanElement|null */
+        this.spanElement = this.element?.querySelector("span") || null;
+
+    }
+
+    getTextNodes() {
+        let childNodes = this.spanElement?.childNodes || [];
+        let textNodes = [];
+
+        for (let childNode of childNodes) {
+            if (childNode.nodeType === Node.TEXT_NODE) {
+                textNodes.push(childNode);
+            }
+        }
+
+        return textNodes;
     }
 
     isStranger() {

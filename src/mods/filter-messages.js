@@ -31,29 +31,50 @@ class TextFilter {
         return text.replaceAll("\r", "").split("\n");
     }
 
-    filterHTML(text) {
+    filterNode(node) {
 
-        let placeholders = {}
+        for (const childNode of node.childNodes) {
 
-        // Find matches & replace with placeholders
-        for (const [filter, status] of Object.entries(this.enabled)) {
-            if (!status) continue;
-            for (let word of this.filters[filter]) {
-                let placeholder = shortUuid();
-                placeholders[placeholder] = word;
-                text = text.replaceAll(word, placeholder);
+            if (childNode.nodeType === Node.TEXT_NODE) {
+
+                childNode.replaceWith(
+                    ...this.filterTextNode(childNode)
+                );
+
             }
         }
 
-        // Replace matches
-        for (const [placeholder, original] of Object.entries(placeholders)) {
-            text = text.replaceAll(placeholder, ReSpoiler(original).outerHTML);
+    }
+
+    filterEntries() {
+        return Object.entries(this.filters).filter(([name, _]) => this.enabled[name]);
+    }
+
+    filterTextNode(node) {
+
+        let filterEntries = this.filterEntries();
+        let testSpan = document.createElement("span");
+        testSpan.innerHTML = node.nodeValue;
+
+        for (let nodeWord of node.nodeValue.split(" ")) {
+            for (let [_, filterWords] of filterEntries) {
+                for (let filterWord of filterWords) {
+                    if (nodeWord.toLowerCase().includes(filterWord)) {
+                        testSpan.innerHTML = testSpan.innerHTML.replace(
+                            nodeWord, ReSpoiler(nodeWord).outerHTML
+                        )
+                    }
+
+                }
+
+            }
+
         }
 
-        // Replace newlines with breaklines
-        return text.replaceAll("\n", "<br/>");
+        return testSpan.childNodes;
 
     }
+
 }
 
 
@@ -61,14 +82,8 @@ class TextFilter {
 class FilterManager extends Module {
 
     filter = new TextFilter();
-    observer = new MutationObserver(this.onMutationObserved.bind(this));
-
-    constructor() {
-        super();
-    }
 
     async onPageStarted() {
-        this.observer.observe(document.body, {childList: true, subtree: true});
         await this.setupFilter();
     }
 
@@ -80,25 +95,12 @@ class FilterManager extends Module {
         if (sexualToggle) this.filter.setStatus("sexual", sexualToggle === "true");
     }
 
-    onMutationObserved(mutation) {
-        for (let mutationRecord of mutation) {
-            for (let node of mutationRecord.addedNodes) {
-                if (node?.classList?.contains("logitem")) {
-                    this.filterLogItem(node);
-                }
-            }
+    onChatMessage(event) {
 
-        }
-    }
+        /** @type ChatMessage */
+        let message = event.detail;
+        this.filter.filterNode(message.spanElement);
 
-    filterLogItem(node) {
-        for (let childNode of node.childNodes) {
-            for (let innerChildNode of childNode.childNodes) {
-                if (innerChildNode.nodeName === "SPAN") {
-                    innerChildNode.innerHTML = this.filter.filterHTML(innerChildNode.innerText);
-                }
-            }
-        }
     }
 
     onSettingsUpdate(event) {

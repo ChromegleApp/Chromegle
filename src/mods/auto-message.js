@@ -1,7 +1,6 @@
 class AutoMessageManager extends Module {
 
     static writingMessage = false;
-    static messageInterval = undefined;
 
     async onChatStarted() {
         let greetingEnabled = await config.greetingToggle.retrieveValue();
@@ -20,6 +19,7 @@ class AutoMessageManager extends Module {
         const timePerMessage = totalTime / messageContent.length;
 
         Logger.DEBUG("Retrieved auto-message text options, picking one at random: %s", JSON.stringify(greetingMessages));
+        let uuid = ChatRegistry.getUUID();
 
         // Send the message after a certain delay
         setTimeout(() => {
@@ -28,7 +28,7 @@ class AutoMessageManager extends Module {
                 messageContent,
                 timePerMessage,
                 sendDelay * 1000,
-                ChatRegistry.getUUID()
+                uuid
             );
         }, startTypingDelay * 1000)
 
@@ -49,14 +49,8 @@ class AutoMessageManager extends Module {
         return totalTypeDelay * adjustFactor;
     }
 
-    static cancelMessage() {
-
-        if (!this.messageInterval) {
-            return;
-        }
-
-        clearInterval(this.messageInterval);
-        this.messageInterval = null;
+    static cancelMessage(interval) {
+        clearInterval(interval);
         this.writingMessage = false;
     }
 
@@ -64,17 +58,19 @@ class AutoMessageManager extends Module {
 
         this.writingMessage = true;
 
-        this.messageInterval = setInterval(() => {
+        const interval = setInterval(() => {
 
             // Chat ended
             if (chatUUID !== ChatRegistry.getUUID() || $(target)?.get(0)?.classList?.contains("disabled")) {
-                return this.cancelMessage();
+                AutoMessageManager.cancelMessage(interval);
+                return;
             }
 
             // If message finished
             if (message.length === 0) {
                 setTimeout(() => $(".sendbtn")?.get(0)?.click(), sendDelay);
-                return this.cancelMessage();
+                AutoMessageManager.cancelMessage(interval);
+                return;
             }
 
             let keydown = document.createEvent('KeyboardEvent');

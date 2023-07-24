@@ -589,3 +589,7 @@ p.tip-message {
 #omegleLogo > canvas {
     display: none;
 }
+
+.youmsg > span, .strangermsg > span {
+    overflow-wrap: break-word;
+}
