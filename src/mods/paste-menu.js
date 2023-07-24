@@ -1,6 +1,8 @@
 
 class PasteMenu extends Module {
 
+    static mobileSupported = false;
+
     STORAGE_ID = "PASTE_BUTTON_CONFIG";
     STORAGE_DEFAULT = {};
     EDIT_CONTENT_ELEMENT_ID = "editPasteContentButton";
@@ -20,10 +22,6 @@ class PasteMenu extends Module {
     }
 
     async onPageStarted() {
-
-        if (!this.isSupported()) {
-            return;
-        }
 
         this.pasteMenuConfig = await this.retrieveChromeValue(this.STORAGE_ID, this.STORAGE_DEFAULT, "local");
         this.menuEnabled = (await config.pasteMenuToggle.retrieveValue()) === "true";
@@ -46,10 +44,6 @@ class PasteMenu extends Module {
         let button = document.getElementById(this.KEYMAP[event.key]);
         button.click();
 
-    }
-
-    isSupported() {
-        return !ThemeManager.isMobile();
     }
 
     setupPasteMenu() {
@@ -82,10 +76,6 @@ class PasteMenu extends Module {
     }
 
     onSettingsUpdate(event) {
-
-        if (!this.isSupported()) {
-            return;
-        }
 
         let menuEnabled = config.pasteMenuToggle.fromSettingsUpdateEvent(event);
 

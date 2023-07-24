@@ -1,5 +1,6 @@
 class VideoWrapperManager extends Module {
 
+    static mobileSupported = false;
     static otherVideoWrapperId = "otherVideoWrapper";
     static selfVideoWrapperId = "selfVideoWrapper";
 
