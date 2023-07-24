@@ -12,9 +12,13 @@ class VideoBlockerManager extends Module {
         VideoBlockerManager.#otherBlockerExt.showBlocker(text);
     }
 
+    isSupported() {
+        return ChatRegistry.isVideoChat() && !ThemeManager.isMobile();
+    }
+
     onWrappedVideos() {
 
-        if (!ChatRegistry.isVideoChat()) {
+        if (!this.isSupported()) {
             return;
         }
 
@@ -40,7 +44,7 @@ class VideoBlockerManager extends Module {
 
     onChatEnded() {
 
-        if (!ChatRegistry.isVideoChat()) {
+        if (!this.isSupported()) {
             return;
         }
 
@@ -49,6 +53,11 @@ class VideoBlockerManager extends Module {
     }
 
     onVideoLoaded() {
+
+        if (!this.isSupported()) {
+            return;
+        }
+
         this.#otherBlocker.onVideoLoaded();
         this.#selfBlocker.onVideoLoaded();
     }

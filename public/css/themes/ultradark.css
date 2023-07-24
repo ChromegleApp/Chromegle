@@ -170,7 +170,7 @@ a {
     text-decoration: none;
 }
 
-#omegleLogo {
+#logo {
     margin-top: 25px;
     padding: 0;
     float: left;
@@ -179,11 +179,7 @@ a {
     margin-right: 5em
 }
 
-#videologo {
-    display: none;
-}
-
-#omegleLogo img {
+#logo img {
     display: block
 }
 

@@ -44,7 +44,10 @@ class ChatRegistryManager extends Module {
         }
 
         // For banned -> Non-banned is able to use the onDocumentMutation
-        if (["videobtn", "textbtn", "videobtnunmoderated"].includes(event.target.id)) {
+        if (
+            ["videobtn", "textbtn", "videobtnunmoderated", "chatbtn"].includes(event.target.id)
+            || event.target?.src?.includes("/static/videobtn-enabled")
+        ) {
             if (!this.pageStarted()) {
                 this.#pageStarted = true;
                 this.#isVideoChat = $("#videowrapper").get(0) != null;
@@ -113,10 +116,13 @@ class ChatRegistryManager extends Module {
     }
 
     onLogItemAdded(logItemNode) {
+
         let innerNode = logItemNode?.childNodes?.[0];
 
         // Determine if user message
-        if (innerNode?.classList?.contains("youmsg") || innerNode?.classList?.contains("strangermsg")) {
+        if (this.containsOneOfClasses(innerNode, "youmsg", "strangermsg")) {
+
+
             let isUser = innerNode.classList.contains("youmsg");
             let idx = this.#messages.length;
             let message = new ChatMessage(isUser, innerNode?.childNodes?.[2].textContent, innerNode, idx);
@@ -125,7 +131,44 @@ class ChatRegistryManager extends Module {
             document.dispatchEvent(new CustomEvent('chatMessage', {detail: message}))
         }
 
+        // On mobile
+        if (this.containsOneOfClasses(innerNode, "strangermsggroup", "youmsggroup")) {
+
+            let isUser = innerNode.classList.contains("youmsggroup");
+            let idx = this.#messages.length;
+
+            let innerElement = innerNode?.childNodes?.[0]?.childNodes?.[0];
+
+            let message = new ChatMessage(
+                isUser,
+                innerElement?.childNodes?.[0].textContent,
+                innerElement,
+                idx
+            );
+
+            this.#messages.push(message);
+            document.dispatchEvent(new CustomEvent('chatMessage', {detail: message}))
+
+        }
+
+
     }
+
+    containsOneOfClasses(node, ...classes) {
+
+        if (!node?.classList) {
+            return false;
+        }
+
+        for (let CLASS of classes) {
+            if (node.classList.contains(CLASS)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     onChatMutationRecord(mutationRecord) {
 
@@ -134,8 +177,6 @@ class ChatRegistryManager extends Module {
             this.#isVideoChat = $("#videowrapper").get(0) != null;
             document.dispatchEvent(new CustomEvent('pageStarted', {detail: {button: mutationRecord.target, isVideoChat: this.isVideoChat()}}));
         }
-
-
 
         const containsDisabled = mutationRecord.target.classList.contains("disabled");
 

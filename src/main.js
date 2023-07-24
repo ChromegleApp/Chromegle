@@ -7,7 +7,6 @@ let ChatRegistry;
 /** @type {Object} */
 let Manifest;
 
-
 (function () {
 
     if (window.location.href.includes('banredir.html') || window.location.href.includes('ban.html')) {

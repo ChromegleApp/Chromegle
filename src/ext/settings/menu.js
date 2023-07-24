@@ -72,12 +72,16 @@ class SettingsMenu {
 
     constructor() {
         this.#settingsModalElement = document.createElement("div");
+
         $(this.#settingsModalElement).load(getResourceURL("public/html/settings.html"));
-        $("html").append(this.#settingsModalElement)
+
+        $("html").append(this.#settingsModalElement);
         this.manageCollapsables();
         this.manageToggleButtons();
         this.manageSwitchButtons();
+
     }
+
 
     manageToggleButtons = () => {
         document.addEventListener("ToggleModify", (response) => {

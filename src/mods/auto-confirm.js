@@ -5,7 +5,8 @@ class ConfirmManager extends Module {
 
         // Listen for click
         this.addMultiElementListener(
-            "click", this.onButtonClick, "#textbtn", "#videobtn", "#videobtnunmoderated"
+            "click", this.onButtonClick,
+            "#textbtn", "#videobtn", "#videobtnunmoderated", "#chatbtn", '[src*="/static/videobtn-enabled"]'
         );
 
         // Listen for page click

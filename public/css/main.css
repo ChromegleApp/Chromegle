@@ -5,6 +5,7 @@ html {
 }
 
 .homeButton {
+    padding: 10px;
     height: 57px;
     width: 265px;
     background-size: 265px 57px;
@@ -118,6 +119,7 @@ html {
     background: none;
     color: rgba(49, 166, 231, 255);
     border: none;
+    text-decoration: none;
 }
 
 .ipMapsButton {
@@ -209,6 +211,9 @@ html {
     bottom: 0;
 }
 
+#videologo {
+    display: none;
+}
 
 .videoMuteButton {
     width: 32px;
@@ -586,10 +591,138 @@ p.tip-message {
     color: inherit;
 }
 
-#omegleLogo > canvas {
+#logo > canvas {
     display: none;
 }
 
 .youmsg > span, .strangermsg > span {
     overflow-wrap: break-word;
 }
+
+/*
+MOBILE START
+ */
+
+html.chromegle-mobile .logbox {
+    padding: 5px;
+}
+
+html.chromegle-mobile img[src*='/static/bwlogo'],
+html.chromegle-mobile #themeSettings,
+html.chromegle-mobile .chromegle-not-mobile
+{
+    display: none;
+}
+
+html.chromegle-mobile .modal__overlay {
+    overflow-x: scroll;
+    display: block;
+}
+
+html.chromegle-mobile .logwrapper {
+    margin-right: 5px !important;
+}
+
+
+/*
+MOBILE END
+ */
+
+/*
+MODAL FALLBACK START
+ */
+
+.modal__overlay {
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.modal__container {
+    background-color: #ffffff;
+
+}
+
+.modal__title {
+    color: #3b3b3b;
+}
+
+.modal__close {
+    color: #a7a7a7;
+}
+
+.modal__close:hover {
+    color: #767676;
+}
+
+.modal__content, .modal__btn {
+    color: rgba(0, 0, 0, .8);
+}
+
+.modal__btn {
+    background-color: #e6e6e6;
+}
+
+.modal__btn-primary {
+    background-color: #00449e;
+    color: #fff;
+}
+
+.settingsModalCloseButton {
+    color: #aaa
+}
+
+.settingsModalCloseButton:hover {
+    color: #6B6B6B;
+}
+
+.settingsCollapsableItem {
+    background-color: rgb(224, 224, 224)
+}
+
+.tableItemLabel, .tableItemSubLabel {
+    color: #424242
+}
+
+.editToggleDisabled {
+    background: gray;
+}
+
+.editToggleDisabled:hover {
+    background: dimgray;
+}
+
+.editToggleEnabled {
+    background-color: forestgreen;
+}
+
+.editToggleEnabled:hover {
+    background-color: green;
+}
+
+.settingsCollapsable:hover, .active {
+    transition: font-size 200ms;
+}
+
+.editFieldButton, .settingsCollapsable {
+    color: white;
+}
+
+.settingsCollapsable, .editFieldButtonGray:hover {
+    background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(110, 117, 123) 0%, rgb(66, 73, 87) 90%);
+}
+
+.settingsCollapsable, .editFieldButtonGray {
+    transition: font-size 200ms;
+    background: linear-gradient(180deg, rgb(206, 205, 222) 0%, rgb(137, 145, 153) 0%, rgb(79, 88, 104) 90%);
+}
+
+.settingsModal {
+    background-color: #fefefe;
+    -webkit-box-shadow: 0 0 11px 4px #6B6B6B;
+    box-shadow: 0 0 11px 4px #6B6B6B;
+    border: 1px solid #BBB;
+}
+
+/**
+MODAL FALLBACK END
+ */

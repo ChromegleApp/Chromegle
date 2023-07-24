@@ -2,6 +2,11 @@ class SplashImageHandler extends Module {
 
     constructor() {
         super();
+
+        if (ThemeManager.isMobile()) {
+            return;
+        }
+
         config.homePageSplashToggle.retrieveValue().then(this.setup.bind(this));
     }
 

@@ -6,7 +6,7 @@ class ThemeManager extends Module {
 
     constructor() {
         super();
-        config.semiLightModeOption.retrieveValue().then(this.setupTheme.bind(this));
+        config.semiLightModeOption.retrieveValue().then(this.setupTheme.bind(this)).catch(this.showPage);
     }
 
     async setupTheme(themeMode) {
@@ -15,7 +15,7 @@ class ThemeManager extends Module {
         MicroModal.init();
 
         // Set the theme mode
-        this.#stylesheet = document.querySelector('[href*="/static/style.css"]');
+        this.#stylesheet = this.#getStylesheet();
 
         // Initialize overrides
         this.OverrideManager.initialize();
@@ -25,9 +25,26 @@ class ThemeManager extends Module {
         let headerEnabled = await config.headerButtonsToggle.retrieveValue();
         this.toggleHeaderButton(headerEnabled === "true")
 
-        // Make page visible
-        document.getElementsByTagName("html")[0].style.visibility = "visible";
+        // Mobile support
+        if (ThemeManager.isMobile()) {
+            this.OverrideManager.overrideMobile();
+        }
 
+        // Make page visible
+        this.showPage();
+
+    }
+
+    static isMobile() {
+        return Boolean(document.querySelector('[href*="/static/mobile.css"]'));
+    }
+
+    #getStylesheet() {
+        return document.querySelector('[href*="/static/style.css"]') || document.createElement("link");
+    }
+
+    showPage() {
+        document.getElementsByTagName("html")[0].style.visibility = "visible";
     }
 
     setThemeMode(resourcePath) {
@@ -91,6 +108,21 @@ class OverrideManager {
         })
     }
 
+    overrideMobile() {
+
+        document.documentElement.classList.add("chromegle-mobile");
+
+        $("button.homeButton")
+            .css("margin-top", "10px")
+            .css("margin-bottom", "10px")
+
+        $("#menucontainer")
+            .css("justify-content", "center")
+            .css("margin-bottom", "10px")
+            .css("margin-top", "10px");
+
+    }
+
     #resizeCommonInterestsLabel = () => {
         $(".shoulduselikescheckbox").parent().css("font-size", "15px");
 
@@ -110,12 +142,8 @@ class OverrideManager {
     };
     #overrideLinks = () => $("#feedback").remove();
     #overrideLogo = () => {
-        $("#logo").attr("id", "omegleLogo");
-
-
-        $("#omegleLogo > img").replaceWith(ButtonFactory.homeButton)
+        $("#logo > img").replaceWith(ButtonFactory.homeButton)
     };
-
 
     #overrideTaglineInsertMenu = () => {
         let div = document.createElement("div");
@@ -139,7 +167,10 @@ class OverrideManager {
     };
 
     #overrideHomePageText() {
-        $("#mobilesitenote").get(0).innerHTML =
+        let note = $("#mobilesitenote").get(0);
+        if (!note) return;
+
+        note.innerHTML =
             "Thanks for using Chromegle! Like what we've got? " +
             "<a target='_blank' href='https://www.isaackogan.com'>Check out the developer</a> " +
             "for more :)";

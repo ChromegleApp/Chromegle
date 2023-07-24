@@ -20,6 +20,11 @@ class PasteMenu extends Module {
     }
 
     async onPageStarted() {
+
+        if (!this.isSupported()) {
+            return;
+        }
+
         this.pasteMenuConfig = await this.retrieveChromeValue(this.STORAGE_ID, this.STORAGE_DEFAULT, "local");
         this.menuEnabled = (await config.pasteMenuToggle.retrieveValue()) === "true";
         this.addEventListener("resize", this.onResize, undefined, window);
@@ -41,6 +46,10 @@ class PasteMenu extends Module {
         let button = document.getElementById(this.KEYMAP[event.key]);
         button.click();
 
+    }
+
+    isSupported() {
+        return !ThemeManager.isMobile();
     }
 
     setupPasteMenu() {
@@ -73,6 +82,11 @@ class PasteMenu extends Module {
     }
 
     onSettingsUpdate(event) {
+
+        if (!this.isSupported()) {
+            return;
+        }
+
         let menuEnabled = config.pasteMenuToggle.fromSettingsUpdateEvent(event);
 
         if (menuEnabled != null) {
@@ -82,6 +96,7 @@ class PasteMenu extends Module {
     }
 
     onPasteButtonClick(buttonId) {
+
         const pasteConfig = this.pasteMenuConfig || this.STORAGE_DEFAULT;
 
         if (this.waitingForButtonSelection) {
