@@ -1,5 +1,7 @@
 class VideoScreenshotManager extends Module {
 
+    static mobileSupported = false;
+
     #button;
     #buttonId = "videoScreenshotButton";
     #videoElementId = "othervideo";

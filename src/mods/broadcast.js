@@ -1,5 +1,7 @@
 class BroadcastManager extends Module {
 
+    static mobileSupported = false;
+
     STORAGE_ID = "BROADCAST_MESSAGE_LIST";
     STORAGE_DEFAULT = "[]";
 

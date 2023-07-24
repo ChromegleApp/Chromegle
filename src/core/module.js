@@ -40,6 +40,9 @@ class Module extends BaseModule {
     statics = ConstantValues;
     settings = Settings;
 
+    /** Whether the module is supported on mobile */
+    static mobileSupported = true;
+
     events = {
         "chatStarted": "onChatStarted",
         "chatEnded": "onChatEnded",
@@ -53,12 +56,15 @@ class Module extends BaseModule {
 
     constructor() {
         super();
-
         this.registerListeners();
-
     }
 
     static initialize() {
+
+        if (isMobile() && !this.mobileSupported) {
+            return null;
+        }
+
         return new this();
     }
 

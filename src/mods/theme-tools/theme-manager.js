@@ -26,17 +26,13 @@ class ThemeManager extends Module {
         this.toggleHeaderButton(headerEnabled === "true")
 
         // Mobile support
-        if (ThemeManager.isMobile()) {
+        if (isMobile()) {
             this.OverrideManager.overrideMobile();
         }
 
         // Make page visible
         this.showPage();
 
-    }
-
-    static isMobile() {
-        return Boolean(document.querySelector('[href*="/static/mobile.css"]'));
     }
 
     #getStylesheet() {

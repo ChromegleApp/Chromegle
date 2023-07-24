@@ -1,12 +1,13 @@
 class VideoPopoutManager extends Module {
 
+    static mobileSupported = false;
+
     #buttonElementId = "videoPopoutButton";
     #otherVideoId = "othervideo";
     #popoutButton;
     #popout;
 
     #buttonEnabled;
-
 
     async onWrappedVideos() {
 

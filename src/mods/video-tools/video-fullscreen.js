@@ -1,5 +1,7 @@
 class FullScreenVideoManager extends Module {
 
+    static mobileSupported = false;
+
     #buttonElementId = "videoFullscreenButton";
     #fullscreenButton;
     #showButton;

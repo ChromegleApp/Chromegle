@@ -116,5 +116,6 @@ function sendInfoLogboxMessage(message, elementId) {
 
 }
 
-
-
+function isMobile() {
+    return Boolean(document.querySelector('[href*="/static/mobile.css"]'));
+}

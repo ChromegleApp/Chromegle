@@ -1,12 +1,9 @@
 class SplashImageHandler extends Module {
 
+    static mobileSupported = false;
+
     constructor() {
         super();
-
-        if (ThemeManager.isMobile()) {
-            return;
-        }
-
         config.homePageSplashToggle.retrieveValue().then(this.setup.bind(this));
     }
 
