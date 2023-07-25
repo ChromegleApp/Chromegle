@@ -26,9 +26,9 @@ class IPBlockList {
         let data = await this.#get();
         if (!address) return;
 
-        data[address] = {
-            "timestamp": Math.floor(Date.now() / 1000)
-        }
+        data[address] = BlockedIP.toData(
+            Math.floor(Date.now() / 1000)
+        );
 
         await this.#set(data);
 
@@ -65,7 +65,76 @@ class IPBlockList {
         return Object.keys(await this.#get()).length < 1;
     }
 
+    async mergeWith(otherList) {
+        let data = await this.#get();
+        if (!data) return -1;
+
+        let added = [];
+        for (const [key, value] of Object.entries(otherList)) {
+
+            if (data[key] !== undefined) {
+                continue;
+            }
+
+            data[key] = value;
+            added.push(key);
+
+        }
+
+        await this.#set(data);
+        return added;
+
+    }
 }
+
+class BlockedIP {
+
+    #address;
+    #timestamp;
+
+    constructor(address, timestamp) {
+        this.#address = address;
+        this.#timestamp = timestamp;
+    }
+
+    static fromData(address, data = {}) {
+        address = address.trim();
+
+        // Check address
+        if (!isValidIP(address)) {
+            return null;
+        }
+
+        // Validate timestamp
+        if (!isNumeric(data?.timestamp?.toString()) || data?.timestamp > Math.floor(Date.now() / 1000)) {
+            return null;
+        }
+
+        return new BlockedIP(address, data.timestamp);
+
+    }
+
+    /**
+     * Static method insures that we have a clear JSON blueprint in the future when we update.
+     * In order to update the IPBlockList with new/changed info, this must be touched.
+     * Future-proofs the JSON structure of data.
+     */
+    static toData(timestamp) {
+        return {
+            timestamp: timestamp
+        }
+    }
+
+    toData() {
+        return (
+            BlockedIP.toData(
+                this.#timestamp
+            )
+        )
+    }
+
+}
+
 
 class IPBlockAPI {
 
@@ -161,12 +230,25 @@ class IPBlockAPI {
         return await this.#blockList.isEmpty();
     }
 
+    async bulkAddBlockList(blockList) {
+        return await this.#blockList.mergeWith(blockList);
+    }
+
+
 }
 
 class IPBlockingMenu {
 
+    ROWS_PER_PAGE = 10;
+
     settingsModal = null;
     elementId = "modal-2";
+
+    #page = null;
+    #pages = null;
+
+    #maxPage = () => this.#page >= this.#pages;
+    #minPage = () => this.#page <= 1;
 
     constructor() {
         this.settingsModal = document.createElement("div");
@@ -174,20 +256,28 @@ class IPBlockingMenu {
         $("html").append(this.settingsModal);
     }
 
-    async createTable() {
+    async createTable(page) {
+
+        // This gets cached, don't worry :-D
         let config = await IPBlockingManager.API.retrieveBlockConfig();
 
         // Get rows
         let rowsHTML;
         if (Object.keys(config).length > 0) {
-            rowsHTML = this.#genTableRows(config).join("\n");
+            rowsHTML = this.#genTableRows(config, page).join("\n");
         } else {
-            rowsHTML = this.genEmptyTableRow();
+            rowsHTML = this.#genEmptyTableRow();
         }
 
         // Create table
         return $(`
-            <table class="ipListTable" >
+            <table class="ipListTable">
+                 <colgroup>
+                   <col span="1" style="width: 25%;">
+                   <col span="1" style="width: 50%;">
+                   <col span="1" style="width: 25%;">
+                </colgroup>
+    
                 <thead>
                     <tr>
                         <th>IP Address</th>
@@ -202,7 +292,13 @@ class IPBlockingMenu {
         `).get(0);
     }
 
-    genEmptyTableRow() {
+    #genEmptyTableRow() {
+
+        this.#page = 0;
+        this.#pages = 0;
+
+        this.updatePaginator();
+
         return (`
             <tr>
                 <td></td>
@@ -213,21 +309,96 @@ class IPBlockingMenu {
         `);
     }
 
-    #getConfigEntries(config) {
-        return Object
+    #getConfigEntries(config, page) {
+
+        // Track page
+        this.#page = page = Math.max(page, 0);
+
+        // Sort by timestamp
+        let sorted = Object
             .entries(config)
             .sort((a, b) => b[1].timestamp - a[1].timestamp);
+
+        // Clamp ceiling
+        this.#pages = Math.ceil(sorted.length / this.ROWS_PER_PAGE);
+        this.#page = page = Math.min(this.#pages, page);
+
+        // Get indices
+        let startIndex = (page - 1) * this.ROWS_PER_PAGE;
+        let endIndex = startIndex + this.ROWS_PER_PAGE;
+
+        // Slice amount for page, calculate page numbers
+        let slice = sorted.slice(startIndex, endIndex);
+        let delta = this.ROWS_PER_PAGE - slice.length;
+
+        // Fill empty rows
+        if (delta > 0) {
+            for (let i=0; i < delta; i++) {
+                slice.push([null, null]);
+            }
+        }
+
+        // Last page & update paginator
+        this.updatePaginator();
+        return slice;
+
     }
 
-    #genTableRows(config) {
+    updatePaginator() {
+
+        let nextPage = document.getElementById("nextIpPageButton");
+        let previousPage = document.getElementById("previousIpPageButton");
+        let pageCount = document.getElementById("ipPage");
+
+        // Disable next page button
+        if (this.#maxPage() && !nextPage.classList.contains("disabled")) {
+            nextPage.classList.add("disabled");
+        }
+        else if (!this.#maxPage() && nextPage.classList.contains("disabled")) {
+            nextPage.classList.remove("disabled");
+        }
+
+        // Disable previous page button
+        if (this.#minPage() && !previousPage.classList.contains("disabled")) {
+            previousPage.classList.add("disabled");
+        }
+        else if (!this.#minPage() && previousPage.classList.contains("disabled")) {
+            previousPage.classList.remove("disabled");
+        }
+
+        // Update page count
+        pageCount.innerText = this.#pages > 0 ? `${this.#page}/${this.#pages}` : 'N/A';
+
+    }
+
+    nextPage() {
+
+        if (this.#maxPage()) {
+            return;
+        }
+
+        this.setPage(this.#page + 1);
+
+    }
+
+    previousPage() {
+
+        if (this.#minPage()) {
+            return;
+        }
+
+        this.setPage(this.#page - 1);
+    }
+
+    #genTableRows(config, page) {
         let rows = [];
 
-        for (const [address, data] of this.#getConfigEntries(config)) {
+        for (const [address, data] of this.#getConfigEntries(config, page)) {
             rows.push(`
                 <tr>
-                    <td>${address}</td>
-                    <td>${this.#timeStampToDate(data.timestamp)}</td>
-                    <td><button class="ipUnblockMenuButton" value="${address}">Unblock</button></td>
+                    <td>${address || "&nbsp;"}</td>
+                    <td>${data ? this.#timeStampToDate(data.timestamp) : ""}</td>
+                    <td>${this.#getIpUnblockButton(address, data)}</td>
                 </tr>
             `);
         }
@@ -235,6 +406,16 @@ class IPBlockingMenu {
         return rows;
 
     }
+
+    #getIpUnblockButton(address, data) {
+
+        if (!data) {
+            return "";
+        }
+
+        return `<button class="ipUnblockMenuButton" value="${address}">Unblock</button>`;
+    }
+
 
     #timeStampToDate(timestamp) {
         let date = new Date(timestamp * 1000);
@@ -244,14 +425,27 @@ class IPBlockingMenu {
     enable(noChange) {
         if (noChange) return;
         Settings.disable();
+        this.genTable(1);
+    }
 
-        this.createTable().then((table) => {
-            let anchor = document.getElementById("blockedListDiv");
-            anchor?.childNodes?.[0]?.remove();
-            anchor.appendChild(table);
+    replaceTable(table) {
+        let anchor = document.getElementById("blockedListDiv");
+        anchor?.childNodes?.[0]?.remove();
+        anchor.appendChild(table);
+    }
+
+    genTable(page = 1) {
+        this.createTable(page).then((table) => {
+            this.replaceTable(table);
             MicroModal.show(this.elementId);
         });
+    }
 
+    setPage(page) {
+
+        this.createTable(page).then((table) => {
+            this.replaceTable(table);
+        });
     }
 
     disable() {
@@ -275,6 +469,7 @@ class IPBlockingManager extends Module {
 
     async onButtonClick(event) {
 
+
         if (event?.target?.classList?.contains("ipBlockButton")) {
             await this.onIpBlockButtonClick(event);
         }
@@ -287,6 +482,103 @@ class IPBlockingManager extends Module {
             let unblocked = await this.onIpUnblockButtonClick(event, false);
             await this.onIpUnblockMenuButtonClick(event, unblocked);
         }
+
+        switch (event?.target?.id) {
+            case "importIpList":
+                await this.onIpImportListButtonClick(event);
+                break;
+            case "exportIpList":
+                await this.onIpExportListButtonClick(event);
+                break;
+            case "previousIpPageButton":
+                await this.onPreviousIpPageButtonClick(event);
+                break;
+            case "nextIpPageButton":
+                await this.onNextIpPageButtonClick(event);
+                break;
+        }
+
+    }
+
+    async onPreviousIpPageButtonClick(_) {
+        this.#menu.previousPage();
+    }
+
+    async onNextIpPageButtonClick(_) {
+        this.#menu.nextPage();
+    }
+
+    async onIpImportListButtonClick(_) {
+
+        // Receive data
+        let json = prompt("Paste the JSON data to import:");
+        let data;
+
+        // Try parse
+        try {
+            data = JSON.parse(json);
+        } catch (ex) {
+            alert("Invalid JSON submitted. No IP addresses were imported.");
+            return;
+        }
+
+        // Empty response
+        if (data == null) {
+            return;
+        }
+
+        let sanitizedList = {};
+
+        // Add them
+        for (const [address, config] of Object.entries(data)) {
+
+            let blockedIp = BlockedIP.fromData(address, config);
+
+            if (blockedIp == null) {
+                continue;
+            }
+
+            sanitizedList[address] = blockedIp.toData();
+        }
+
+        let originalLength = Object.keys(data).length;
+        let sanitizedLength = Object.keys(sanitizedList).length;
+        let importedList = await this.#api.bulkAddBlockList(sanitizedList);
+        let importedLength = importedList.length;
+
+        let duplicates = sanitizedLength - importedLength;
+        let invalid = originalLength - sanitizedLength;
+
+        // Log that it happened
+        Logger.INFO(
+            "Imported %s addresses of %s submitted to IP list <%s invalid, %s duplicate(s)>.",
+            importedLength, originalLength, invalid, duplicates
+        );
+
+        let message = (
+            `Imported ${importedLength} address of ${originalLength} into IP list` +
+            ((invalid || duplicates) ? ` (${invalid} invalid, ${duplicates} duplicate${duplicates > 1 ? 's' : ''}).` : '!')
+        )
+
+        // Send alert
+        alert(message);
+
+        // Add them to the currently open menu by regenerating it
+        this.#menu.genTable(1);
+    }
+
+    async onIpExportListButtonClick(_) {
+
+        let text = JSON.stringify(await this.#api.retrieveBlockConfig());
+
+        // Download the element
+        const download = document.createElement("a");
+        download.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+        download.download = `IP-List-${new Date().toDateString()}.json`;
+        download.click();
+        download.remove();
+
+        Logger.INFO("Exported IP address list as \"%s\"", download.download);
 
     }
 
@@ -317,11 +609,3 @@ class IPBlockingManager extends Module {
     }
 
 }
-
-/*
-TODO for IP blocking
-
-- Handle imports & exports
-- Confirm Unblock All works
-- Page-ify IP block values
- */

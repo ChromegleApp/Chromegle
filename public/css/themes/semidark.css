@@ -172,15 +172,6 @@ a {
     text-decoration: none;
 }
 
-#logo {
-    margin-top: 25px;
-    padding: 0;
-    float: left;
-    font-size: 1em;
-    margin-left: .5em;
-    margin-right: 5em
-}
-
 #logo img {
     display: block
 }
@@ -194,19 +185,6 @@ a {
     display: block
 }
 
-#onlinecount {
-    font-size: 1.5em;
-    color: #9cf;
-    position: absolute;
-    right: .333333em;
-    top: 55px;
-    bottom: 6px
-}
-
-#onlinecount strong {
-    font-size: 1.3333333333333333333333em;
-    color: #6cb5ff
-}
 
 #intro {
     line-height: 1.5;
@@ -641,18 +619,6 @@ textarea:focus {
     color: #d0d0d0;
     font-weight: normal;
     font-size: 1.25em
-}
-
-#sharebuttons {
-    position: absolute;
-    right: .5em;
-    top: 35px;
-    margin-right: -1px;
-    vertical-align: top
-}
-
-#sharebuttons * {
-    vertical-align: top !important
 }
 
 #EFF {

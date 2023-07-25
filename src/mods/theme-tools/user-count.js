@@ -7,11 +7,7 @@ class UserCountManager extends Module {
 
     constructor() {
         super();
-
-        setTimeout(() => {
-            this.setupCount()
-        }, 1000);
-
+        setTimeout(this.setupCount.bind(this), 500);
     }
 
     setupCount() {

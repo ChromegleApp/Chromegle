@@ -68,10 +68,8 @@ class ThemeManager extends Module {
 
         if (headerEnabled) {
             $("#sharebuttons").css("display", "");
-            $("#onlinecount").css("margin-top", "");
         } else {
             $("#sharebuttons").css("display", "none");
-            $("#onlinecount").css("margin-top", "-15px");
         }
 
     }
@@ -93,7 +91,8 @@ class OverrideManager {
             this.#overrideCollegeAndUnModeratedButtons,
             this.#overrideLinks,
             this.#overrideStudentChatEmoji,
-            this.#resizeCommonInterestsLabel
+            this.#resizeCommonInterestsLabel,
+            this.#wrapHeaderButtons
         ].forEach((fn) => {
             try {
                 fn();
@@ -116,6 +115,16 @@ class OverrideManager {
             .css("justify-content", "center")
             .css("margin-bottom", "10px")
             .css("margin-top", "10px");
+
+    }
+
+    #wrapHeaderButtons() {
+        let headerButtons = document.createElement("div");
+        headerButtons.id = "header-buttons";
+        document.getElementById("header").appendChild(headerButtons);
+
+        $("#sharebuttons").detach().appendTo('#header-buttons')
+        $("#onlinecount").detach().appendTo('#header-buttons')
 
     }
 

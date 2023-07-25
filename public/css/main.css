@@ -4,6 +4,18 @@ html {
     background-size: cover !important;
 }
 
+#header {
+    display: flex;
+    align-items: center;
+}
+
+#logo {
+    padding: 0;
+    float: left;
+    margin: 25px;
+    font-size: 1em;
+}
+
 .homeButton {
     padding: 10px;
     height: 57px;
@@ -16,7 +28,6 @@ html {
 }
 
 .settingsButtonContainer {
-    margin-top: 24px;
     display: flex;
     align-items: center;
 }
@@ -132,7 +143,7 @@ html {
 }
 
 .ipMapsButton {
-    font-size: 16px;
+    font-size: 15.5px;
 }
 
 .clearInterestsButton {
@@ -309,8 +320,12 @@ html {
     justify-items: center;
     border: none;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
+.ipListTable td {
+    overflow-x: scroll;
+}
 
 .ipListTable > tbody tr:nth-child(odd) {
     background: rgb(201, 201, 201);
@@ -323,7 +338,7 @@ html {
 }
 
 .ipListTable th, .ipListTable td {
-    padding: 10px;
+    padding: 5px;
     border: none;
 }
 
@@ -536,12 +551,20 @@ span.chromegle-cancel-skip {
     margin-right: 20px !important;
 }
 
+#onlinecount {
+    font-size: 1.5em;
+    color: #9cf;
+    right: .333333em;
+}
+
+#onlinecount strong {
+    font-size: 1.3333333333333333333333em;
+    color: #6cb5ff
+}
+
 @media(max-width: 1050px) {
     #sharebuttons {
-        display: none;
-    }
-    #onlinecount {
-        top: 45px !important;
+        display: none !important;
     }
 }
 
@@ -566,6 +589,19 @@ span.chromegle-cancel-skip {
     }
 }
 
+#header-buttons {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: end;
+}
+
+#sharebuttons {
+    margin-top: 0 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 #intro {
     margin: 1.5em .5em .5em;
     font-size: 15.5px;
@@ -623,6 +659,10 @@ MOBILE START
 
 html.chromegle-mobile .logbox {
     padding: 5px;
+}
+
+html.chromegle-mobile #header {
+    display: block !important;
 }
 
 html.chromegle-mobile img[src*='/static/bwlogo'],
@@ -744,3 +784,49 @@ MODAL FALLBACK START
 /**
 MODAL FALLBACK END
  */
+
+.ipModalTools {
+    margin-top: 25px;
+}
+
+.ipTableControls {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+#ipPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    padding: 8px 35px;
+    background: #e0e0e0;
+    font-size: 13px;
+}
+
+#importIpList, #exportIpList {
+    margin-right: 5px;
+}
+
+#importIpList, #exportIpList, #nextIpPageButton, #previousIpPageButton {
+    border: none;
+    padding: 8px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    color: inherit;
+    cursor: pointer;
+}
+
+#importIpList:hover, #exportIpList:hover, #nextIpPageButton:hover, #previousIpPageButton:hover {
+    background: #cecece;
+}
+
+#importIpList:active, #exportIpList:active, #nextIpPageButton:active, #previousIpPageButton:active {
+    background: #c4c4c4;
+}
+
+#previousIpPageButton.disabled, #nextIpPageButton.disabled {
+    cursor: not-allowed;
+    background: #c4c4c4;
+}
