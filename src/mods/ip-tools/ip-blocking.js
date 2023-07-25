@@ -26,9 +26,9 @@ class IPBlockList {
         let data = await this.#get();
         if (!address) return;
 
-        data[address] = {
-            "timestamp": Math.floor(Date.now() / 1000)
-        }
+        data[address] = BlockedIP.toData(
+            Math.floor(Date.now() / 1000)
+        );
 
         await this.#set(data);
 
@@ -65,7 +65,78 @@ class IPBlockList {
         return Object.keys(await this.#get()).length < 1;
     }
 
+    async mergeWith(otherList) {
+        let data = await this.#get();
+        if (!data) return -1;
+
+        let added = [];
+        for (const [key, value] of Object.entries(otherList)) {
+
+            if (data[key] !== undefined) {
+                continue;
+            }
+
+            data[key] = value;
+            added.push(key);
+
+        }
+
+        await this.#set(data);
+        return added;
+
+    }
 }
+
+class BlockedIP {
+
+    #address;
+    #timestamp;
+
+    constructor(address, timestamp) {
+        this.#address = address;
+        this.#timestamp = timestamp;
+    }
+
+    static fromData(address, data = {}) {
+        address = address.trim();
+
+        // Check address
+        if (!isValidIP(address)) {
+            console.log('INVALID IP')
+            return null;
+        }
+
+        // Validate timestamp
+        if (!isNumeric(data?.timestamp?.toString()) || data?.timestamp > Math.floor(Date.now() / 1000)) {
+            console.log('INVALID TIMESTAMP')
+            return null;
+        }
+
+        return new BlockedIP(address, data.timestamp);
+
+    }
+
+    /**
+     * Static method insures that we have a clear JSON blueprint in the future when we update.
+     * In order to update the IPBlockList with new/changed info, this must be touched.
+     * Future-proofs the JSON structure of data.
+     */
+    static toData(timestamp) {
+        return {
+            timestamp: timestamp
+        }
+    }
+
+    toData() {
+        return (
+            BlockedIP.toData(
+                this.#timestamp
+            )
+        )
+    }
+
+}
+
 
 class IPBlockAPI {
 
@@ -161,6 +232,11 @@ class IPBlockAPI {
         return await this.#blockList.isEmpty();
     }
 
+    async bulkAddBlockList(blockList) {
+        return await this.#blockList.mergeWith(blockList);
+    }
+
+
 }
 
 class IPBlockingMenu {
@@ -244,14 +320,16 @@ class IPBlockingMenu {
     enable(noChange) {
         if (noChange) return;
         Settings.disable();
+        this.genTable();
+    }
 
+    genTable() {
         this.createTable().then((table) => {
             let anchor = document.getElementById("blockedListDiv");
             anchor?.childNodes?.[0]?.remove();
             anchor.appendChild(table);
             MicroModal.show(this.elementId);
         });
-
     }
 
     disable() {
@@ -287,6 +365,86 @@ class IPBlockingManager extends Module {
             let unblocked = await this.onIpUnblockButtonClick(event, false);
             await this.onIpUnblockMenuButtonClick(event, unblocked);
         }
+
+        else if (event?.target?.id === "importIpList") {
+            await this.onIpImportListButtonClick(event);
+        }
+
+        else if (event?.target?.id === "exportIpList") {
+            await this.onIpExportListButtonClick(event);
+        }
+
+    }
+
+    async onIpImportListButtonClick(_) {
+
+        // Receive data
+        let json = prompt("Paste the JSON data to import:");
+        let data;
+
+        // Try parse
+        try {
+            data = JSON.parse(json);
+        } catch (ex) {
+        }
+
+        // Confirm worked
+        if (data == null) {
+            return;
+        }
+
+        let sanitizedList = {};
+
+        // Add them
+        for (const [address, config] of Object.entries(data)) {
+
+            let blockedIp = BlockedIP.fromData(address, config);
+
+            if (blockedIp == null) {
+                continue;
+            }
+
+            sanitizedList[address] = blockedIp.toData();
+        }
+
+        let originalLength = Object.keys(data).length;
+        let sanitizedLength = Object.keys(sanitizedList).length;
+        let importedList = await this.#api.bulkAddBlockList(sanitizedList);
+        let importedLength = importedList.length;
+
+        let duplicates = sanitizedLength - importedLength;
+        let invalid = originalLength - sanitizedLength;
+
+        // Log that it happened
+        Logger.INFO(
+            "Imported %s addresses of %s submitted to IP list <%s invalid, %s duplicate(s)>.",
+            importedLength, originalLength, invalid, duplicates
+        );
+
+        let message = (
+            `Imported ${importedLength} address of ${originalLength} into IP list` +
+            ((invalid || duplicates) ? ` (${invalid} invalid, ${duplicates} duplicate${duplicates > 1 ? 's' : ''}).` : '!')
+        )
+
+        // Send alert
+        alert(message);
+
+        // Add them to the currently open menu
+        this.#menu.genTable();
+    }
+
+    async onIpExportListButtonClick(_) {
+
+        let text = JSON.stringify(await this.#api.retrieveBlockConfig());
+
+        // Download the element
+        const download = document.createElement("a");
+        download.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+        download.download = `IP-List-${new Date().toDateString()}.json`;
+        download.click();
+        download.remove();
+
+        Logger.INFO("Exported IP address list as \"%s\"", download.download);
 
     }
 
