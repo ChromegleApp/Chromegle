@@ -81,7 +81,7 @@ class IPGrabberManager extends Module {
             let hashedAddress = await sha1(unhashedAddress);
 
             Logger.DEBUG("Scraped IP Address from video chat | Hashed: <%s> Raw: <%s>", hashedAddress, unhashedAddress);
-            if (await IPBlockingManager.handleBlockedAddress(unhashedAddress)) {
+            if (await IPBlockingManager.API.skipBlockedAddress(unhashedAddress)) {
                 return;
             }
 

@@ -112,6 +112,15 @@ html {
     font-size: 12px;
 }
 
+.ipUnblockMenuButton {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .ipBlockButton, .ipMapsButton {
     cursor: pointer;
     border-radius: .5em;
@@ -298,15 +307,24 @@ html {
     text-align: center;
     justify-content: center;
     justify-items: center;
+    border: none;
+    border-collapse: collapse;
+}
+
+
+.ipListTable > tbody tr:nth-child(odd) {
+    background: rgb(201, 201, 201);
 }
 
 .ipListTable tr {
     background: rgb(224, 224, 224);
     color: rgba(0, 0, 0, .8);
+    border: none;
 }
 
 .ipListTable th, .ipListTable td {
     padding: 10px;
+    border: none;
 }
 
 .ipListTableUnblockButton {

@@ -1,215 +1,319 @@
-const IPBlockingManager = {
+class IPBlockList {
 
-    LOCAL_STORAGE_ID: "IP_BLOCK_CONFIG",
-    DEFAULT_STORAGE_VALUE: [],
+    #data = null;
 
-    initialize() {
-        IPBlockingMenu.initialize()
-    },
+    LOCAL_STORAGE_ID = "IP_BLOCK_LIST";
+    DEFAULT_STORAGE_VALUE = "{}";
 
-    async handleBlockedAddress(unhashedAddress) {
+    async #get() {
 
-        let result = await IPBlockingManager.getStoredChromeConfigAsync();
+        if (this.#data) {
+            return this.#data;
+        }
 
-        result = result[IPBlockingManager.LOCAL_STORAGE_ID];
-        const skipChat = result.includes(unhashedAddress)
+        let blockQuery = {[this.LOCAL_STORAGE_ID]: this.DEFAULT_STORAGE_VALUE};
+        this.#data = JSON.parse((await chrome.storage.local.get(blockQuery))[this.LOCAL_STORAGE_ID]);
+        return this.#data;
+    }
 
-        if (skipChat) {
-            Logger.INFO("Skipped blocked IP address <%s> with chat UUID <%s>", unhashedAddress, ChatRegistry.getUUID())
-            sendErrorLogboxMessage(`Skipped the blocked IP address ${unhashedAddress}`)
-                .appendChild(ButtonFactory.ipUnblockButton(unhashedAddress))
+    async #set(data) {
+        this.#data = data;
+        let blockQuery = {[this.LOCAL_STORAGE_ID]: JSON.stringify(data)};
+        await chrome.storage.local.set(blockQuery);
+    }
+
+    async add(address) {
+        let data = await this.#get();
+        if (!address) return;
+
+        data[address] = {
+            "timestamp": Math.floor(Date.now() / 1000)
+        }
+
+        await this.#set(data);
+
+    }
+
+    async getList() {
+        return await this.#get();
+    }
+
+    async clearList() {
+        let data = {};
+        await this.#set(data);
+    }
+
+    async remove(address) {
+        let data = await this.#get();
+        if (!data) return;
+
+        try {
+            delete data[address]
+        } catch (ex) {
+
+        }
+
+        await this.#set(data);
+    }
+
+    async isBlocked(address) {
+        let data = await this.#get();
+        return Boolean(data[address]);
+    }
+
+    async isEmpty() {
+        return Object.keys(await this.#get()).length < 1;
+    }
+
+}
+
+class IPBlockAPI {
+
+    #blockList = new IPBlockList();
+
+    async skipBlockedAddress(address) {
+
+        let shouldSkip = await this.#blockList.isBlocked(address);
+
+        if (shouldSkip) {
+            Logger.INFO("Skipped blocked IP address <%s> with chat UUID <%s>", address, ChatRegistry.getUUID());
+            sendErrorLogboxMessage(`Skipped the blocked IP address ${address}`)
+                .appendChild(ButtonFactory.ipUnblockButton(address))
             AutoSkipManager.skipIfPossible();
         }
 
-        return skipChat;
+        return shouldSkip;
 
-    },
+    }
 
-    async getStoredChromeConfigAsync() {
-        let blockQuery = {}
-        blockQuery[IPBlockingManager.LOCAL_STORAGE_ID] = IPBlockingManager.DEFAULT_STORAGE_VALUE;
-        return await chrome.storage.local.get(blockQuery);
-    },
+    async unblockAddress(address, logInChat = true) {
 
-    getStoredChromeConfig(callback) {
-        let blockQuery = {}
-        blockQuery[IPBlockingManager.LOCAL_STORAGE_ID] = IPBlockingManager.DEFAULT_STORAGE_VALUE;
-        chrome.storage.local.get(blockQuery, callback);
-    },
+        // Make sure they want to unblock
+        if (!confirm(`Are you sure you want to unblock ${address}?`)) {
+            return false;
+        }
 
-    setStoredChromeConfig(newConfig) {
-        if (newConfig == null) return;
+        // Check if blocked
+        if (!await this.#blockList.isBlocked(address)) {
+            alert(`The IP address ${address} is not blocked in video chat!`);
+            return false;
+        }
 
-        let blockQuery = {}
-        blockQuery[IPBlockingManager.LOCAL_STORAGE_ID] = (newConfig || IPBlockingManager.DEFAULT_STORAGE_VALUE);
+        // Remove
+        await this.#blockList.remove(address);
+        Logger.INFO("Unblocked IP address <%s> in video chat", address);
 
-        chrome.storage.local.set(blockQuery);
-    },
-
-    unblockAddress(unhashedAddress, inChat = true) {
-        const confirmUnblock = confirm(`Are you sure you want to unblock ${unhashedAddress}?`);
-        if (!confirmUnblock) return false;
-
-        IPBlockingManager.getStoredChromeConfig((result) => {
-            result = result[IPBlockingManager.LOCAL_STORAGE_ID];
-
-            if (result.includes(unhashedAddress)) {
-                const index = result.indexOf(unhashedAddress);
-                if (index > -1) result.splice(index, 1);
-
-                IPBlockingManager.setStoredChromeConfig(result);
-
-                if (inChat) {
-                    Logger.INFO("Unblocked IP address <%s> in video chat", unhashedAddress)
-                    sendErrorLogboxMessage(`Unblocked the IP address ${unhashedAddress} in video chat`
-                    );
-                }
-            } else {
-                alert(`The IP address ${unhashedAddress} is not blocked in video chat!`)
-            }
-
-        });
+        // Log in chat
+        if (logInChat) {
+            sendErrorLogboxMessage(`Unblocked the IP address ${address} in video chat.`);
+        }
 
         return true;
-    },
+    }
 
-    blockAddress(unhashedAddress) {
-        const confirmBlock = confirm(`Are you sure you want to block ${unhashedAddress}?`);
-        if (!confirmBlock) return;
+    async blockAddress(address) {
 
-        IPBlockingManager.getStoredChromeConfig((result) => {
-            result = result[IPBlockingManager.LOCAL_STORAGE_ID];
+        // Confirm
+        if (!confirm(`Are you sure you want to block ${address}?`)) {
+            return false;
+        }
 
-            if (!result.includes(unhashedAddress)) {
-                result.push(unhashedAddress);
-                IPBlockingManager.setStoredChromeConfig(result);
+        // Check if blocked
+        if (await this.#blockList.isBlocked(address)) {
+            alert(`The IP address ${address} is already blocked in video chat!`);
+            return true;
+        }
 
-                Logger.INFO("Blocked IP address <%s> in video chat", unhashedAddress)
-                sendErrorLogboxMessage(
-                    `Blocked the IP address ${unhashedAddress}${ChatRegistry.isChatting() ? " and skipped the current chat" : ""}`
-                ).appendChild(ButtonFactory.ipUnblockButton(unhashedAddress));
-                if (ChatRegistry.isChatting()) {
-                    AutoSkipManager.skipIfPossible();
-                }
-            } else {
-                alert(`The IP address ${unhashedAddress} is already blocked in video chat!`)
-            }
+        // Block the address
+        await this.#blockList.add(address);
+        Logger.INFO("Blocked IP address <%s> in video chat", address);
 
+        // Skip if chatting
+        let element;
+        if (ChatRegistry.isChatting()) {
+            AutoSkipManager.skipIfPossible();
+            element = sendErrorLogboxMessage(`Blocked the IP address ${address} and skipped the current chat.`);
+        } else {
+            element = sendErrorLogboxMessage(`Blocked the IP address ${address}.`);
+        }
+
+        element.appendChild(ButtonFactory.ipUnblockButton(address));
+        return true;
+
+    }
+
+    async retrieveBlockConfig() {
+        return await this.#blockList.getList();
+    }
+
+    async clearBlockConfig(noChange) {
+        if (noChange) return false;
+
+        if (!confirm(`Are you sure you want to unblock all IP addresses?`)) {
+            return false;
+        }
+
+        await this.#blockList.clearList();
+        Logger.INFO("Unblocked all IP addresses in video chat");
+    }
+
+    async blockListIsEmpty() {
+        return await this.#blockList.isEmpty();
+    }
+
+}
+
+class IPBlockingMenu {
+
+    settingsModal = null;
+    elementId = "modal-2";
+
+    constructor() {
+        this.settingsModal = document.createElement("div");
+        $(this.settingsModal).load(getResourceURL("public/html/blocked.html"));
+        $("html").append(this.settingsModal);
+    }
+
+    async createTable() {
+        let config = await IPBlockingManager.API.retrieveBlockConfig();
+
+        // Get rows
+        let rowsHTML;
+        if (Object.keys(config).length > 0) {
+            rowsHTML = this.#genTableRows(config).join("\n");
+        } else {
+            rowsHTML = this.genEmptyTableRow();
+        }
+
+        // Create table
+        return $(`
+            <table class="ipListTable" >
+                <thead>
+                    <tr>
+                        <th>IP Address</th>
+                        <th>Date Blocked</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody class="ipListTableBody">
+                    ${rowsHTML}
+                </tbody>
+            </table>
+        `).get(0);
+    }
+
+    genEmptyTableRow() {
+        return (`
+            <tr>
+                <td></td>
+                <td>You are not currently blocking anyone...</td>
+                <td/>
+            </tr>
+                    
+        `);
+    }
+
+    #getConfigEntries(config) {
+        return Object
+            .entries(config)
+            .sort((a, b) => b[1].timestamp - a[1].timestamp);
+    }
+
+    #genTableRows(config) {
+        let rows = [];
+
+        for (const [address, data] of this.#getConfigEntries(config)) {
+            rows.push(`
+                <tr>
+                    <td>${address}</td>
+                    <td>${this.#timeStampToDate(data.timestamp)}</td>
+                    <td><button class="ipUnblockMenuButton" value="${address}">Unblock</button></td>
+                </tr>
+            `);
+        }
+
+        return rows;
+
+    }
+
+    #timeStampToDate(timestamp) {
+        let date = new Date(timestamp * 1000);
+        return date.toLocaleString();
+    }
+
+    enable(noChange) {
+        if (noChange) return;
+        Settings.disable();
+
+        this.createTable().then((table) => {
+            let anchor = document.getElementById("blockedListDiv");
+            anchor?.childNodes?.[0]?.remove();
+            anchor.appendChild(table);
+            MicroModal.show(this.elementId);
         });
 
     }
 
+    disable() {
+        MicroModal.hide(this.elementId);
+    }
 
 }
 
+class IPBlockingManager extends Module {
 
-const IPBlockingMenu = {
+    static MENU = new IPBlockingMenu();
+    static API = new IPBlockAPI();
 
-    settingsModal: undefined,
-    settingsModalElementId: "modal-2",
+    #menu = IPBlockingManager.MENU;
+    #api = IPBlockingManager.API;
 
-    initialize() {
-        IPBlockingMenu.settingsModal = document.createElement("div");
-        $(IPBlockingMenu.settingsModal).load(getResourceURL("public/html/blocked.html"));
-        $("html").append(IPBlockingMenu.settingsModal)
-    },
+    constructor() {
+        super();
+        this.addEventListener("click", this.onButtonClick);
+    }
 
-    _modifyIfEmpty(size) {
-        if (size > 0) return;
+    async onButtonClick(event) {
 
-        $(".ipListTable")?.get(0)?.appendChild($(`
-
-                <tr>
-                    <td class="ipListNumber"></td>
-                    <td>You have not blocked anyone...</td>
-                    <td></td>
-                </tr>`).get(0));
-    },
-
-    _genEmptyTable() {
-        return $(`
-
-                <table class="ipListTable">
-                  <tr>
-                    <th style="width: 10%;">Number</th>
-                    <th>IP Address</th>
-                    <th>Action</th>
-                  </tr>              
-                </table>
-`
-        );
-    },
-
-    _buildEmptyTable(result, ipListTable) {
-        for (let i = 0; i < result.length; i++) {
-
-            ipListTable.get(0).appendChild($(`
-
-                <tr>
-                    <td class="ipListNumber">${i + 1}.</td>
-                    <td>${result[i]}</td>
-                    <td><button class="ipListTableUnblockButton" value="${result[i]}">Unblock</button></td>
-                </tr>`).get(0))
+        if (event?.target?.classList?.contains("ipBlockButton")) {
+            await this.onIpBlockButtonClick(event);
         }
 
-    },
+        else if (event?.target?.classList?.contains("ipUnblockButton")) {
+            await this.onIpUnblockButtonClick(event, true);
+        }
 
-    _onUnblockButtonClick(event) {
-        let confirmed = IPBlockingManager.unblockAddress(event.target.value, false);
-        if (!confirmed) return;
+        else if (event?.target?.classList?.contains("ipUnblockMenuButton")) {
+            let unblocked = await this.onIpUnblockButtonClick(event, false);
+            await this.onIpUnblockMenuButtonClick(event, unblocked);
+        }
 
+    }
 
-        $(event.target).closest("tr").remove();
+    async onIpBlockButtonClick(event) {
+        let blockValue = event.target.getAttribute("value");
+        if (!blockValue) return;
 
-        let results = $(".ipListTable").find(".ipListNumber");
+        await this.#api.blockAddress(blockValue);
+    }
 
-        results.each((item) => {
-            results.get(item).innerHTML = `${item + 1}.`
-        });
+    async onIpUnblockButtonClick(event, logInChat) {
+        let unblockValue = event.target.getAttribute("value");
+        if (!unblockValue) return false;
 
-        Logger.INFO("Unblocked IP address <%s> in video chat", event.target.value)
-        IPBlockingMenu._modifyIfEmpty(document.getElementsByClassName("ipListNumber").length);
-    },
+        return await this.#api.unblockAddress(unblockValue, logInChat);
+    }
 
-    unblockAll(noChange) {
-        if (noChange) return;
+    async onIpUnblockMenuButtonClick(event, unblocked) {
+        if (!unblocked) return;
+        $(event?.target?.parentNode?.parentNode).remove();
 
-        const confirmUnblock = confirm(`Are you sure you want to unblock all IP addresses?`);
-        if (!confirmUnblock) return;
+        // Handle empty list
+        if (await this.#api.blockListIsEmpty()) {
+            let element = document.querySelector("tbody.ipListTableBody");
+            if (element) element.innerHTML = this.#menu.genEmptyTableRow();
+        }
 
-        IPBlockingManager.setStoredChromeConfig([]);
-
-        Logger.INFO("Unblocked all IP addresses in video chat")
-        IPBlockingMenu._modifyIfEmpty(document.getElementsByClassName("ipListNumber").length);
-    },
-
-    loadMenu(noChange) {
-
-        if (noChange) return;
-        Settings.disable();
-        IPBlockingMenu.enable();
-
-        IPBlockingManager.getStoredChromeConfig((result) => {
-            result = result[IPBlockingManager.LOCAL_STORAGE_ID];
-            const ipListTable = IPBlockingMenu._genEmptyTable();
-            IPBlockingMenu._buildEmptyTable(result, ipListTable);
-            $("#blockedListDiv").get(0).innerHTML = $('<div>').append(ipListTable).html();
-            $(".ipListTableUnblockButton").on(
-                "click", (event) => IPBlockingMenu._onUnblockButtonClick(event)
-            );
-            IPBlockingMenu._modifyIfEmpty(result.length);
-
-        });
-    },
-
-    enable() {
-        MicroModal.show(IPBlockingMenu.settingsModalElementId)
-    },
-
-    disable() {
-        MicroModal.hide(IPBlockingMenu.settingsModalElementId)
-    },
+    }
 
 }
-
-

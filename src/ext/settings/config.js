@@ -297,10 +297,10 @@ const config = {
         "default": "false"
     }),
     "blockedIPList": new ExternalField({
-        "external": IPBlockingMenu.loadMenu
+        "external": IPBlockingManager.MENU.enable.bind(IPBlockingManager.MENU)
     }),
     "unblockAllIPAddresses": new ExternalField({
-        "external": IPBlockingMenu.unblockAll
+        "external": IPBlockingManager.API.clearBlockConfig.bind(IPBlockingManager.API)
     }),
     "voiceCommandToggle": new ToggleEdit({
         "elementName": "voiceCommandToggle",
