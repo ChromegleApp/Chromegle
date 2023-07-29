@@ -103,7 +103,7 @@ body, #header, html {
 /*
 Secondary Colour BACKGROUND
  */
-#intro, .tip-message, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .pasteButton {
+#intro, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .pasteButton {
     background: #ffffff;
 }
 
@@ -134,16 +134,15 @@ Primary Colour TEXT
 /*
 Secondary Colour TEXT
  */
-.disconnectbtnwrapper.newbtn, #collegeButton, #videobtnunmoderated {
+.disconnectbtnwrapper.newbtn, #videobtnunmoderated {
     color: rgba(54, 57, 63, 255);
 }
 
 /*
 Tertiary Colour Background
  */
-.topictageditor, #collegeButton, #videobtnunmoderated {
-!important;
-    background: #d2d2d2;
+.topictageditor, #videobtnunmoderated {
+    background: #d2d2d2 !important;
 }
 
 
@@ -164,6 +163,15 @@ Tertiary colour text
 
 .logwrapper, .chatmsgwrapper, .disconnectbtnwrapper, .sendbtnwrapper, #selfvideo, #othervideo, .pasteButton, #abovevideosexybtn {
     border: 1px solid #CCC;
+}
+
+/*
+COLLEGE BUTTON
+ */
+#topicsettingscontainer a[href='javascript:'], #videobtnunmoderated {
+    color: rgba(54, 57, 63, 255); !important;
+    background: #d2d2d2 !important;
+    border: none !important;
 }
 
 
@@ -666,8 +674,6 @@ textarea:focus {
     font-size: .8em;
     color: #9cf;
     font-weight: bold;
-    margin-top: .25em;
-    height: 0;
 }
 
 :disabled .btnkbshortcut, [disabled] .btnkbshortcut {
@@ -855,7 +861,7 @@ textarea:focus {
     color: #8c8c8e;
     cursor: text;
     position: absolute;
-    padding-left: 1px
+    padding-left: 1px;
 }
 
 #topicsettingscell {
@@ -983,8 +989,4 @@ p + #topterms {
     #headerappstore {
         visibility: hidden !important
     }
-}
-
-#broadcast-id {
-    color: #ababab;
 }

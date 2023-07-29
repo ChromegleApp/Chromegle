@@ -56,19 +56,36 @@ class TextFilter {
         let testSpan = document.createElement("span");
         testSpan.innerHTML = node.nodeValue;
 
+        let placeholders = {};
+
         for (let nodeWord of node.nodeValue.split(" ")) {
             for (let [_, filterWords] of filterEntries) {
+
                 for (let filterWord of filterWords) {
-                    if (nodeWord.toLowerCase().includes(filterWord)) {
+                    if (nodeWord.toLowerCase() === filterWord) {
+
+                        // Create placeholder
+                        let placeholder = shortUuid();
+                        placeholders[placeholder] = nodeWord;
+
+                        // Temporarily store it
                         testSpan.innerHTML = testSpan.innerHTML.replace(
-                            nodeWord, ReSpoiler(nodeWord).outerHTML
-                        )
+                            nodeWord, placeholder
+                        );
+
                     }
 
                 }
 
             }
 
+        }
+
+        // Re-place the words
+        for (const [placeholder, word] of Object.entries(placeholders)) {
+            testSpan.innerHTML = testSpan.innerHTML.replace(
+                placeholder, ReSpoiler(word).outerHTML
+            )
         }
 
         return testSpan.childNodes;

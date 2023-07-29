@@ -377,7 +377,6 @@ code {
 
 #broadcast {
     z-index: 100 !important;
-    pointer-events: none;
     animation: mmfadeIn 500ms cubic-bezier(0.0, 0.0, 0.2, 1);
     transition: opacity;
     transition-duration: 500ms;
@@ -391,11 +390,37 @@ code {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    background-color: #000510d1;
+
     padding-top: 10px;
     padding-bottom: 25px;
+    padding-left: 100px;
+    padding-right: 100px;
+    min-width: 60vw;
+    border-radius: 10px;
+    background: rgba(0, 9, 15, 0.77);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+
 }
+
+#broadcast > .broadcase-close {
+    position: fixed;
+    right: 15px;
+    top: 9px;
+    color: gray;
+    font-weight: bold;
+    cursor: pointer;
+    transition-duration: 100ms;
+}
+
+#broadcast > .broadcase-close:hover {
+    color: #6b6b6b;
+}
+
+#broadcast > .broadcase-close:active {
+    color: #444444;
+}
+
 
 #broadcast > .broadcast-title {
     background: #409ffe;
@@ -405,17 +430,26 @@ code {
     background-image: -webkit-linear-gradient(top, #80c0ff 0, #017ffe 100%);
     background-image: -ms-linear-gradient(top, #80c0ff 0, #017ffe 100%);
     background-image: linear-gradient(top, #80c0ff 0, #017ffe 100%);
-
-    font-size: 50px;
+    font-size: 40px;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: bold;
+    text-wrap: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#broadcast > .broadcast-title > .logo-icon {
+    height: 40px;
+    margin-right: 6px;
+    margin-top: 3px;
 }
 
 #broadcast > .broadcast-msg {
     max-width: 80vw;
     overflow-wrap: break-word;
-    font-size: 35px;
+    font-size: 30px;
     text-align: center;
 }
 
@@ -616,16 +650,22 @@ span.chromegle-cancel-skip {
     z-index: 100;
 }
 
+/*
+Copies "btnkbshortcut"
+ */
 #broadcast-id {
-    padding-right: 8px;
     float: right;
-    padding-top: 5px;
-    font-size: 12px;
+    font-size: .7em;
+    font-weight: bold;
+    color: #9cf;
+}
+
+.disconnectbtnwrapper.newbtn #broadcast-id {
+    color: rgb(206 229 251);
 }
 
 p.tip-message {
     width: fit-content;
-    padding-right: 5px;
 }
 
 .chromegle-note {
@@ -785,6 +825,10 @@ MODAL FALLBACK START
 MODAL FALLBACK END
  */
 
+#collegeButton > span:first-child {
+    display: none;
+}
+
 .ipModalTools {
     margin-top: 25px;
 }
@@ -830,3 +874,18 @@ MODAL FALLBACK END
     cursor: not-allowed;
     background: #c4c4c4;
 }
+
+.disconnectbtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/*
+COLLEGE BUTTON
+ */
+#topicsettingscontainer a[href='javascript:'] > span:first-child {
+    display: none;
+}
+

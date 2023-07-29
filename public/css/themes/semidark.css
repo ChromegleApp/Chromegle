@@ -101,7 +101,7 @@ body, #header, html {
 /*
 Secondary Colour BACKGROUND
  */
-#intro, code, #abovevideosexybtn, .tip-message, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton, #selfvideo, #othervideo, #otherVideoWrapper, .pasteButton {
+#intro, code, #abovevideosexybtn, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton, #selfvideo, #othervideo, #otherVideoWrapper, .pasteButton {
     background: rgba(54, 57, 63, 255);
 }
 
@@ -637,8 +637,6 @@ textarea:focus {
     font-size: .8em;
     color: #9cf;
     font-weight: bold;
-    margin-top: .25em;
-    height: 0;
 }
 
 :disabled .btnkbshortcut, [disabled] .btnkbshortcut {
@@ -783,9 +781,13 @@ textarea:focus {
     margin-top: 1em
 }
 
-#collegeButton {
-    color: rgb(177, 180, 183);
-    background: #474b52;
+/*
+COLLEGE BUTTON
+ */
+#topicsettingscontainer a[href='javascript:'], #videobtnunmoderated {
+    color: rgb(177, 180, 183) !important;
+    background: #474b52 !important;
+    border: none !important;
 }
 
 #videobtnunmoderated {
@@ -796,7 +798,7 @@ textarea:focus {
 
 .topictageditor {
     color: whitesmoke;
-    background: #474b52;
+    background: #474b52 !important;
     cursor: text;
     position: relative;
     padding: .25em;
@@ -972,8 +974,4 @@ p + #topterms {
     #headerappstore {
         visibility: hidden !important
     }
-}
-
-#broadcast-id {
-    color: #737373;
 }

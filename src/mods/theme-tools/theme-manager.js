@@ -87,10 +87,7 @@ class OverrideManager {
             this.#overrideTaglineInsertMenu,
             this.#overrideHongKongPoster,
             this.#overrideHomePageText,
-            this.#overrideTopicEditor,
-            this.#overrideCollegeAndUnModeratedButtons,
             this.#overrideLinks,
-            this.#overrideStudentChatEmoji,
             this.#resizeCommonInterestsLabel,
             this.#wrapHeaderButtons
         ].forEach((fn) => {
@@ -133,10 +130,6 @@ class OverrideManager {
 
     }
 
-    #overrideStudentChatEmoji = () => {
-        $("span:contains('▶')").remove()
-    }
-
     #overrideBody = () => {
         $("body").css("min-height", "").css("top", "")
     }
@@ -166,10 +159,6 @@ class OverrideManager {
         $(newBanner).on("click", () => window.open(ConstantValues.discordURL));
         $("img[src$='/static/standwithhk.jpeg']").replaceWith(newBanner);
     }
-    #overrideTopicEditor = () => {
-        let editor = $(".topictageditor").get(0);
-        if (editor != null) editor.style.background = null;
-    };
 
     #overrideHomePageText() {
         let note = $("#mobilesitenote").get(0);
@@ -179,28 +168,6 @@ class OverrideManager {
             "Thanks for using Chromegle! Like what we've got? " +
             "<a target='_blank' href='https://www.isaackogan.com'>Check out the developer</a> " +
             "for more :)";
-    }
-
-    #overrideCollegeAndUnModeratedButtons() {
-        const collegeButton = $("a[href='javascript:']").get(0);
-
-        if (collegeButton != null) {
-            collegeButton.id = "collegeButton";
-            collegeButton.style.background = null;
-            collegeButton.style.border = null;
-            collegeButton.style.color = null;
-        }
-
-
-        const videoButtonUnModerated = $("#videobtnunmoderated").get(0);
-
-        if (videoButtonUnModerated != null) {
-            videoButtonUnModerated.style.background = null;
-            videoButtonUnModerated.style.border = null;
-            videoButtonUnModerated.style.padding = null;
-            videoButtonUnModerated.style.color = null;
-        }
-
     }
 
 }
