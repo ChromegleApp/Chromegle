@@ -598,13 +598,7 @@ class IPBlockingManager extends Module {
 
     async onIpUnblockMenuButtonClick(event, unblocked) {
         if (!unblocked) return;
-        $(event?.target?.parentNode?.parentNode).remove();
-
-        // Handle empty list
-        if (await this.#api.blockListIsEmpty()) {
-            let element = document.querySelector("tbody.ipListTableBody");
-            if (element) element.innerHTML = this.#menu.genEmptyTableRow();
-        }
+        this.#menu.genTable(1);
 
     }
 
