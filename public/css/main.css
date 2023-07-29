@@ -17,6 +17,7 @@ html {
 }
 
 .homeButton {
+    cursor: pointer;
     padding: 10px;
     height: 57px;
     width: 265px;
@@ -324,7 +325,7 @@ html {
 }
 
 .ipListTable td {
-    overflow-x: scroll;
+    text-overflow: ellipsis;
 }
 
 .ipListTable > tbody tr:nth-child(odd) {
@@ -636,6 +637,12 @@ span.chromegle-cancel-skip {
     justify-content: center;
     align-items: center;
 }
+
+#sharebuttons > a {
+    margin-top: 3px;
+    margin-right: 2px;
+}
+
 #intro {
     margin: 1.5em .5em .5em;
     font-size: 15.5px;

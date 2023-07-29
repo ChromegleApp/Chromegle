@@ -26,7 +26,6 @@ let Manifest;
     )
 
     loadModules(
-        ConfigManager,
         IPBlockingManager,
         ThemeManager,
         TopicSyncManager,
