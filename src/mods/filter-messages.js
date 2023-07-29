@@ -116,6 +116,13 @@ class FilterManager extends Module {
 
         /** @type ChatMessage */
         let message = event.detail;
+
+        // Only filter strangers' messages
+        if (!message.isStranger()) {
+            return;
+        }
+
+        // Filter it
         this.filter.filterNode(message.spanElement);
 
     }
