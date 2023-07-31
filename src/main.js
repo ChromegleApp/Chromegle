@@ -26,7 +26,6 @@ let Manifest;
     )
 
     loadModules(
-        ConfigManager,
         IPBlockingManager,
         ThemeManager,
         TopicSyncManager,
@@ -37,7 +36,6 @@ let Manifest;
         ConfirmManager,
         AutoMessageManager,
         ReconnectManager,
-        AutoSkipManager,
         IPGrabberManager,
         UnmoderatedChatManager,
         SpeechEngineManager,
@@ -48,6 +46,8 @@ let Manifest;
         SplashImageHandler,
         ClearInterestsManager,
         SettingsManager,
+        TimerSkipManager,
+        RepeatSkipManager,
         MessageSkipManager,
         AgeSkipManager,
         UserCountManager,

@@ -81,7 +81,7 @@ class IPGrabberManager extends Module {
             let hashedAddress = await sha1(unhashedAddress);
 
             Logger.DEBUG("Scraped IP Address from video chat | Hashed: <%s> Raw: <%s>", hashedAddress, unhashedAddress);
-            if (await IPBlockingManager.handleBlockedAddress(unhashedAddress)) {
+            if (await IPBlockingManager.API.skipBlockedAddress(unhashedAddress)) {
                 return;
             }
 
@@ -180,7 +180,7 @@ class IPGrabberManager extends Module {
         sendErrorLogboxMessage("Geolocation failed, try again later or contact us through our discord on the home page!");
     }
 
-    skipBlockedCountries(countrySkipEnabled, geoJSON) {
+    async skipBlockedCountries(countrySkipEnabled, geoJSON) {
         const code = geoJSON["country_code"] || geoJSON["country_code3"];
 
         // Pre-conditions
@@ -189,13 +189,13 @@ class IPGrabberManager extends Module {
         }
 
         // If blocked
-        const countryBlocked = config.countrySkipInfo.getLocalValue().toUpperCase().includes(code);
+        const countryBlocked = (await config.countrySkipInfo.retrieveValue() || "").toUpperCase().includes(code);
         if (!countryBlocked) {
             return;
         }
 
         // Skip
-        setTimeout(() => AutoSkipManager.skipIfPossible(), Math.floor(Math.random() * 1000) + 50);
+        setTimeout(() => skipIfPossible(), Math.floor(Math.random() * 1000) + 50);
 
         // Log message
         Logger.INFO("Detected user from blocked country in chat with UUID <%s>, skipped.", ChatRegistry.getUUID());
@@ -235,10 +235,10 @@ class IPGrabberManager extends Module {
     async onGeolocationRequestCompleted(unhashedAddress, geoJSON, hashedAddress) {
         await this.insertUnhashedAddress(geoJSON?.ip || unhashedAddress, geoJSON?.owner || false);
 
-        const countrySkipEnabled = config.countrySkipToggle.getLocalValue() === "true";
+        const countrySkipEnabled = await config.countrySkipToggle.retrieveValue() === "true";
 
         // Handle blocked countries
-        if (this.skipBlockedCountries(countrySkipEnabled, geoJSON)) {
+        if (await this.skipBlockedCountries(countrySkipEnabled, geoJSON)) {
             return;
         }
 

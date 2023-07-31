@@ -103,6 +103,11 @@ class ChatRegistryManager extends Module {
             }
         }
 
+        // Disconnect button
+        if (mutationRecord.target.classList.contains('disconnectbtn')) {
+            document.dispatchEvent(new CustomEvent('disconnectBtnMutation', {detail: mutationRecord}))
+        }
+
         // REGULAR STUFF
         if (mutationRecord.target.classList.contains("chatmsg")) {
             this.onChatMutationRecord(mutationRecord);

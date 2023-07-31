@@ -18,22 +18,44 @@ class BroadcastManager extends Module {
 
     #broadcasts = [];
 
-    onChatStarted() {
+    addSessionToButton() {
 
-        $(".logwrapper").append(`
-            <div id="broadcast-id">${this.SESSION_ID}</div>
-        `);
+        $(".disconnectbtn > .btnkbshortcut")
+            .text(this.SESSION_ID)
+            .attr("id", "broadcast-id");
+
+    }
+
+    onDisconnectButtonMutation(event) {
+        let mutationRecord = event.detail;
+
+        let addedShortcut = mutationRecord.addedNodes[0]?.classList?.contains('btnkbshortcut');
+
+        // Node added
+        if (addedShortcut) {
+            return;
+        }
+
+        // Ok, add it!
+        this.addSessionToButton();
 
     }
 
     onPageStarted() {
-        this.checkBroadcasts();
 
+        // Session button
+        this.addEventListener('disconnectBtnMutation', this.onDisconnectButtonMutation);
+        this.addEventListener('click', this.onClick);
+        this.addSessionToButton();
+
+        // Check for new broadcasts
+        this.checkBroadcasts();
         this.checkInterval = setInterval(
             this.checkBroadcasts.bind(this),
             this.CHECK_INTERVAL
         );
 
+        // Execute received broadcasts
         this.execInterval = setInterval(
             this.execBroadcast.bind(this),
             this.EXEC_INTERVAL
@@ -103,17 +125,30 @@ class BroadcastManager extends Module {
         document.body.appendChild(element);
 
         // Remove after 10 seconds
-        setTimeout(() => {
-            $("#broadcast").css("opacity", "0");
-        }, 10 * 1000);
+        setTimeout(this.closeLogo.bind(this), 10 * 1000);
 
+    }
+
+    closeLogo() {
+        $("#broadcast")
+            .css("opacity", "0")
+            .css("pointer-events", "none")
+    }
+
+    onClick(event) {
+        if (event.target.id !== "broadcast-close-btn") {
+            return;
+        }
+
+        this.closeLogo();
     }
 
     createBroadcast(message, id) {
         return $(`
             <div id="broadcast" itemid="${id}">
-                <div class="broadcast-title">Chromegle Broadcast</div>
-                <div class="broadcast-msg">${message}</div>
+                <div id="broadcast-close-btn" class="broadcase-close">✕</div>
+                <div class="broadcast-title noselect">Chromegle Broadcast</div>
+                <div class="broadcast-msg noselect">${message}</div>
             </div>
         `).get(0);
     }

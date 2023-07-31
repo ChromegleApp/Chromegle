@@ -4,7 +4,20 @@ html {
     background-size: cover !important;
 }
 
+#header {
+    display: flex;
+    align-items: center;
+}
+
+#logo {
+    padding: 0;
+    float: left;
+    margin: 25px;
+    font-size: 1em;
+}
+
 .homeButton {
+    cursor: pointer;
     padding: 10px;
     height: 57px;
     width: 265px;
@@ -16,7 +29,6 @@ html {
 }
 
 .settingsButtonContainer {
-    margin-top: 24px;
     display: flex;
     align-items: center;
 }
@@ -112,7 +124,16 @@ html {
     font-size: 12px;
 }
 
-.ipBlockButton, .ipMapsButton {
+.ipUnblockMenuButton {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.ipBlockButton, .ipMapsButton, .ipUnblockButton {
     cursor: pointer;
     border-radius: .5em;
     font-size: 15px;
@@ -122,8 +143,19 @@ html {
     text-decoration: none;
 }
 
+.chromegle-whitelist-skip-chat-button {
+    color: red !important;
+    cursor: pointer;
+    border-radius: .5em;
+    background: none;
+    font-weight: bold;
+    border: none;
+    font-size: .9em;
+}
+
+
 .ipMapsButton {
-    font-size: 16px;
+    font-size: 15.5px;
 }
 
 .clearInterestsButton {
@@ -142,16 +174,6 @@ html {
     margin-bottom: 10px;
     width: 400px;
 
-}
-
-.ipUnblockButton {
-    color: red;
-    cursor: pointer;
-    border-radius: .5em;
-    background: none;
-    font-weight: bold;
-    border: none;
-    font-size: .9em;
 }
 
 .statusItem {
@@ -298,15 +320,28 @@ html {
     text-align: center;
     justify-content: center;
     justify-items: center;
+    border: none;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.ipListTable td {
+    text-overflow: ellipsis;
+}
+
+.ipListTable > tbody tr:nth-child(odd) {
+    background: rgb(201, 201, 201);
 }
 
 .ipListTable tr {
     background: rgb(224, 224, 224);
     color: rgba(0, 0, 0, .8);
+    border: none;
 }
 
 .ipListTable th, .ipListTable td {
-    padding: 10px;
+    padding: 5px;
+    border: none;
 }
 
 .ipListTableUnblockButton {
@@ -344,7 +379,6 @@ code {
 
 #broadcast {
     z-index: 100 !important;
-    pointer-events: none;
     animation: mmfadeIn 500ms cubic-bezier(0.0, 0.0, 0.2, 1);
     transition: opacity;
     transition-duration: 500ms;
@@ -358,11 +392,37 @@ code {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    background-color: #000510d1;
+
     padding-top: 10px;
     padding-bottom: 25px;
+    padding-left: 100px;
+    padding-right: 100px;
+    min-width: 60vw;
+    border-radius: 10px;
+    background: rgba(0, 9, 15, 0.77);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+
 }
+
+#broadcast > .broadcase-close {
+    position: fixed;
+    right: 15px;
+    top: 9px;
+    color: gray;
+    font-weight: bold;
+    cursor: pointer;
+    transition-duration: 100ms;
+}
+
+#broadcast > .broadcase-close:hover {
+    color: #6b6b6b;
+}
+
+#broadcast > .broadcase-close:active {
+    color: #444444;
+}
+
 
 #broadcast > .broadcast-title {
     background: #409ffe;
@@ -372,17 +432,26 @@ code {
     background-image: -webkit-linear-gradient(top, #80c0ff 0, #017ffe 100%);
     background-image: -ms-linear-gradient(top, #80c0ff 0, #017ffe 100%);
     background-image: linear-gradient(top, #80c0ff 0, #017ffe 100%);
-
-    font-size: 50px;
+    font-size: 40px;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: bold;
+    text-wrap: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#broadcast > .broadcast-title > .logo-icon {
+    height: 40px;
+    margin-right: 6px;
+    margin-top: 3px;
 }
 
 #broadcast > .broadcast-msg {
     max-width: 80vw;
     overflow-wrap: break-word;
-    font-size: 35px;
+    font-size: 30px;
     text-align: center;
 }
 
@@ -412,7 +481,7 @@ button.chromegle-spoiler:active {
     color: inherit;
 }
 
-span.chromegle-cancel-skip {
+span.chromegle-cancel-skip, span.chromegle-whitelist-skip, span.chromegle-un-whitelist-skip {
     cursor: pointer;
     color: rgba(49,166,231,255);
 }
@@ -518,12 +587,20 @@ span.chromegle-cancel-skip {
     margin-right: 20px !important;
 }
 
+#onlinecount {
+    font-size: 1.5em;
+    color: #9cf;
+    right: .333333em;
+}
+
+#onlinecount strong {
+    font-size: 1.3333333333333333333333em;
+    color: #6cb5ff
+}
+
 @media(max-width: 1050px) {
     #sharebuttons {
-        display: none;
-    }
-    #onlinecount {
-        top: 45px !important;
+        display: none !important;
     }
 }
 
@@ -548,6 +625,25 @@ span.chromegle-cancel-skip {
     }
 }
 
+#header-buttons {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: end;
+}
+
+#sharebuttons {
+    margin-top: 0 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#sharebuttons > a {
+    margin-top: 3px;
+    margin-right: 2px;
+}
+
 #intro {
     margin: 1.5em .5em .5em;
     font-size: 15.5px;
@@ -562,16 +658,22 @@ span.chromegle-cancel-skip {
     z-index: 100;
 }
 
+/*
+Copies "btnkbshortcut"
+ */
 #broadcast-id {
-    padding-right: 8px;
     float: right;
-    padding-top: 5px;
-    font-size: 12px;
+    font-size: .7em;
+    font-weight: bold;
+    color: #9cf;
+}
+
+.disconnectbtnwrapper.newbtn #broadcast-id {
+    color: rgb(206 229 251);
 }
 
 p.tip-message {
     width: fit-content;
-    padding-right: 5px;
 }
 
 .chromegle-note {
@@ -605,6 +707,10 @@ MOBILE START
 
 html.chromegle-mobile .logbox {
     padding: 5px;
+}
+
+html.chromegle-mobile #header {
+    display: block !important;
 }
 
 html.chromegle-mobile img[src*='/static/bwlogo'],
@@ -726,3 +832,68 @@ MODAL FALLBACK START
 /**
 MODAL FALLBACK END
  */
+
+#collegeButton > span:first-child {
+    display: none;
+}
+
+.ipModalTools {
+    margin-top: 25px;
+}
+
+.ipTableControls {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+#ipPage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    padding: 8px 35px;
+    background: #e0e0e0;
+    font-size: 13px;
+}
+
+#importIpList, #exportIpList {
+    margin-right: 5px;
+}
+
+#importIpList, #exportIpList, #nextIpPageButton, #previousIpPageButton {
+    border: none;
+    padding: 8px;
+    background: #e0e0e0;
+    border-radius: 5px;
+    color: inherit;
+    cursor: pointer;
+}
+
+#importIpList:hover, #exportIpList:hover, #nextIpPageButton:hover, #previousIpPageButton:hover {
+    background: #cecece;
+}
+
+#importIpList:active, #exportIpList:active, #nextIpPageButton:active, #previousIpPageButton:active {
+    background: #c4c4c4;
+}
+
+#previousIpPageButton.disabled, #nextIpPageButton.disabled {
+    cursor: not-allowed;
+    background: #c4c4c4;
+}
+
+.disconnectbtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+/*
+COLLEGE BUTTON
+ */
+#topicsettingscontainer a[href='javascript:'] > span:first-child {
+    display: none;
+}
+

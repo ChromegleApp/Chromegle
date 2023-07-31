@@ -297,10 +297,10 @@ const config = {
         "default": "false"
     }),
     "blockedIPList": new ExternalField({
-        "external": IPBlockingMenu.loadMenu
+        "external": IPBlockingManager.MENU.enable.bind(IPBlockingManager.MENU)
     }),
     "unblockAllIPAddresses": new ExternalField({
-        "external": IPBlockingMenu.unblockAll
+        "external": IPBlockingManager.API.clearBlockConfig.bind(IPBlockingManager.API)
     }),
     "voiceCommandToggle": new ToggleEdit({
         "elementName": "voiceCommandToggle",
@@ -448,65 +448,5 @@ const config = {
         }
     }),
 }
-const ConfigManager = {
 
-    initialize() {
-
-        /**
-         * Load Initial Values
-         */
-        {
-            let storageQuery = {}
-
-            // Load Values
-            for (let key of Object.keys(config)) {
-                storageQuery[key] = config[key].getDefault();
-            }
-
-            chrome.storage.sync.get(storageQuery, (result) => {
-                MutableField.localValues = result;
-                document.dispatchEvent(new CustomEvent("localStorageLoaded"));
-            });
-
-
-        }
-
-        /**
-         * Update Changed Values
-         */
-        document.addEventListener("storageSettingsUpdate", (event) => ConfigManager._storageSettingsUpdate(event));
-
-        /**
-         * Load Initial Values
-         */
-        {
-            let storageQuery = {}
-
-            // Load Values
-            for (let key of Object.keys(config)) {
-                storageQuery[config[key].getName()] = config[key].getDefault();
-            }
-
-            chrome.storage.sync.get(storageQuery, (result) => MutableField.localValues = result);
-
-        }
-
-        /**
-         * Update Changed Values
-         */
-        document.addEventListener("storageSettingsUpdate", (event) => {
-            for (let key of Object.keys(event.detail)) {
-                MutableField.localValues[key] = event.detail[key];
-            }
-        });
-
-    },
-
-    _storageSettingsUpdate(event) {
-        for (let key of Object.keys(event.detail)) {
-            MutableField.localValues[key] = event.detail[key];
-        }
-    }
-
-}
 

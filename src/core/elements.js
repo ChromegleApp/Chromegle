@@ -208,3 +208,23 @@ function EmbeddedLink(url) {
     return element;
 
 }
+
+class ChromeStoredElement {
+
+    constructor(storageId, storageDefault, storageArea = "sync") {
+        this.id = storageId;
+        this.default = storageDefault;
+        this.storageArea = storageArea;
+    }
+
+    async retrieveValue() {
+        let query = {[this.id]: this.default};
+        return ((await chrome.storage[this.storageArea].get(query)) || {})[this.id];
+    }
+
+    async setValue(newValue) {
+        let query = {[this.id]: newValue};
+        await chrome.storage[this.storageArea].set(query);
+    }
+
+}

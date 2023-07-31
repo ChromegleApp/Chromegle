@@ -68,10 +68,8 @@ class ThemeManager extends Module {
 
         if (headerEnabled) {
             $("#sharebuttons").css("display", "");
-            $("#onlinecount").css("margin-top", "");
         } else {
             $("#sharebuttons").css("display", "none");
-            $("#onlinecount").css("margin-top", "-15px");
         }
 
     }
@@ -89,11 +87,9 @@ class OverrideManager {
             this.#overrideTaglineInsertMenu,
             this.#overrideHongKongPoster,
             this.#overrideHomePageText,
-            this.#overrideTopicEditor,
-            this.#overrideCollegeAndUnModeratedButtons,
             this.#overrideLinks,
-            this.#overrideStudentChatEmoji,
-            this.#resizeCommonInterestsLabel
+            this.#resizeCommonInterestsLabel,
+            this.#wrapHeaderButtons
         ].forEach((fn) => {
             try {
                 fn();
@@ -119,13 +115,19 @@ class OverrideManager {
 
     }
 
-    #resizeCommonInterestsLabel = () => {
-        $(".shoulduselikescheckbox").parent().css("font-size", "15px");
+    #wrapHeaderButtons() {
+        let headerButtons = document.createElement("div");
+        headerButtons.id = "header-buttons";
+        document.getElementById("header").appendChild(headerButtons);
+
+        $("#sharebuttons").detach().appendTo('#header-buttons')
+        $("#onlinecount").detach().appendTo('#header-buttons')
 
     }
 
-    #overrideStudentChatEmoji = () => {
-        $("span:contains('▶')").remove()
+    #resizeCommonInterestsLabel = () => {
+        $(".shoulduselikescheckbox").parent().css("font-size", "15px");
+
     }
 
     #overrideBody = () => {
@@ -157,10 +159,6 @@ class OverrideManager {
         $(newBanner).on("click", () => window.open(ConstantValues.discordURL));
         $("img[src$='/static/standwithhk.jpeg']").replaceWith(newBanner);
     }
-    #overrideTopicEditor = () => {
-        let editor = $(".topictageditor").get(0);
-        if (editor != null) editor.style.background = null;
-    };
 
     #overrideHomePageText() {
         let note = $("#mobilesitenote").get(0);
@@ -170,28 +168,6 @@ class OverrideManager {
             "Thanks for using Chromegle! Like what we've got? " +
             "<a target='_blank' href='https://www.isaackogan.com'>Check out the developer</a> " +
             "for more :)";
-    }
-
-    #overrideCollegeAndUnModeratedButtons() {
-        const collegeButton = $("a[href='javascript:']").get(0);
-
-        if (collegeButton != null) {
-            collegeButton.id = "collegeButton";
-            collegeButton.style.background = null;
-            collegeButton.style.border = null;
-            collegeButton.style.color = null;
-        }
-
-
-        const videoButtonUnModerated = $("#videobtnunmoderated").get(0);
-
-        if (videoButtonUnModerated != null) {
-            videoButtonUnModerated.style.background = null;
-            videoButtonUnModerated.style.border = null;
-            videoButtonUnModerated.style.padding = null;
-            videoButtonUnModerated.style.color = null;
-        }
-
     }
 
 }

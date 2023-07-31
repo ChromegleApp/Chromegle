@@ -101,7 +101,7 @@ body, #header, html {
 /*
 Secondary Colour BACKGROUND
  */
-#intro, code, #abovevideosexybtn, .tip-message, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton, #selfvideo, #othervideo, #otherVideoWrapper, .pasteButton {
+#intro, code, #abovevideosexybtn, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton, #selfvideo, #othervideo, #otherVideoWrapper, .pasteButton {
     background: rgba(54, 57, 63, 255);
 }
 
@@ -172,15 +172,6 @@ a {
     text-decoration: none;
 }
 
-#logo {
-    margin-top: 25px;
-    padding: 0;
-    float: left;
-    font-size: 1em;
-    margin-left: .5em;
-    margin-right: 5em
-}
-
 #logo img {
     display: block
 }
@@ -194,19 +185,6 @@ a {
     display: block
 }
 
-#onlinecount {
-    font-size: 1.5em;
-    color: #9cf;
-    position: absolute;
-    right: .333333em;
-    top: 55px;
-    bottom: 6px
-}
-
-#onlinecount strong {
-    font-size: 1.3333333333333333333333em;
-    color: #6cb5ff
-}
 
 #intro {
     line-height: 1.5;
@@ -643,18 +621,6 @@ textarea:focus {
     font-size: 1.25em
 }
 
-#sharebuttons {
-    position: absolute;
-    right: .5em;
-    top: 35px;
-    margin-right: -1px;
-    vertical-align: top
-}
-
-#sharebuttons * {
-    vertical-align: top !important
-}
-
 #EFF {
     margin-left: .5em;
     text-align: center;
@@ -671,8 +637,6 @@ textarea:focus {
     font-size: .8em;
     color: #9cf;
     font-weight: bold;
-    margin-top: .25em;
-    height: 0;
 }
 
 :disabled .btnkbshortcut, [disabled] .btnkbshortcut {
@@ -817,9 +781,13 @@ textarea:focus {
     margin-top: 1em
 }
 
-#collegeButton {
-    color: rgb(177, 180, 183);
-    background: #474b52;
+/*
+COLLEGE BUTTON
+ */
+#topicsettingscontainer a[href='javascript:'], #videobtnunmoderated {
+    color: rgb(177, 180, 183) !important;
+    background: #474b52 !important;
+    border: none !important;
 }
 
 #videobtnunmoderated {
@@ -830,7 +798,7 @@ textarea:focus {
 
 .topictageditor {
     color: whitesmoke;
-    background: #474b52;
+    background: #474b52 !important;
     cursor: text;
     position: relative;
     padding: .25em;
@@ -1006,8 +974,4 @@ p + #topterms {
     #headerappstore {
         visibility: hidden !important
     }
-}
-
-#broadcast-id {
-    color: #737373;
 }

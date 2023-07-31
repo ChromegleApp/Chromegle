@@ -73,7 +73,7 @@ class MessageSkipManager extends Module {
             for (let testWord of contentArray) {
                 if (testWord === badWord) {
                     sendErrorLogboxMessage(`Skipped user who said auto-skip word ${ReSpoiler(badWord).outerHTML}.`);
-                    AutoSkipManager.skipIfPossible();
+                    skipIfPossible();
                     break;
                 }
             }
