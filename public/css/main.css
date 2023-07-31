@@ -133,7 +133,7 @@ html {
     cursor: pointer;
 }
 
-.ipBlockButton, .ipMapsButton {
+.ipBlockButton, .ipMapsButton, .ipUnblockButton {
     cursor: pointer;
     border-radius: .5em;
     font-size: 15px;
@@ -142,6 +142,17 @@ html {
     border: none;
     text-decoration: none;
 }
+
+.chromegle-whitelist-skip-chat-button {
+    color: red !important;
+    cursor: pointer;
+    border-radius: .5em;
+    background: none;
+    font-weight: bold;
+    border: none;
+    font-size: .9em;
+}
+
 
 .ipMapsButton {
     font-size: 15.5px;
@@ -163,16 +174,6 @@ html {
     margin-bottom: 10px;
     width: 400px;
 
-}
-
-.ipUnblockButton {
-    color: red;
-    cursor: pointer;
-    border-radius: .5em;
-    background: none;
-    font-weight: bold;
-    border: none;
-    font-size: .9em;
 }
 
 .statusItem {
@@ -480,7 +481,7 @@ button.chromegle-spoiler:active {
     color: inherit;
 }
 
-span.chromegle-cancel-skip {
+span.chromegle-cancel-skip, span.chromegle-whitelist-skip, span.chromegle-un-whitelist-skip {
     cursor: pointer;
     color: rgba(49,166,231,255);
 }

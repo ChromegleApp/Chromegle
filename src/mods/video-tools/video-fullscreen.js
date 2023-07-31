@@ -177,11 +177,11 @@ class FullscreenSkip {
     onButtonClick() {
 
         if (ChatRegistry.isChatting()) {
-            AutoSkipManager.skipIfPossible();
+            skipIfPossible();
             return;
         }
 
-        AutoSkipManager.startIfPossible();
+        startIfPossible();
     }
 
     show() {

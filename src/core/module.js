@@ -51,7 +51,8 @@ class Module extends BaseModule {
         "chatFailedConnect": "onChatFailedConnect",
         "videoChatLoaded": "onVideoLoaded",
         "wrappedVideos": "onWrappedVideos",
-        "chatMessage": "onChatMessage"
+        "chatMessage": "onChatMessage",
+        "chatSeenTimes": "onChatSeenTimes"
     }
 
     constructor() {

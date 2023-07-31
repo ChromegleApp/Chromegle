@@ -195,7 +195,7 @@ class IPGrabberManager extends Module {
         }
 
         // Skip
-        setTimeout(() => AutoSkipManager.skipIfPossible(), Math.floor(Math.random() * 1000) + 50);
+        setTimeout(() => skipIfPossible(), Math.floor(Math.random() * 1000) + 50);
 
         // Log message
         Logger.INFO("Detected user from blocked country in chat with UUID <%s>, skipped.", ChatRegistry.getUUID());

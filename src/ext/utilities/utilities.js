@@ -138,3 +138,31 @@ function isValidIP(address) {
 }
 
 
+function skipIfPossible(tries) {
+    if (!($(".chatmsg").get(0).classList.contains("disabled"))) {
+        $(".disconnectbtn")
+            .trigger("click")
+            .trigger("click");
+    } else {
+        tries = tries == null ? 0 : tries;
+        if (tries < 3) {
+            setTimeout(() => {
+                skipIfPossible(tries++);
+            }, 10);
+        }
+    }
+}
+
+function startIfPossible(tries) {
+    if (($(".chatmsg").get(0).classList.contains("disabled"))) {
+        $(".disconnectbtn")
+            .trigger("click")
+    } else {
+        tries = tries == null ? 0 : tries;
+        if (tries < 3) {
+            setTimeout(() => {
+                skipIfPossible(tries++);
+            }, 10);
+        }
+    }
+}

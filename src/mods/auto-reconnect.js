@@ -36,7 +36,7 @@ class ReconnectManager extends Module {
         }
 
         let reconnectDelay = await config.autoReconnectDelayField.retrieveValue() || 0;
-        reconnectDelay < 1 ? AutoSkipManager.startIfPossible() : this.reconnectAnimation(reconnectDelay);
+        reconnectDelay < 1 ? startIfPossible() : this.reconnectAnimation(reconnectDelay);
 
     }
 
@@ -85,7 +85,7 @@ class ReconnectManager extends Module {
 
             if (reconnectDelay <= 0) {
                 element.remove();
-                AutoSkipManager.startIfPossible();
+                startIfPossible();
                 clearInterval(interval);
                 return;
             }

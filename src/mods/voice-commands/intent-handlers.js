@@ -48,10 +48,10 @@ class SkipIntentHandler extends AbstractIntentHandler {
     handle(utterance) {
 
         if (ChatRegistry.isChatting()) {
-            AutoSkipManager.skipIfPossible();
+            skipIfPossible();
         }
 
-        AutoSkipManager.startIfPossible();
+        startIfPossible();
     }
 
 }
@@ -65,7 +65,7 @@ class StopIntentHandler extends AbstractIntentHandler {
     }
 
     handle(utterance) {
-        AutoSkipManager.skipIfPossible();
+        skipIfPossible();
     }
 
 }
@@ -80,7 +80,7 @@ class StartIntentHandler extends AbstractIntentHandler {
 
     handle(utterance) {
         if (!ChatRegistry.isChatting()) {
-            AutoSkipManager.startIfPossible();
+            startIfPossible();
         }
     }
 

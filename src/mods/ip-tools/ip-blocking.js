@@ -148,7 +148,7 @@ class IPBlockAPI {
             Logger.INFO("Skipped blocked IP address <%s> with chat UUID <%s>", address, ChatRegistry.getUUID());
             sendErrorLogboxMessage(`Skipped the blocked IP address ${address}`)
                 .appendChild(ButtonFactory.ipUnblockButton(address))
-            AutoSkipManager.skipIfPossible();
+            skipIfPossible();
         }
 
         return shouldSkip;
@@ -177,6 +177,10 @@ class IPBlockAPI {
             sendErrorLogboxMessage(`Unblocked the IP address ${address} in video chat.`);
         }
 
+        document.getElementById("ipUnblockButton")?.replaceWith(
+            ButtonFactory.ipBlockButton(address)
+        );
+
         return true;
     }
 
@@ -198,17 +202,19 @@ class IPBlockAPI {
         Logger.INFO("Blocked IP address <%s> in video chat", address);
 
         // Skip if chatting
-        let element;
         if (ChatRegistry.isChatting()) {
-            AutoSkipManager.skipIfPossible();
-            element = sendErrorLogboxMessage(`Blocked the IP address ${address} and skipped the current chat.`);
+            skipIfPossible();
+            sendErrorLogboxMessage(`Blocked the IP address ${address} and skipped the current chat.`);
         } else {
-            element = sendErrorLogboxMessage(`Blocked the IP address ${address}.`);
+            sendErrorLogboxMessage(`Blocked the IP address ${address} in video chat.`);
         }
 
-        element.appendChild(ButtonFactory.ipUnblockButton(address));
-        return true;
+        // Switch with unblock button
+        document.getElementById("ipBlockButton")?.replaceWith(
+            ButtonFactory.ipUnblockButton(address)
+        );
 
+        return true;
     }
 
     async retrieveBlockConfig() {

@@ -13,13 +13,13 @@ const ButtonFactory = {
 
     ipBlockButton: (unhashedAddress) => {
         return $(`
-                    <button value="${unhashedAddress}" class="ipBlockButton">(Block IP Address)</button>`
+                    <button value="${unhashedAddress}" id="ipBlockButton" class="ipBlockButton">(Block IP Address)</button>`
         ).get(0);
     },
 
     ipUnblockButton: (unhashedAddress) => {
         return $(
-                `<button value="${unhashedAddress}" class="ipUnblockButton">(Unblock IP)</button>`
+                `<button value="${unhashedAddress}" id="ipUnblockButton" class="ipUnblockButton">(Unblock IP Address)</button>`
         ).get(0);
     },
 
