@@ -51,7 +51,12 @@ class SkipIntentHandler extends AbstractIntentHandler {
             skipIfPossible();
         }
 
-        startIfPossible();
+        setTimeout(() => {
+            if (!ChatRegistry.isChatting()) {
+                startIfPossible();
+            }
+        }, 150);
+        
     }
 
 }
