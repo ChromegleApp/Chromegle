@@ -1,7 +1,7 @@
 /*
 Modal Styling
  */
-.modal__overlay {
+ .modal__overlay {
     background: rgba(0, 0, 0, 0.6);
 }
 
@@ -104,6 +104,12 @@ Secondary Colour BACKGROUND
 #intro, code, #abovevideosexybtn, .logwrapper, .disconnectbtnwrapper, .lowersexybtn, .lowergaybtn, .sendbtn, .chatmsg, .chatmsgwrapper, .videoCoverButton, #selfvideo, #othervideo, #otherVideoWrapper, .pasteButton {
     background: rgba(54, 57, 63, 255);
 }
+
+#selfvideo, #othervideo, code, #otherVideoWrapper {
+    background: #555555;
+
+}
+
 
 /*
 Primary Colour TEXT
