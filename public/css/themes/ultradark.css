@@ -105,6 +105,11 @@ Secondary Colour BACKGROUND
     background: rgb(29, 29, 31);
 }
 
+#selfvideo, #othervideo, code, #otherVideoWrapper {
+    background: #555555;
+
+}
+
 /*
 Primary Colour TEXT
  */
