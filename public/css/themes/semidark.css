@@ -105,6 +105,12 @@ Secondary Colour BACKGROUND
     background: rgba(54, 57, 63, 255);
 }
 
+#selfvideo, #othervideo, code, #otherVideoWrapper {
+    background: #555555;
+
+}
+
+
 /*
 Primary Colour TEXT
  */
