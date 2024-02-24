@@ -65,7 +65,9 @@
         "src/main.js"
       ],
       "matches": [
-        "*://*.omegle.com/*"
+        "*://*.omegleweb.com/*",
+        "*://*.omegle.com/*", 
+        "*://*.anotherwebsite.com/*" 
       ]
     }
   ],
@@ -78,7 +80,9 @@
         "/src/ext/scrape-ips.js"
       ],
       "matches": [
-        "*://*.omegle.com/*"
+        "*://*.omegleweb.com/*",
+        "*://*.omegle.com/*", 
+        "*://*.anotherwebsite.com/*" 
       ]
     }
   ],
@@ -88,7 +92,9 @@
   ],
   "externally_connectable": {
     "matches": [
-      "*://*.omegle.com/*"
+      "*://*.omegleweb.com/*",
+      "*://*.omegle.com/*",
+      "*://*.anotherwebsite.com/*" 
     ]
   }
 }
